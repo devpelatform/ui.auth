@@ -1,0 +1,38 @@
+{
+  "shared": {
+    "overview": "Overview",
+    "general": "General",
+    "account": "Account",
+    "workspace": "Workspace",
+    "settings": "Settings",
+    "security": "Security",
+    "preferences": "Preferences",
+    "logs": "Logs",
+    "people": "People",
+    "billing": "Billings",
+    "integration": "Integrations",
+    "developer": "Developer",
+    "apikey": "Api Keys",
+    "webhook": "Webhooks",
+    "notification": "Notification"
+  },
+  "signed": {
+    "text": " You're signed in as",
+    "button": "Sign in as a different user"
+  },
+  "onboarding": {
+    "welcome": {
+      "title": "Welcome",
+      "heading": "Welcome to {name}",
+      "description": "We're here to help you get started with {name}.",
+      "button": "Get Started"
+    }
+  },
+  "workspace": {
+    "create": {
+      "title": "Create Workspace",
+      "heading": "Create your workspace",
+      "description": "Set up a workspace to manage your apps with your team."
+    }
+  }
+}

@@ -6,6 +6,7 @@ const withMDX = createMDX();
 const config = {
   reactStrictMode: true,
   output: 'export',
+  basePath: process.env.NODE_ENV === 'production' ? '/ui.auth' : '',
   images: { unoptimized: true },
 };
 

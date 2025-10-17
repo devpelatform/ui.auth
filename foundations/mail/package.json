@@ -1,0 +1,32 @@
+{
+  "name": "@repo/mail",
+  "version": "0.0.0",
+  "private": true,
+  "type": "module",
+  "exports": {
+    ".": "./src/send.ts"
+  },
+  "scripts": {
+    "clean:all": "rimraf .turbo node_modules",
+    "export": "email export",
+    "preview": "email dev --port 3005",
+    "test": "dotenv -c -e ../../.env.local -- tsx test.ts",
+    "types:check": "tsc --noEmit"
+  },
+  "dependencies": {
+    "@pelatform/email": "^1.0.0",
+    "@react-email/render": "^1.4.0",
+    "@repo/config": "workspace:*",
+    "@repo/i18n": "workspace:*",
+    "react": "^19.2.0",
+    "react-dom": "^19.2.0",
+    "react-email": "^4.3.0",
+    "use-intl": "^4.3.12"
+  },
+  "devDependencies": {
+    "@react-email/preview-server": "4.3.0",
+    "@repo/tsconfig": "workspace:*",
+    "@types/react": "^19.2.2",
+    "tsx": "^4.20.6"
+  }
+}

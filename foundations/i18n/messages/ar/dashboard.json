@@ -1,0 +1,38 @@
+{
+  "shared": {
+    "overview": "نظرة عامة",
+    "general": "عام",
+    "account": "الحساب",
+    "workspace": "مساحة العمل",
+    "settings": "الإعدادات",
+    "security": "الأمان",
+    "preferences": "التفضيلات",
+    "logs": "السجلات",
+    "people": "الأشخاص",
+    "billing": "الفواتير",
+    "integration": "التكاملات",
+    "developer": "المطور",
+    "apikey": "مفاتيح API",
+    "webhook": "Webhooks",
+    "notification": "الإشعارات"
+  },
+  "signed": {
+    "text": " أنت مسجل الدخول كـ",
+    "button": "تسجيل الدخول كمستخدم آخر"
+  },
+  "onboarding": {
+    "welcome": {
+      "title": "مرحباً",
+      "heading": "مرحباً بك في {name}",
+      "description": "نحن هنا لمساعدتك في البدء مع {name}.",
+      "button": "ابدأ"
+    }
+  },
+  "workspace": {
+    "create": {
+      "title": "إنشاء مساحة العمل",
+      "heading": "أنشئ مساحة العمل الخاصة بك",
+      "description": "قم بإعداد مساحة عمل لإدارة تطبيقاتك مع فريقك."
+    }
+  }
+}
