@@ -1,0 +1,45 @@
+'use client';
+
+import { useMemo } from 'react';
+import { LockIcon, MailIcon } from 'lucide-react';
+
+import { Button } from '@pelatform/ui/default';
+import { useAuth } from '@/hooks';
+import { cn } from '@/lib/utils';
+import type { AuthButtonProps } from '../types';
+
+export function EmailOTPButton({
+  classNames,
+  isSubmitting,
+  localization: propLocalization,
+  view,
+}: AuthButtonProps) {
+  const { basePath, localization: contextLocalization, navigate, viewPaths } = useAuth();
+
+  const localization = useMemo(
+    () => ({ ...contextLocalization, ...propLocalization }),
+    [contextLocalization, propLocalization],
+  );
+
+  return (
+    <Button
+      type="button"
+      variant="secondary"
+      className={cn('w-full', classNames?.form?.button, classNames?.form?.secondaryButton)}
+      disabled={isSubmitting}
+      onClick={() =>
+        navigate(
+          `${basePath}/${view === 'EMAIL_OTP' ? viewPaths.SIGN_IN : viewPaths.EMAIL_OTP}${window.location.search}`,
+        )
+      }
+    >
+      {view === 'EMAIL_OTP' ? (
+        <LockIcon className={classNames?.form?.icon} />
+      ) : (
+        <MailIcon className={classNames?.form?.icon} />
+      )}
+      {localization.SIGN_IN_WITH}{' '}
+      {view === 'EMAIL_OTP' ? localization.PASSWORD : localization.EMAIL_OTP}
+    </Button>
+  );
+}

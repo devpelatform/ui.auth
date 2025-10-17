@@ -2,8 +2,6 @@ import type { ReactNode } from 'react';
 import { Inter } from 'next/font/google';
 import { RootProvider } from 'fumadocs-ui/provider';
 
-import SearchDialog from '@/components/search';
-
 import './global.css';
 
 const inter = Inter({
@@ -16,7 +14,9 @@ export default function Layout({ children }: { children: ReactNode }) {
       <body className="flex min-h-screen flex-col">
         <RootProvider
           search={{
-            SearchDialog,
+            options: {
+              type: 'static',
+            },
           }}
         >
           {children}

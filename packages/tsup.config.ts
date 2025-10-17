@@ -5,6 +5,7 @@ export default defineConfig(() => {
   return {
     entry: {
       index: './src/index.ts',
+      server: './src/server.ts',
     },
     format: ['esm', 'cjs'],
     splitting: true,
@@ -19,5 +20,6 @@ export default defineConfig(() => {
         exclude: /node_modules/,
       }),
     ],
+    onSuccess: 'node scripts/addClientDirective.js',
   };
 });

@@ -1,10 +1,10 @@
-# @pelatform/package
+# @pelatform/ui.auth
 
-This is a template package for creating a package & docs
+Plug & play UI components for Better Auth.
 
-[![Version](https://img.shields.io/npm/v/@pelatform/package-template.svg)](https://www.npmjs.com/package/@pelatform/package-template)
-[![License](https://img.shields.io/npm/l/@pelatform/package-template.svg)](https://github.com/devpelatform/package-template/blob/main/LICENSE)
+[![Version](https://img.shields.io/npm/v/@pelatform/ui.auth.svg)](https://www.npmjs.com/package/@pelatform/ui.auth)
+[![License](https://img.shields.io/npm/l/@pelatform/ui.auth.svg)](https://github.com/devpelatform/ui.auth/blob/main/LICENSE)
 
 ## Getting Started
 
-Visit https://devpelatform.github.io/package-template to get started with this package.
+Visit https://devpelatform.github.io/ui.auth to get started with this package.
