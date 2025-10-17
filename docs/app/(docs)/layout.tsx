@@ -17,7 +17,7 @@ export default function Layout({ children }: { children: ReactNode }) {
         title: (
           <div className="flex flex-row items-center gap-2">
             <Logo className="size-5.5" />
-            <span className="font-semibold text-mono">Pelatform UI.auth</span>
+            <span className="font-semibold text-mono">Pelatform UI.Auth</span>
           </div>
         ),
       }}

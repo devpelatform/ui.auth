@@ -1,0 +1,23 @@
+{
+  "name": "@examples/api",
+  "version": "0.0.0",
+  "private": true,
+  "scripts": {
+    "clean:all": "rimraf .turbo dist node_modules",
+    "build": "esbuild ./src/index.ts --bundle --platform=node --outfile=dist/index.js --external:zod-to-json-schema",
+    "dev": "dotenv -c -e .env.local -- tsx src/index.ts --watch",
+    "types:check": "tsc --noEmit"
+  },
+  "dependencies": {
+    "@hono/node-server": "^1.19.5",
+    "@repo/api": "workspace:*"
+  },
+  "devDependencies": {
+    "@repo/tsconfig": "workspace:*",
+    "@types/node": "24.8.1",
+    "@types/react": "19.2.2",
+    "esbuild": "^0.25.11",
+    "tsx": "^4.20.6",
+    "typescript": "5.9.3"
+  }
+}
