@@ -1,0 +1,21 @@
+@import "tailwindcss";
+
+@import "@pelatform/ui/css";
+@import "@pelatform/ui.auth/css";
+
+@import "tailwindcss-safe-area";
+
+:root {
+  --warning: hsl(38 92% 50%);
+  --warning-foreground: hsl(48 96% 89%);
+}
+
+.dark {
+  --warning: hsl(48 96% 89%);
+  --warning-foreground: hsl(38 92% 50%);
+}
+
+@theme inline {
+  --color-warning: var(--warning);
+  --color-warning-foreground: var(--warning-foreground);
+}

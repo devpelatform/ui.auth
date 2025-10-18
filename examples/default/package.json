@@ -1,0 +1,39 @@
+{
+  "name": "@examples/default",
+  "version": "0.0.0",
+  "private": true,
+  "scripts": {
+    "clean": "rimraf .next",
+    "clean:all": "rimraf .next .turbo node_modules",
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start",
+    "types:check": "tsc --noEmit"
+  },
+  "dependencies": {
+    "@pelatform/ui": "^1.5.0",
+    "@pelatform/ui.auth": "workspace:*",
+    "@pelatform/utils": "^1.0.0",
+    "@repo/api": "workspace:*",
+    "@repo/auth": "workspace:*",
+    "@repo/config": "workspace:*",
+    "@repo/db": "workspace:*",
+    "@repo/i18n": "workspace:*",
+    "hono": "^4.10.1",
+    "lucide-react": "^0.546.0",
+    "next": "15.5.6",
+    "next-intl": "^4.3.12",
+    "react": "^19.2.0",
+    "react-dom": "^19.2.0"
+  },
+  "devDependencies": {
+    "@repo/tsconfig": "workspace:*",
+    "@tailwindcss/postcss": "^4.1.14",
+    "@types/node": "^24.8.1",
+    "@types/react": "^19.2.2",
+    "@types/react-dom": "^19.2.2",
+    "tailwindcss": "^4.1.14",
+    "tailwindcss-safe-area": "^1.1.0",
+    "typescript": "^5.9.3"
+  }
+}
