@@ -1,4 +1,6 @@
-// hooks
+/************************************
+ **** HOOKS
+ *************************************/
 export * from './hooks';
 export * from './hooks/accounts';
 export * from './hooks/apikeys';
@@ -8,18 +10,24 @@ export * from './hooks/other';
 export * from './hooks/passkeys';
 export * from './hooks/sessions';
 export * from './hooks/use-authenticate';
+/************************************
+ **** LIB
+ *************************************/
 export * from './lib/create-auth-hooks';
 export * from './lib/create-auth-prefetches';
-// lib
 export * from './lib/localization';
 export * from './lib/prefetch-session';
 export * from './lib/social-providers';
 export * from './lib/view-paths';
-// types
+/************************************
+ **** TYPES
+ *************************************/
 export * from './types/main';
 export * from './types/organization';
 export * from './types/query';
-// auth
+/************************************
+ **** UI - auth
+ *************************************/
 export * from './ui/auth/callback';
 export * from './ui/auth/email-otp';
 export * from './ui/auth/forgot-password';
@@ -38,11 +46,10 @@ export * from './ui/auth/sign-up';
 export * from './ui/auth/two-factor';
 export * from './ui/auth/types';
 export * from './ui/auth/view';
-// provider
-export * from './ui/providers/auth';
-export * from './ui/providers/organization';
 
-// cards
+/************************************
+ **** UI - cards
+ *************************************/
 // export * from './ui/cards/accept-invitation';
 // export * from './ui/cards/base-organizations';
 // export * from './ui/cards/base-security';
@@ -71,7 +78,9 @@ export * from './ui/providers/organization';
 // export * from './ui/cards/sessions';
 // export * from './ui/cards/two-factor';
 
-// dialogs
+/************************************
+ **** UI - dialogs
+ *************************************/
 // export * from './ui/dialogs/backup-codes';
 // export * from './ui/dialogs/create-apikey';
 // export * from './ui/dialogs/create-organization';
@@ -85,7 +94,14 @@ export * from './ui/providers/organization';
 // export * from './ui/dialogs/two-factor-password';
 // export * from './ui/dialogs/update-member-role';
 
-// shared
+/************************************
+ **** UI - providers
+ *************************************/
+export * from './ui/providers/auth';
+export * from './ui/providers/organization';
+/************************************
+ **** UI - shared
+ *************************************/
 export * from './ui/shared/helpers';
 export * from './ui/shared/organization-logo';
 // export * from './ui/shared/organization-switcher';

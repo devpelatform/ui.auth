@@ -6,11 +6,13 @@
 @import "tailwindcss-safe-area";
 
 :root {
+  --primary: oklch(0.782 0.106 167.126);
   --warning: hsl(38 92% 50%);
   --warning-foreground: hsl(48 96% 89%);
 }
 
 .dark {
+  --primary: oklch(0.782 0.106 167.126);
   --warning: hsl(48 96% 89%);
   --warning-foreground: hsl(38 92% 50%);
 }

@@ -86,7 +86,7 @@ export function UserAvatar({
   return (
     <Avatar
       className={cn(
-        // 'bg-muted',
+        'rounded-full bg-accent',
         size === 'sm' ? 'size-6' : size === 'lg' ? 'size-10' : 'size-8',
         className,
         classNames?.base,
