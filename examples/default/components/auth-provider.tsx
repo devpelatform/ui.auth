@@ -14,31 +14,25 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   const router = useRouter();
   const t = useTranslations('auth');
 
-  // let { slug } = useParams() as { slug: string | null };
-  // const searchParams = useSearchParams();
-  // if (!slug) {
-  //   slug = searchParams.get('slug') || searchParams.get('workspace');
-  // }
-
   return (
     <AuthUIProvider
       authClient={authClient}
       // additionalFields
       avatar={{
-        // upload: async (file) => {
-        //   const formData = new FormData()
-        //   formData.append("avatar", file)
-        //   const res = await fetch("/api/uploadAvatar", { method: "POST", body: formData })
-        //   const { data } = await res.json()
-        //   return data.url
-        // },
-        // delete: async (url) => {
-        //   await fetch("/api/deleteAvatar", {
-        //     method: "POST",
-        //     headers: { "Content-Type": "application/json" },
-        //     body: JSON.stringify({ url })
-        //   })
-        // },
+        upload: async (file) => {
+          const formData = new FormData();
+          formData.append('avatar', file);
+          const res = await fetch('/api/user/avatar', { method: 'POST', body: formData });
+          const { file: uploadedFile } = await res.json();
+          return uploadedFile.url;
+        },
+        delete: async (url) => {
+          await fetch('/api/user/avatar', {
+            method: 'DELETE',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ url }),
+          });
+        },
         Image: Image,
       }}
       // basePath={config.appUrl}

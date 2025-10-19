@@ -7,7 +7,7 @@ const nextConfig: NextConfig = {
   transpilePackages: ['@repo/api'],
   // allowedDevOrigins: [ENV_APP_DOMAIN, `*.${ENV_APP_DOMAIN}`],
   reactStrictMode: true,
-  serverExternalPackages: ['@aws-sdk/client-s3', '@aws-sdk/s3-request-presigner', 'prettier'],
+  // serverExternalPackages: ['@aws-sdk/client-s3', '@aws-sdk/s3-request-presigner', 'prettier'],
   eslint: {
     // Replaced by root workspace command
     ignoreDuringBuilds: true,
