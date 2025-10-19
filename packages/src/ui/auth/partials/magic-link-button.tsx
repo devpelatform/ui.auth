@@ -11,20 +11,20 @@ import type { AuthButtonProps } from '../types';
 export function MagicLinkButton({
   classNames,
   isSubmitting,
-  localization: propLocalization,
+  localization: localizationProp,
   view,
 }: AuthButtonProps) {
   const {
     basePath,
     credentials,
-    localization: contextLocalization,
+    localization: localizationContext,
     navigate,
     viewPaths,
   } = useAuth();
 
   const localization = useMemo(
-    () => ({ ...contextLocalization, ...propLocalization }),
-    [contextLocalization, propLocalization],
+    () => ({ ...localizationContext, ...localizationProp }),
+    [localizationContext, localizationProp],
   );
 
   return (

@@ -26,6 +26,32 @@ export * from './types/main';
 export * from './types/organization';
 export * from './types/query';
 /************************************
+ **** UI - account
+ *************************************/
+export * from './ui/account/partials/delete-account';
+export * from './ui/account/partials/form-avatar';
+export * from './ui/account/partials/form-email';
+export * from './ui/account/partials/form-fields';
+export * from './ui/account/partials/form-name';
+export * from './ui/account/partials/form-password';
+export * from './ui/account/partials/form-username';
+export * from './ui/account/partials/multi-account';
+export * from './ui/account/partials/passkeys';
+export * from './ui/account/partials/providers';
+export * from './ui/account/partials/sessions';
+export * from './ui/account/partials/two-factor';
+export * from './ui/account/security';
+export * from './ui/account/settings';
+export * from './ui/account/view';
+/************************************
+ **** UI - apikeys
+ *************************************/
+export * from './ui/apikeys/apikeys';
+export * from './ui/apikeys/create-apikey';
+//  export * from './ui/apikeys/create-apikey-org';
+export * from './ui/apikeys/delete-apikey';
+export * from './ui/apikeys/display-apikey';
+/************************************
  **** UI - auth
  *************************************/
 export * from './ui/auth/callback';
@@ -46,54 +72,6 @@ export * from './ui/auth/sign-up';
 export * from './ui/auth/two-factor';
 export * from './ui/auth/types';
 export * from './ui/auth/view';
-
-/************************************
- **** UI - cards
- *************************************/
-// export * from './ui/cards/accept-invitation';
-// export * from './ui/cards/base-organizations';
-// export * from './ui/cards/base-security';
-// export * from './ui/cards/base-account';
-// export * from './ui/cards/base-user-invitations';
-// export * from './ui/cards/apikeys';
-// export * from './ui/cards/delete-account';
-// export * from './ui/cards/delete-organization';
-// export * from './ui/cards/form-avatar';
-// export * from './ui/cards/form-email';
-// export * from './ui/cards/form-fields';
-// export * from './ui/cards/form-name';
-// export * from './ui/cards/form-password';
-// export * from './ui/cards/form-username';
-// export * from './ui/cards/member-cell';
-// export * from './ui/cards/multi-account';
-// export * from './ui/cards/organization-cell-view';
-// export * from './ui/cards/base-org-invitations';
-// export * from './ui/cards/organization-logo';
-// export * from './ui/cards/base-org-members';
-// export * from './ui/cards/organization-name';
-// export * from './ui/cards/base-org-settings';
-// export * from './ui/cards/organization-slug';
-// export * from './ui/cards/passkeys';
-// export * from './ui/cards/providers';
-// export * from './ui/cards/sessions';
-// export * from './ui/cards/two-factor';
-
-/************************************
- **** UI - dialogs
- *************************************/
-// export * from './ui/dialogs/backup-codes';
-// export * from './ui/dialogs/create-apikey';
-// export * from './ui/dialogs/create-organization';
-// export * from './ui/dialogs/delete-account';
-// export * from './ui/dialogs/delete-apikey';
-// export * from './ui/dialogs/delete-organization';
-// export * from './ui/dialogs/display-apikey';
-// export * from './ui/dialogs/invite-member';
-// export * from './ui/dialogs/leave-organization';
-// export * from './ui/dialogs/remove-member';
-// export * from './ui/dialogs/two-factor-password';
-// export * from './ui/dialogs/update-member-role';
-
 /************************************
  **** UI - providers
  *************************************/

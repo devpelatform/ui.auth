@@ -3,43 +3,45 @@
 // General application strings
 export const GENERAL_STRINGS = {
   APP: 'Pelatform',
-  // CONTINUE: 'Continue',
-  // CANCEL: 'Cancel',
-  // SAVE: 'Save',
-  // DELETE: 'Delete',
-  // DONE: 'Done',
+  CONTINUE: 'Continue',
+  CANCEL: 'Cancel',
+  SAVE: 'Save',
+  DELETE: 'Delete',
+  DONE: 'Done',
   UPLOAD: 'Upload',
-  // LINK: 'Link',
-  // UNLINK: 'Unlink',
-  // REVOKE: 'Revoke',
-  // ACCEPT: 'Accept',
-  // REJECT: 'Reject',
+  LINK: 'Link',
+  UNLINK: 'Unlink',
+  REVOKE: 'Revoke',
+  ACCEPT: 'Accept',
+  REJECT: 'Reject',
   GO_BACK: 'Go back',
-  // UNKNOWN: 'Unknown',
+  UNKNOWN: 'Unknown',
   IS_INVALID: 'is invalid',
   IS_REQUIRED: 'is required',
-  // IS_THE_SAME: 'is the same',
-  // UPDATED_SUCCESSFULLY: 'updated successfully',
+  IS_THE_SAME: 'is the same',
+  UPDATED_SUCCESSFULLY: 'updated successfully',
   REQUEST_FAILED: 'Request failed',
-  // COPIED_TO_CLIPBOARD: 'Copied to clipboard',
-  // COPY_TO_CLIPBOARD: 'Copy to clipboard',
+  COPIED_TO_CLIPBOARD: 'Copied to clipboard',
+  COPY_TO_CLIPBOARD: 'Copy to clipboard',
 };
 
 // Account related strings
 export const ACCOUNT_STRINGS = {
   ACCOUNT: 'Account',
-  // ACCOUNTS: 'Accounts',
-  // ACCOUNTS_DESCRIPTION: 'Switch between your currently signed in accounts.',
-  // ACCOUNTS_INSTRUCTIONS: 'Sign in to an additional account.',
+  ACCOUNTS: 'Accounts',
+  ACCOUNTS_DESCRIPTION: 'Switch between your currently signed in accounts.',
+  ACCOUNTS_INSTRUCTIONS: 'Sign in to an additional account.',
   ADD_ACCOUNT: 'Add Account',
-  // SWITCH_ACCOUNT: 'Switch Account',
+  SWITCH_ACCOUNT: 'Switch Account',
   PERSONAL_ACCOUNT: 'Personal Account',
-  // CURRENT_SESSION: 'Current Session',
-  // DELETE_ACCOUNT: 'Delete Account',
-  // DELETE_ACCOUNT_DESCRIPTION: 'Permanently remove your account and all of its contents. This action is not reversible, so please continue with caution.',
-  // DELETE_ACCOUNT_INSTRUCTIONS: 'Please confirm the deletion of your account. This action is not reversible, so please continue with caution.',
-  // DELETE_ACCOUNT_VERIFY: 'Please check your email to verify the deletion of your account.',
-  // DELETE_ACCOUNT_SUCCESS: 'Your account has been deleted.',
+  CURRENT_SESSION: 'Current Session',
+  DELETE_ACCOUNT: 'Delete Account',
+  DELETE_ACCOUNT_DESCRIPTION:
+    'Permanently remove your account and all of its contents. This action is not reversible, so please continue with caution.',
+  DELETE_ACCOUNT_INSTRUCTIONS:
+    'Please confirm the deletion of your account. This action is not reversible, so please continue with caution.',
+  DELETE_ACCOUNT_VERIFY: 'Please check your email to verify the deletion of your account.',
+  DELETE_ACCOUNT_SUCCESS: 'Your account has been deleted.',
 };
 
 // Authentication strings
@@ -59,19 +61,19 @@ export const AUTH_STRINGS = {
   OR_CONTINUE_WITH: 'Or continue with',
   REMEMBER_ME: 'Remember me',
   TRUST_DEVICE: 'Trust this device',
-  // SESSION_NOT_FRESH: 'Your session is not fresh. Please sign in again.',
+  SESSION_NOT_FRESH: 'Your session is not fresh. Please sign in again.',
 };
 
 // Form field strings
 export const FORM_STRINGS = {
   EMAIL: 'Email',
-  // EMAIL_DESCRIPTION: 'Enter the email address you want to use to log in.',
-  // EMAIL_INSTRUCTIONS: 'Please enter a valid email address.',
+  EMAIL_DESCRIPTION: 'Enter the email address you want to use to log in.',
+  EMAIL_INSTRUCTIONS: 'Please enter a valid email address.',
   EMAIL_PLACEHOLDER: 'm@example.com',
   // EMAIL_REQUIRED: 'Email address is required',
-  // EMAIL_IS_THE_SAME: 'Email is the same',
-  // EMAIL_VERIFY_CHANGE: 'Please check your email to verify the change.',
-  // EMAIL_VERIFICATION: 'Please check your email for the verification link.',
+  EMAIL_IS_THE_SAME: 'Email is the same',
+  EMAIL_VERIFY_CHANGE: 'Please check your email to verify the change.',
+  EMAIL_VERIFICATION: 'Please check your email for the verification link.',
 
   PASSWORD: 'Password',
   PASSWORD_PLACEHOLDER: 'Password',
@@ -82,31 +84,31 @@ export const FORM_STRINGS = {
   CONFIRM_PASSWORD_PLACEHOLDER: 'Confirm Password',
   CONFIRM_PASSWORD_REQUIRED: 'Confirm password is required',
 
-  // CURRENT_PASSWORD: 'Current Password',
-  // CURRENT_PASSWORD_PLACEHOLDER: 'Current Password',
+  CURRENT_PASSWORD: 'Current Password',
+  CURRENT_PASSWORD_PLACEHOLDER: 'Current Password',
 
   NEW_PASSWORD: 'New Password',
   NEW_PASSWORD_PLACEHOLDER: 'New Password',
   NEW_PASSWORD_REQUIRED: 'New password is required',
 
   NAME: 'Name',
-  // NAME_DESCRIPTION: 'Please enter your full name, or a display name.',
-  // NAME_INSTRUCTIONS: 'Please use 32 characters at maximum.',
+  NAME_DESCRIPTION: 'Please enter your full name, or a display name.',
+  NAME_INSTRUCTIONS: 'Please use 32 characters at maximum.',
   NAME_PLACEHOLDER: 'Name',
 
   USERNAME: 'Username',
-  // USERNAME_DESCRIPTION: 'Enter the username you want to use to log in.',
-  // USERNAME_INSTRUCTIONS: 'Please use 32 characters at maximum.',
+  USERNAME_DESCRIPTION: 'Enter the username you want to use to log in.',
+  USERNAME_INSTRUCTIONS: 'Please use 32 characters at maximum.',
   USERNAME_PLACEHOLDER: 'Username',
   SIGN_IN_USERNAME_PLACEHOLDER: 'Username or email',
 };
 
 // Password management strings
 export const PASSWORD_STRINGS = {
-  // CHANGE_PASSWORD: 'Change Password',
-  // CHANGE_PASSWORD_DESCRIPTION: 'Enter your current password and a new password.',
-  // CHANGE_PASSWORD_INSTRUCTIONS: 'Please use 8 characters at minimum.',
-  // CHANGE_PASSWORD_SUCCESS: 'Your password has been changed.',
+  CHANGE_PASSWORD: 'Change Password',
+  CHANGE_PASSWORD_DESCRIPTION: 'Enter your current password and a new password.',
+  CHANGE_PASSWORD_INSTRUCTIONS: 'Please use 8 characters at minimum.',
+  CHANGE_PASSWORD_SUCCESS: 'Your password has been changed.',
   // FORGOT_PASSWORD: 'Forgot Password',
   FORGOT_PASSWORD_ACTION: 'Send reset link',
   // FORGOT_PASSWORD_DESCRIPTION: 'Enter your email to reset your password',
@@ -116,8 +118,9 @@ export const PASSWORD_STRINGS = {
   RESET_PASSWORD_ACTION: 'Save new password',
   // RESET_PASSWORD_DESCRIPTION: 'Enter your new password below',
   RESET_PASSWORD_SUCCESS: 'Password reset successfully',
-  // SET_PASSWORD: 'Set Password',
-  // SET_PASSWORD_DESCRIPTION: 'Click the button below to receive an email to set up a password for your account.',
+  SET_PASSWORD: 'Set Password',
+  SET_PASSWORD_DESCRIPTION:
+    'Click the button below to receive an email to set up a password for your account.',
 };
 
 // Magic link and OTP strings
@@ -132,33 +135,34 @@ export const MAGIC_LINK_STRINGS = {
   // EMAIL_OTP_DESCRIPTION: 'Enter your email to receive a code',
   EMAIL_OTP_VERIFICATION_SENT: 'Please check your email for the verification code.',
   RESEND_CODE: 'Resend code',
-  // RESEND_VERIFICATION_EMAIL: 'Resend Verification Email',
+  RESEND_VERIFICATION_EMAIL: 'Resend Verification Email',
   SEND_VERIFICATION_CODE: 'Send verification code',
 };
 
 // Two-factor authentication strings
 export const TWO_FACTOR_STRINGS = {
-  // TWO_FACTOR: 'Two-Factor',
+  TWO_FACTOR: 'Two-Factor',
   TWO_FACTOR_ACTION: 'Verify code',
-  // TWO_FACTOR_DESCRIPTION: 'Please enter your one-time password to continue',
-  // TWO_FACTOR_CARD_DESCRIPTION: 'Add an extra layer of security to your account.',
-  // TWO_FACTOR_DISABLE_INSTRUCTIONS: 'Please enter your password to disable 2FA.',
-  // TWO_FACTOR_ENABLE_INSTRUCTIONS: 'Please enter your password to enable 2FA.',
+  TWO_FACTOR_DESCRIPTION: 'Please enter your one-time password to continue',
+  TWO_FACTOR_CARD_DESCRIPTION: 'Add an extra layer of security to your account.',
+  TWO_FACTOR_DISABLE_INSTRUCTIONS: 'Please enter your password to disable 2FA.',
+  TWO_FACTOR_ENABLE_INSTRUCTIONS: 'Please enter your password to enable 2FA.',
   TWO_FACTOR_ENABLED: 'Two-factor authentication has been enabled',
-  // TWO_FACTOR_DISABLED: 'Two-Factor Authentication has been disabled',
-  // TWO_FACTOR_PROMPT: 'Two-Factor Authentication',
+  TWO_FACTOR_DISABLED: 'Two-Factor Authentication has been disabled',
+  TWO_FACTOR_PROMPT: 'Two-Factor Authentication',
   TWO_FACTOR_TOTP_LABEL: 'Scan the QR Code with your Authenticator',
-  // ENABLE_TWO_FACTOR: 'Enable Two-Factor',
-  // DISABLE_TWO_FACTOR: 'Disable Two-Factor',
+  ENABLE_TWO_FACTOR: 'Enable Two-Factor',
+  DISABLE_TWO_FACTOR: 'Disable Two-Factor',
   ONE_TIME_PASSWORD: 'One-Time Password',
   CONTINUE_WITH_AUTHENTICATOR: 'Continue with Authenticator',
   FORGOT_AUTHENTICATOR: 'Forgot authenticator?',
-  // BACKUP_CODES: 'Backup Codes',
-  // BACKUP_CODES_DESCRIPTION: 'Save these backup codes in a secure place. You can use them to access your account if you lose your two-factor authentication method.',
+  BACKUP_CODES: 'Backup Codes',
+  BACKUP_CODES_DESCRIPTION:
+    'Save these backup codes in a secure place. You can use them to access your account if you lose your two-factor authentication method.',
   BACKUP_CODE: 'Backup Code',
   BACKUP_CODE_PLACEHOLDER: 'Backup Code',
   BACKUP_CODE_REQUIRED: 'Backup code is required',
-  // COPY_ALL_CODES: 'Copy all codes',
+  COPY_ALL_CODES: 'Copy all codes',
   // RECOVER_ACCOUNT: 'Recover Account',
   RECOVER_ACCOUNT_ACTION: 'Recover account',
   // RECOVER_ACCOUNT_DESCRIPTION: 'Please enter a backup code to access your account',
@@ -167,35 +171,37 @@ export const TWO_FACTOR_STRINGS = {
 // Passkey strings
 export const PASSKEY_STRINGS = {
   PASSKEY: 'Passkey',
-  // PASSKEYS: 'Passkeys',
-  // PASSKEYS_DESCRIPTION: 'Manage your passkeys for secure access.',
-  // PASSKEYS_INSTRUCTIONS: 'Securely access your account without a password.',
-  // ADD_PASSKEY: 'Add Passkey',
+  PASSKEYS: 'Passkeys',
+  PASSKEYS_DESCRIPTION: 'Manage your passkeys for secure access.',
+  PASSKEYS_INSTRUCTIONS: 'Securely access your account without a password.',
+  ADD_PASSKEY: 'Add Passkey',
 };
 
 // API Keys strings
 export const API_KEY_STRINGS = {
-  // API_KEYS: 'API Keys',
-  // API_KEYS_DESCRIPTION: 'Manage your API keys for secure access.',
-  // API_KEYS_INSTRUCTIONS: 'Generate API keys to access your account programmatically.',
-  // CREATE_API_KEY: 'Create API Key',
-  // CREATE_API_KEY_DESCRIPTION: 'Enter a unique name for your API key to differentiate it from other keys.',
-  // API_KEY_NAME_PLACEHOLDER: 'New API Key',
-  // API_KEY_CREATED: 'API Key Created',
-  // CREATE_API_KEY_SUCCESS: 'Please copy your API key and store it in a safe place. For security reasons we cannot show it again.',
-  // NEVER_EXPIRES: 'Never Expires',
-  // EXPIRES: 'Expires',
-  // NO_EXPIRATION: 'No Expiration',
-  // DELETE_API_KEY: 'Delete API Key',
-  // DELETE_API_KEY_CONFIRM: 'Are you sure you want to delete this API key?',
-  // API_KEY: 'API Key',
+  API_KEYS: 'API Keys',
+  API_KEYS_DESCRIPTION: 'Manage your API keys for secure access.',
+  API_KEYS_INSTRUCTIONS: 'Generate API keys to access your account programmatically.',
+  CREATE_API_KEY: 'Create API Key',
+  CREATE_API_KEY_DESCRIPTION:
+    'Enter a unique name for your API key to differentiate it from other keys.',
+  API_KEY_NAME_PLACEHOLDER: 'New API Key',
+  API_KEY_CREATED: 'API Key Created',
+  CREATE_API_KEY_SUCCESS:
+    'Please copy your API key and store it in a safe place. For security reasons we cannot show it again.',
+  NEVER_EXPIRES: 'Never Expires',
+  EXPIRES: 'Expires',
+  NO_EXPIRATION: 'No Expiration',
+  DELETE_API_KEY: 'Delete API Key',
+  DELETE_API_KEY_CONFIRM: 'Are you sure you want to delete this API key?',
+  API_KEY: 'API Key',
 };
 
 // Avatar and media strings
 export const MEDIA_STRINGS = {
   AVATAR: 'Avatar',
-  // AVATAR_DESCRIPTION: 'Click on the avatar to upload a custom one from your files.',
-  // AVATAR_INSTRUCTIONS: 'An avatar is optional but strongly recommended.',
+  AVATAR_DESCRIPTION: 'Click on the avatar to upload a custom one from your files.',
+  AVATAR_INSTRUCTIONS: 'An avatar is optional but strongly recommended.',
   UPLOAD_AVATAR: 'Upload Avatar',
   DELETE_AVATAR: 'Delete Avatar',
   // LOGO: 'Logo',
@@ -207,23 +213,24 @@ export const MEDIA_STRINGS = {
 
 // Session management strings
 export const SESSION_STRINGS = {
-  // SESSIONS: 'Sessions',
-  // SESSIONS_DESCRIPTION: 'Manage your active sessions and revoke access.',
+  SESSIONS: 'Sessions',
+  SESSIONS_DESCRIPTION: 'Manage your active sessions and revoke access.',
 };
 
 // Settings strings
 export const SETTINGS_STRINGS = {
   SETTINGS: 'Settings',
-  // SECURITY: 'Security',
-  // PROVIDERS: 'Providers',
-  // PROVIDERS_DESCRIPTION: 'Connect your account with a third-party service.',
+  SECURITY: 'Security',
+  PROVIDERS: 'Providers',
+  PROVIDERS_DESCRIPTION: 'Connect your account with a third-party service.',
   DISABLED_CREDENTIALS_DESCRIPTION: 'Choose a provider to login to your account',
 };
 
 // Email verification strings
 export const EMAIL_VERIFICATION_STRINGS = {
-  // VERIFY_YOUR_EMAIL: 'Verify Your Email',
-  // VERIFY_YOUR_EMAIL_DESCRIPTION: "Please verify your email address. Check your inbox for the verification email. If you haven't received the email, click the button below to resend.",
+  VERIFY_YOUR_EMAIL: 'Verify Your Email',
+  VERIFY_YOUR_EMAIL_DESCRIPTION:
+    "Please verify your email address. Check your inbox for the verification email. If you haven't received the email, click the button below to resend.",
 };
 
 // Legal and compliance strings

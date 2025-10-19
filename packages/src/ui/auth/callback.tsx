@@ -7,10 +7,10 @@ import { useAuth } from '@/hooks';
 import { useOnSuccessTransition } from '@/hooks/private';
 import type { AuthFormProps } from './types';
 
-export function AuthCallback({ redirectTo }: AuthFormProps) {
+export function AuthCallback({ redirectTo: redirectToProp }: AuthFormProps) {
   const { persistClient } = useAuth();
 
-  const { onSuccess } = useOnSuccessTransition(redirectTo);
+  const { onSuccess } = useOnSuccessTransition(redirectToProp);
   const isRedirecting = useRef(false);
 
   useEffect(() => {

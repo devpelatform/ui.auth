@@ -7,15 +7,18 @@ import { useOnSuccessTransition } from '@/hooks/private';
 import { getLocalizedError } from '@/lib/utils';
 import type { AuthButtonProps } from '../types';
 
-export function OneTap({ localization: propLocalization, redirectTo }: AuthButtonProps) {
-  const { authClient, localization: contextLocalization, toast } = useAuth();
+export function OneTap({
+  localization: localizationProp,
+  redirectTo: redirectToProp,
+}: AuthButtonProps) {
+  const { authClient, localization: localizationContext, toast } = useAuth();
 
   const localization = useMemo(
-    () => ({ ...contextLocalization, ...propLocalization }),
-    [contextLocalization, propLocalization],
+    () => ({ ...localizationContext, ...localizationProp }),
+    [localizationContext, localizationProp],
   );
 
-  const { onSuccess } = useOnSuccessTransition(redirectTo);
+  const { onSuccess } = useOnSuccessTransition(redirectToProp);
   const oneTapFetched = useRef(false);
 
   useEffect(() => {

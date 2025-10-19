@@ -39,14 +39,14 @@ export function OrganizationLogo({
   isPending,
   size,
   organization,
-  localization: propLocalization,
+  localization: localizationProp,
   ...props
 }: OrganizationLogoProps & ComponentProps<typeof Avatar>) {
-  const { localization: contextLocalization, avatar } = useAuth();
+  const { localization: localizationContext, avatar } = useAuth();
 
   const localization = useMemo(
-    () => ({ ...contextLocalization, ...propLocalization }),
-    [contextLocalization, propLocalization],
+    () => ({ ...localizationContext, ...localizationProp }),
+    [localizationContext, localizationProp],
   );
 
   const name = organization?.name;

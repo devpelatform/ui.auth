@@ -5,7 +5,8 @@ import type { SocialProvider } from 'better-auth/social-providers';
 
 import { Button } from '@pelatform/ui/default';
 import { useAuth } from '@/hooks';
-import { cn, getLocalizedError, getSearchParam } from '@/lib/utils';
+import { useOnSuccessTransition } from '@/hooks/private';
+import { cn, getLocalizedError } from '@/lib/utils';
 import type { Provider } from '@/types/components';
 import type { AuthButtonProps } from '../types';
 
@@ -20,47 +21,43 @@ export interface ProviderButtonProps extends AuthButtonProps {
 export function ProviderButton({
   className,
   classNames,
-  callbackURL: propCallbackURL,
+  callbackURL: callbackURLProp,
   isSubmitting,
-  localization: propLocalization,
+  localization: localizationProp,
   other,
   provider,
-  redirectTo: propRedirectTo,
-  socialLayout,
+  redirectTo: redirectToProp,
   setIsSubmitting,
+  socialLayout,
 }: ProviderButtonProps) {
   const {
     authClient,
     basePath,
     baseURL,
     genericOAuth,
-    localization: contextLocalization,
+    localization: localizationContext,
     persistClient,
-    redirectTo: contextRedirectTo,
     social,
     toast,
     viewPaths,
   } = useAuth();
 
   const localization = useMemo(
-    () => ({ ...contextLocalization, ...propLocalization }),
-    [contextLocalization, propLocalization],
+    () => ({ ...localizationContext, ...localizationProp }),
+    [localizationContext, localizationProp],
   );
 
-  const getRedirectTo = useCallback(
-    () => propRedirectTo || getSearchParam('redirectTo') || contextRedirectTo,
-    [propRedirectTo, contextRedirectTo],
-  );
+  const { redirectTo } = useOnSuccessTransition(redirectToProp);
 
   const getCallbackURL = useCallback(
     () =>
       `${baseURL}${
-        propCallbackURL ||
+        callbackURLProp ||
         (persistClient
-          ? `${basePath}/${viewPaths.CALLBACK}?redirectTo=${encodeURIComponent(getRedirectTo())}`
-          : getRedirectTo())
+          ? `${basePath}/${viewPaths.CALLBACK}?redirectTo=${encodeURIComponent(redirectTo)}`
+          : redirectTo)
       }`,
-    [propCallbackURL, persistClient, basePath, viewPaths, baseURL, getRedirectTo],
+    [callbackURLProp, persistClient, basePath, viewPaths, baseURL, redirectTo],
   );
 
   const doSignInSocial = async () => {

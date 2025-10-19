@@ -32,30 +32,29 @@ export function TwoFactorForm({
   className,
   classNames,
   isSubmitting,
-  localization: propLocalization,
+  localization: localizationProp,
   otpSeparators = 0,
-  redirectTo,
+  redirectTo: redirectToProp,
   setIsSubmitting,
 }: AuthFormProps) {
   const {
     authClient,
     basePath,
-    localization: contextLocalization,
+    localization: localizationContext,
     twoFactor,
     viewPaths,
     toast,
     Link,
   } = useAuth();
-
   const { data: sessionData } = useAuthHooks().useSession();
   const isTwoFactorEnabled = (sessionData?.user as User)?.twoFactorEnabled;
 
   const localization = useMemo(
-    () => ({ ...contextLocalization, ...propLocalization }),
-    [contextLocalization, propLocalization],
+    () => ({ ...localizationContext, ...localizationProp }),
+    [localizationContext, localizationProp],
   );
 
-  const { onSuccess, isPending: transitionPending } = useOnSuccessTransition(redirectTo);
+  const { onSuccess, isPending: transitionPending } = useOnSuccessTransition(redirectToProp);
   const isHydrated = useIsHydrated();
   const totpURI = isHydrated ? getSearchParam('totpURI') : null;
   const initialSendRef = useRef(false);

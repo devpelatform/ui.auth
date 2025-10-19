@@ -23,33 +23,33 @@ import type { AuthFormProps } from './types';
 export function ResetPasswordForm({
   className,
   classNames,
-  localization: propLocalization,
-  passwordValidation: propPasswordValidation,
+  localization: localizationProp,
+  passwordValidation: passwordValidationProp,
 }: AuthFormProps) {
   const {
     authClient,
     basePath,
     credentials,
-    localization: contextLocalization,
+    localization: localizationContext,
     viewPaths,
     navigate,
     toast,
   } = useAuth();
 
   const localization = useMemo(
-    () => ({ ...contextLocalization, ...propLocalization }),
-    [contextLocalization, propLocalization],
+    () => ({ ...localizationContext, ...localizationProp }),
+    [localizationContext, localizationProp],
+  );
+
+  const confirmPasswordEnabled = credentials?.confirmPassword;
+  const passwordValidationContext = credentials?.passwordValidation;
+
+  const passwordValidation = useMemo(
+    () => ({ ...passwordValidationContext, ...passwordValidationProp }),
+    [passwordValidationContext, passwordValidationProp],
   );
 
   const tokenChecked = useRef(false);
-
-  const confirmPasswordEnabled = credentials?.confirmPassword;
-  const contextPasswordValidation = credentials?.passwordValidation;
-
-  const passwordValidation = useMemo(
-    () => ({ ...contextPasswordValidation, ...propPasswordValidation }),
-    [contextPasswordValidation, propPasswordValidation],
-  );
 
   const formSchema = z
     .object({

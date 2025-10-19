@@ -27,22 +27,22 @@ export function ForgotPasswordForm({
   className,
   classNames,
   isSubmitting,
-  localization: propLocalization,
+  localization: localizationProp,
   setIsSubmitting,
 }: AuthFormProps) {
   const {
     authClient,
     basePath,
     baseURL,
-    localization: contextLocalization,
+    localization: localizationContext,
     navigate,
     toast,
     viewPaths,
   } = useAuth();
 
   const localization = useMemo(
-    () => ({ ...contextLocalization, ...propLocalization }),
-    [contextLocalization, propLocalization],
+    () => ({ ...localizationContext, ...localizationProp }),
+    [localizationContext, localizationProp],
   );
 
   const { captchaRef, getCaptchaHeaders, resetCaptcha } = useCaptcha(localization);

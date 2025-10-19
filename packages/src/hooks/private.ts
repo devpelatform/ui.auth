@@ -230,7 +230,7 @@ export function useOnSuccessTransition(redirectTo?: string) {
     if (onSessionChange) startTransition(onSessionChange);
   }, [refetchSession, onSessionChange]);
 
-  return { onSuccess, isPending };
+  return { onSuccess, isPending, redirectTo: getRedirectTo() };
 }
 
 export function useTheme() {

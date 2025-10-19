@@ -109,7 +109,7 @@
 //     authClient,
 //     basePath,
 //     hooks: { useSession, useListOrganizations },
-//     localization: contextLocalization,
+//     localization: localizationContext,
 //     account: accountOptions,
 //     organization: organizationOptions,
 //     redirectTo,

@@ -24,13 +24,13 @@ export function PersonalAccountView({
   isPending,
   size,
   user,
-  localization: propLocalization,
+  localization: localizationProp,
 }: UserViewProps) {
-  const { localization: contextLocalization } = useAuth();
+  const { localization: localizationContext } = useAuth();
 
   const localization = useMemo(
-    () => ({ ...contextLocalization, ...propLocalization }),
-    [contextLocalization, propLocalization],
+    () => ({ ...localizationContext, ...localizationProp }),
+    [localizationContext, localizationProp],
   );
 
   const name =

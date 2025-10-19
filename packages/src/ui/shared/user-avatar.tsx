@@ -41,14 +41,14 @@ export function UserAvatar({
   isPending,
   size,
   user,
-  localization: propLocalization,
+  localization: localizationProp,
   ...props
 }: UserAvatarProps & ComponentProps<typeof Avatar>) {
-  const { localization: contextLocalization, gravatar, avatar } = useAuth();
+  const { localization: localizationContext, gravatar, avatar } = useAuth();
 
   const localization = useMemo(
-    () => ({ ...contextLocalization, ...propLocalization }),
-    [contextLocalization, propLocalization],
+    () => ({ ...localizationContext, ...localizationProp }),
+    [localizationContext, localizationProp],
   );
 
   const name =

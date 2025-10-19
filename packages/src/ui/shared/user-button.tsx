@@ -91,7 +91,7 @@ export function UserButton({
   trigger,
   additionalLinks,
   disableDefaultLinks,
-  localization: propLocalization,
+  localization: localizationProp,
   size,
   ...props
 }: UserButtonProps & ComponentProps<typeof Button>) {
@@ -99,7 +99,7 @@ export function UserButton({
     account: accountOptions,
     basePath,
     Link,
-    localization: contextLocalization,
+    localization: localizationContext,
     multiSession,
     onSessionChange,
     signUp,
@@ -112,8 +112,8 @@ export function UserButton({
   const user = sessionData?.user;
 
   const localization = useMemo(
-    () => ({ ...contextLocalization, ...propLocalization }),
-    [contextLocalization, propLocalization],
+    () => ({ ...localizationContext, ...localizationProp }),
+    [localizationContext, localizationProp],
   );
 
   const isHydrated = useIsHydrated();
@@ -138,6 +138,8 @@ export function UserButton({
         await setActiveSession({ sessionToken });
 
         onSessionChange?.();
+        // Reset pending state after successful switch
+        setActiveSessionPending(false);
       } catch (error) {
         toast({
           message: getLocalizedError({ error, localization }),
@@ -148,11 +150,12 @@ export function UserButton({
     [setActiveSession, onSessionChange, toast, localization],
   );
 
+  // biome-ignore lint/correctness/useExhaustiveDependencies: sessionData?.user?.id is needed to reset pending state when user changes
   useEffect(() => {
     if (!multiSession) return;
 
     setActiveSessionPending(false);
-  }, [multiSession]);
+  }, [multiSession, sessionData?.user?.id]);
 
   return (
     <DropdownMenu>

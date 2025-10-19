@@ -129,7 +129,13 @@ export function SettingsCardHeader({
   title,
 }: SettingsCardHeaderProps) {
   return (
-    <CardHeader className={cn(classNames?.header, className)}>
+    <CardHeader
+      className={cn(
+        'flex-col items-start justify-start gap-1.5 p-5',
+        classNames?.header,
+        className,
+      )}
+    >
       {isPending ? (
         <>
           <Skeleton className={cn('my-0.5 h-5 w-1/3 md:h-5.5', classNames?.skeleton)} />

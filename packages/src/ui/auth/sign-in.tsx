@@ -29,16 +29,16 @@ export function SignInForm({
   className,
   classNames,
   isSubmitting,
-  localization: propLocalization,
-  redirectTo,
+  localization: localizationProp,
+  redirectTo: redirectToProp,
   setIsSubmitting,
-  passwordValidation: propPasswordValidation,
+  passwordValidation: passwordValidationProp,
 }: AuthFormProps) {
   const {
     authClient,
     basePath,
     credentials,
-    localization: contextLocalization,
+    localization: localizationContext,
     viewPaths,
     navigate,
     toast,
@@ -46,21 +46,21 @@ export function SignInForm({
   } = useAuth();
 
   const localization = useMemo(
-    () => ({ ...contextLocalization, ...propLocalization }),
-    [contextLocalization, propLocalization],
+    () => ({ ...localizationContext, ...localizationProp }),
+    [localizationContext, localizationProp],
   );
 
   const { captchaRef, getCaptchaHeaders, resetCaptcha } = useCaptcha(localization);
   const isHydrated = useIsHydrated();
-  const { onSuccess, isPending: transitionPending } = useOnSuccessTransition(redirectTo);
+  const { onSuccess, isPending: transitionPending } = useOnSuccessTransition(redirectToProp);
 
   const rememberMeEnabled = credentials?.rememberMe;
   const usernameEnabled = credentials?.username;
-  const contextPasswordValidation = credentials?.passwordValidation;
+  const passwordValidationContext = credentials?.passwordValidation;
 
   const passwordValidation = useMemo(
-    () => ({ ...contextPasswordValidation, ...propPasswordValidation }),
-    [contextPasswordValidation, propPasswordValidation],
+    () => ({ ...passwordValidationContext, ...passwordValidationProp }),
+    [passwordValidationContext, passwordValidationProp],
   );
 
   const formSchema = z.object({

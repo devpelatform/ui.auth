@@ -37,17 +37,17 @@ function EmailForm({
   className,
   classNames,
   isSubmitting,
-  localization: propLocalization,
+  localization: localizationProp,
   setIsSubmitting,
   setEmail,
 }: AuthFormProps & {
   setEmail: (email: string) => void;
 }) {
-  const { authClient, localization: contextLocalization, toast } = useAuth();
+  const { authClient, localization: localizationContext, toast } = useAuth();
 
   const localization = useMemo(
-    () => ({ ...contextLocalization, ...propLocalization }),
-    [contextLocalization, propLocalization],
+    () => ({ ...localizationContext, ...localizationProp }),
+    [localizationContext, localizationProp],
   );
 
   const isHydrated = useIsHydrated();
@@ -137,22 +137,22 @@ function OTPForm({
   className,
   classNames,
   isSubmitting,
-  localization: propLocalization,
+  localization: localizationProp,
   otpSeparators = 0,
-  redirectTo,
+  redirectTo: redirectToProp,
   setIsSubmitting,
   email,
 }: AuthFormProps & {
   email: string;
 }) {
-  const { authClient, localization: contextLocalization, toast } = useAuth();
+  const { authClient, localization: localizationContext, toast } = useAuth();
 
   const localization = useMemo(
-    () => ({ ...contextLocalization, ...propLocalization }),
-    [contextLocalization, propLocalization],
+    () => ({ ...localizationContext, ...localizationProp }),
+    [localizationContext, localizationProp],
   );
 
-  const { onSuccess, isPending: transitionPending } = useOnSuccessTransition(redirectTo);
+  const { onSuccess, isPending: transitionPending } = useOnSuccessTransition(redirectToProp);
 
   const formSchema = z.object({
     code: z

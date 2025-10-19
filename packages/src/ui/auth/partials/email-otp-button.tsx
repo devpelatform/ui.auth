@@ -11,14 +11,14 @@ import type { AuthButtonProps } from '../types';
 export function EmailOTPButton({
   classNames,
   isSubmitting,
-  localization: propLocalization,
+  localization: localizationProp,
   view,
 }: AuthButtonProps) {
-  const { basePath, localization: contextLocalization, navigate, viewPaths } = useAuth();
+  const { basePath, localization: localizationContext, navigate, viewPaths } = useAuth();
 
   const localization = useMemo(
-    () => ({ ...contextLocalization, ...propLocalization }),
-    [contextLocalization, propLocalization],
+    () => ({ ...localizationContext, ...localizationProp }),
+    [localizationContext, localizationProp],
   );
 
   return (

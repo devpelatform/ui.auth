@@ -25,18 +25,18 @@ export function RecoverAccountForm({
   className,
   classNames,
   isSubmitting,
-  localization: propLocalization,
-  redirectTo,
+  localization: localizationProp,
+  redirectTo: redirectToProp,
   setIsSubmitting,
 }: AuthFormProps) {
-  const { authClient, localization: contextLocalization, toast } = useAuth();
+  const { authClient, localization: localizationContext, toast } = useAuth();
 
   const localization = useMemo(
-    () => ({ ...contextLocalization, ...propLocalization }),
-    [contextLocalization, propLocalization],
+    () => ({ ...localizationContext, ...localizationProp }),
+    [localizationContext, localizationProp],
   );
 
-  const { onSuccess, isPending: transitionPending } = useOnSuccessTransition(redirectTo);
+  const { onSuccess, isPending: transitionPending } = useOnSuccessTransition(redirectToProp);
 
   const formSchema = z.object({
     code: z.string().min(1, { error: localization.BACKUP_CODE_REQUIRED }),

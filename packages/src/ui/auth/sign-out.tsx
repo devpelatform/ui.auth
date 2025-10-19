@@ -7,10 +7,10 @@ import { useAuth } from '@/hooks';
 import { useOnSuccessTransition } from '@/hooks/private';
 import type { AuthFormProps } from './types';
 
-export function SignOut({ redirectTo: propRedirectTo }: AuthFormProps) {
+export function SignOut({ redirectTo: redirectToProp }: AuthFormProps) {
   const { authClient, basePath, viewPaths } = useAuth();
 
-  const redirectTo = propRedirectTo ?? `${basePath}/${viewPaths.SIGN_IN}`;
+  const redirectTo = redirectToProp ?? `${basePath}/${viewPaths.SIGN_IN}`;
   const { onSuccess } = useOnSuccessTransition(redirectTo);
   const signingOut = useRef(false);
 

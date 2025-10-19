@@ -27,7 +27,7 @@ import * as z from '@pelatform/ui/re/zod';
 import { useAuth } from '@/hooks';
 import { useCaptcha, useIsHydrated, useOnSuccessTransition } from '@/hooks/private';
 import { fileToBase64, resizeAndCropImage } from '@/lib/images';
-import { cn, getLocalizedError, getPasswordSchema, getSearchParam } from '@/lib/utils';
+import { cn, getLocalizedError, getPasswordSchema } from '@/lib/utils';
 import { Captcha } from '../captcha/captcha';
 import { PasswordInput } from '../shared/password-input';
 import { UserAvatar } from '../shared/user-avatar';
@@ -38,10 +38,10 @@ export function SignUpForm({
   classNames,
   callbackURL,
   isSubmitting,
-  localization: propLocalization,
-  redirectTo,
+  localization: localizationProp,
+  redirectTo: redirectToProp,
   setIsSubmitting,
-  passwordValidation: propPasswordValidation,
+  passwordValidation: passwordValidationProp,
 }: AuthFormProps) {
   const {
     additionalFields,
@@ -50,33 +50,36 @@ export function SignUpForm({
     basePath,
     baseURL,
     credentials,
-    localization: contextLocalization,
+    localization: localizationContext,
     nameRequired,
     navigate,
     persistClient,
-    redirectTo: contextRedirectTo,
     signUp: signUpOptions,
     viewPaths,
     toast,
   } = useAuth();
 
   const localization = useMemo(
-    () => ({ ...contextLocalization, ...propLocalization }),
-    [contextLocalization, propLocalization],
+    () => ({ ...localizationContext, ...localizationProp }),
+    [localizationContext, localizationProp],
   );
 
   const { captchaRef, getCaptchaHeaders, resetCaptcha } = useCaptcha(localization);
   const isHydrated = useIsHydrated();
-  const { onSuccess, isPending: transitionPending } = useOnSuccessTransition(redirectTo);
+  const {
+    onSuccess,
+    isPending: transitionPending,
+    redirectTo,
+  } = useOnSuccessTransition(redirectToProp);
 
   const confirmPasswordEnabled = credentials?.confirmPassword;
   const usernameEnabled = credentials?.username;
-  const contextPasswordValidation = credentials?.passwordValidation;
+  const passwordValidationContext = credentials?.passwordValidation;
   const signUpFields = signUpOptions?.fields;
 
   const passwordValidation = useMemo(
-    () => ({ ...contextPasswordValidation, ...propPasswordValidation }),
-    [contextPasswordValidation, propPasswordValidation],
+    () => ({ ...passwordValidationContext, ...passwordValidationProp }),
+    [passwordValidationContext, passwordValidationProp],
   );
 
   // Avatar upload state
@@ -84,20 +87,15 @@ export function SignUpForm({
   const [avatarImage, setAvatarImage] = useState<string | null>(null);
   const [uploadingAvatar, setUploadingAvatar] = useState(false);
 
-  const getRedirectTo = useCallback(
-    () => redirectTo || getSearchParam('redirectTo') || contextRedirectTo,
-    [redirectTo, contextRedirectTo],
-  );
-
   const getCallbackURL = useCallback(
     () =>
       `${baseURL}${
         callbackURL ||
         (persistClient
-          ? `${basePath}/${viewPaths.CALLBACK}?redirectTo=${encodeURIComponent(getRedirectTo())}`
-          : getRedirectTo())
+          ? `${basePath}/${viewPaths.CALLBACK}?redirectTo=${encodeURIComponent(redirectTo)}`
+          : redirectTo)
       }`,
-    [callbackURL, persistClient, basePath, viewPaths, baseURL, getRedirectTo],
+    [callbackURL, persistClient, basePath, viewPaths, baseURL, redirectTo],
   );
 
   // Create the base schema for standard fields

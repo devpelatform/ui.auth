@@ -12,18 +12,18 @@ import type { AuthButtonProps } from '../types';
 export function PasskeyButton({
   classNames,
   isSubmitting,
-  localization: propLocalization,
-  redirectTo,
+  localization: localizationProp,
+  redirectTo: redirectToProp,
   setIsSubmitting,
 }: AuthButtonProps) {
-  const { authClient, localization: contextLocalization, toast } = useAuth();
+  const { authClient, localization: localizationContext, toast } = useAuth();
 
   const localization = useMemo(
-    () => ({ ...contextLocalization, ...propLocalization }),
-    [contextLocalization, propLocalization],
+    () => ({ ...localizationContext, ...localizationProp }),
+    [localizationContext, localizationProp],
   );
 
-  const { onSuccess } = useOnSuccessTransition(redirectTo);
+  const { onSuccess } = useOnSuccessTransition(redirectToProp);
 
   const signInPassKey = async () => {
     setIsSubmitting?.(true);

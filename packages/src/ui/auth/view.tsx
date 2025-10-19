@@ -41,7 +41,7 @@ export function AuthView({
   classNames,
   callbackURL,
   cardHeader,
-  localization: propLocalization,
+  localization: localizationProp,
   path: pathProp,
   pathname,
   redirectTo,
@@ -55,7 +55,7 @@ export function AuthView({
     emailOTP,
     genericOAuth,
     Link,
-    localization: contextLocalization,
+    localization: localizationContext,
     magicLink,
     oneTap,
     passkey,
@@ -65,8 +65,8 @@ export function AuthView({
   } = useAuth();
 
   const localization = useMemo(
-    () => ({ ...contextLocalization, ...propLocalization }),
-    [contextLocalization, propLocalization],
+    () => ({ ...localizationContext, ...localizationProp }),
+    [localizationContext, localizationProp],
   );
 
   const isHydrated = useIsHydrated();
@@ -305,7 +305,7 @@ export function AuthForm({
   classNames,
   callbackURL,
   isSubmitting,
-  localization: propLocalization,
+  localization: localizationProp,
   pathname,
   redirectTo,
   view,
@@ -316,7 +316,7 @@ export function AuthForm({
     basePath,
     credentials,
     emailOTP,
-    localization: contextLocalization,
+    localization: localizationContext,
     magicLink,
     replace,
     signUp,
@@ -325,8 +325,8 @@ export function AuthForm({
   } = useAuth();
 
   const localization = useMemo(
-    () => ({ ...contextLocalization, ...propLocalization }),
-    [contextLocalization, propLocalization],
+    () => ({ ...localizationContext, ...localizationProp }),
+    [localizationContext, localizationProp],
   );
 
   const signUpEnabled = !!signUp;

@@ -18,53 +18,48 @@ import {
 import { useForm } from '@pelatform/ui/re/react-hook-form';
 import * as z from '@pelatform/ui/re/zod';
 import { useAuth } from '@/hooks';
-import { useCaptcha, useIsHydrated } from '@/hooks/private';
-import { cn, getLocalizedError, getSearchParam } from '@/lib/utils';
+import { useCaptcha, useIsHydrated, useOnSuccessTransition } from '@/hooks/private';
+import { cn, getLocalizedError } from '@/lib/utils';
 import { Captcha } from '../captcha/captcha';
 import type { AuthFormProps } from './types';
 
 export function MagicLinkForm({
   className,
   classNames,
-  callbackURL: propCallbackURL,
+  callbackURL: callbackURLProp,
   isSubmitting,
-  localization: propLocalization,
-  redirectTo: propRedirectTo,
+  localization: localizationProp,
+  redirectTo: redirectToProp,
   setIsSubmitting,
 }: AuthFormProps) {
   const {
     authClient,
     basePath,
     baseURL,
-    localization: contextLocalization,
+    localization: localizationContext,
     persistClient,
-    redirectTo: contextRedirectTo,
     toast,
     viewPaths,
   } = useAuth();
 
   const localization = useMemo(
-    () => ({ ...contextLocalization, ...propLocalization }),
-    [contextLocalization, propLocalization],
+    () => ({ ...localizationContext, ...localizationProp }),
+    [localizationContext, localizationProp],
   );
 
   const { captchaRef, getCaptchaHeaders, resetCaptcha } = useCaptcha(localization);
   const isHydrated = useIsHydrated();
-
-  const getRedirectTo = useCallback(
-    () => propRedirectTo || getSearchParam('redirectTo') || contextRedirectTo,
-    [propRedirectTo, contextRedirectTo],
-  );
+  const { redirectTo } = useOnSuccessTransition(redirectToProp);
 
   const getCallbackURL = useCallback(
     () =>
       `${baseURL}${
-        propCallbackURL ||
+        callbackURLProp ||
         (persistClient
-          ? `${basePath}/${viewPaths.CALLBACK}?redirectTo=${encodeURIComponent(getRedirectTo())}`
-          : getRedirectTo())
+          ? `${basePath}/${viewPaths.CALLBACK}?redirectTo=${encodeURIComponent(redirectTo)}`
+          : redirectTo)
       }`,
-    [propCallbackURL, persistClient, basePath, viewPaths, baseURL, getRedirectTo],
+    [callbackURLProp, persistClient, basePath, viewPaths, baseURL, redirectTo],
   );
 
   const formSchema = z.object({
