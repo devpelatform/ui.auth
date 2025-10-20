@@ -1,19 +1,22 @@
-import { createClient } from '@supabase/supabase-js';
+import { createClient as createSupabaseClient } from '@supabase/supabase-js';
 
 export const SUPABASE_BUCKET = 'dev';
 
-export const supabase = createClient(
-  process.env.NEXT_PUBLIC_SUPABASE_URL!,
-  process.env.SUPABASE_SERVICE_ROLE_KEY!,
-  {
-    auth: {
-      autoRefreshToken: false,
-      persistSession: false,
+export function createClient() {
+  return createSupabaseClient(
+    process.env.NEXT_PUBLIC_SUPABASE_URL as string,
+    process.env.SUPABASE_SERVICE_ROLE_KEY as string,
+    {
+      auth: {
+        autoRefreshToken: false,
+        persistSession: false,
+      },
     },
-  },
-);
+  );
+}
 
 export function getPublicUrl(path: string) {
+  const supabase = createClient();
   const { data } = supabase.storage.from(SUPABASE_BUCKET).getPublicUrl(path);
 
   return `${data.publicUrl}?v=${Date.now()}`;

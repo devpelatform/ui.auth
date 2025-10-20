@@ -2,10 +2,10 @@ import { Hono } from 'hono';
 import { describeRoute } from 'hono-openapi';
 
 import {
+  createClient,
   getPublicUrl,
   getStorageKeyFromPublicUrl,
   SUPABASE_BUCKET,
-  supabase,
 } from '../../../lib/supabase';
 import { authMiddleware } from '../../../middleware/web';
 
@@ -33,6 +33,8 @@ export const workspaceLogoRouter = new Hono()
       if (!session || !user || !orgId) {
         return c.body(null, 401);
       }
+
+      const supabase = createClient();
 
       const body = await c.req.parseBody();
       const file = body.logo as File;
@@ -80,6 +82,8 @@ export const workspaceLogoRouter = new Hono()
       if (!session || !user || !orgId) {
         return c.body(null, 401);
       }
+
+      const supabase = createClient();
 
       const body = await c.req.json();
       const publicUrl = body.url as string;
