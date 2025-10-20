@@ -60,7 +60,10 @@ export function ApiKeysCard({
     <>
       <SettingsCard
         className={className}
-        classNames={classNames}
+        classNames={{
+          header: 'border-b-0',
+          ...classNames,
+        }}
         actionLabel={localization.CREATE_API_KEY}
         description={localization.API_KEYS_DESCRIPTION}
         instructions={localization.API_KEYS_INSTRUCTIONS}
@@ -70,7 +73,7 @@ export function ApiKeysCard({
         {...props}
       >
         {filteredApiKeys && filteredApiKeys.length > 0 && (
-          <CardContent className={cn('grid gap-4', classNames?.content)}>
+          <CardContent className={cn('grid gap-4 border-t', classNames?.content)}>
             {filteredApiKeys?.map((apiKey) => (
               <ApiKeyCell
                 key={apiKey.id}

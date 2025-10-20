@@ -1,7 +1,6 @@
 'use client';
 
 import { useTransition } from 'react';
-import Image from 'next/image';
 import { Globe, Languages } from 'lucide-react';
 import { useLocale } from 'next-intl';
 
@@ -80,7 +79,8 @@ export function LanguageSwitcher({
             className={cn('cursor-pointer gap-2', currentLocale === lang.code && 'bg-accent')}
           >
             {showFlags && lang.flag ? (
-              <Image
+              // biome-ignore lint/performance/noImgElement: disable
+              <img
                 src={getFlagUrl(lang.flag)}
                 alt={`${lang.name} flag`}
                 className="size-4 rounded-full object-cover"

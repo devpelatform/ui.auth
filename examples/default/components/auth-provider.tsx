@@ -38,7 +38,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       // basePath={config.appUrl}
       // baseURL
       changeEmail
-      // deleteUser
+      deleteUser
       emailVerification
       // freshAge
       // gravatar

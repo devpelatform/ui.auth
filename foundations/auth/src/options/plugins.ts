@@ -29,7 +29,8 @@ import { getLocaleFromRequest, isDevelopment, isProduction } from '../lib/utils'
 
 const polarClient = new Polar({
   accessToken: process.env.POLAR_ACCESS_TOKEN,
-  server: isProduction ? 'production' : 'sandbox',
+  server: 'sandbox',
+  // server: isProduction ? 'production' : 'sandbox',
 });
 
 const pluginList = {

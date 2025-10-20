@@ -2,7 +2,6 @@ import { Scalar } from '@scalar/hono-api-reference';
 import { Hono } from 'hono';
 import { openAPIRouteHandler } from 'hono-openapi';
 
-import { isDevelopment } from '@pelatform/utils';
 import { auth } from '@repo/auth';
 import { config } from '@repo/config';
 import { mergeOpenApiSchemas } from './lib/openapi';
@@ -25,7 +24,7 @@ app.get('/', (c) => {
 // Mount routes with different prefixes
 const appRouter = app.route('/', routes);
 
-app.use(docsAuthMiddleware()).get(
+app.get(
   '/app-openapi',
   openAPIRouteHandler(app, {
     documentation: {
@@ -45,9 +44,9 @@ app.use(docsAuthMiddleware()).get(
 
 app.get('/openapi', async (c) => {
   const authSchema = await auth.api.generateOpenAPISchema();
-  const appSchema = await (
-    app.request(`${isDevelopment ? '/api' : ''}/app-openapi`) as Promise<Response>
-  ).then((res) => res.json());
+  const appSchema = await (app.request('/api/app-openapi') as Promise<Response>).then((res) =>
+    res.json(),
+  );
   const mergedSchema = mergeOpenApiSchemas({
     appSchema,
     // biome-ignore lint/suspicious/noExplicitAny: disable
