@@ -1,62 +1,49 @@
 'use client';
 
-import { useMemo } from 'react';
-
 import { useAuth, useAuthHooks } from '@/hooks';
-import type { AuthLocalization } from '@/lib/localization';
+import { useLocalization } from '@/hooks/private';
 import { cn } from '@/lib/utils';
-import type { SettingsCardClassNames } from '../shared/settings-card';
 import { FormAvatarCard } from './partials/form-avatar';
 import { FormEmailCard } from './partials/form-email';
 import { FormFieldsCard } from './partials/form-fields';
 import { FormNameCard } from './partials/form-name';
 import { FormUsernameCard } from './partials/form-username';
 import { MultiAccountCard } from './partials/multi-account';
+import type { AccountBaseProps } from './types';
 
 export function SettingsCards({
   className,
   classNames,
   localization: localizationProp,
-}: {
-  className?: string;
-  classNames?: {
-    card?: SettingsCardClassNames;
-    cards?: string;
-  };
-  localization?: AuthLocalization;
-}) {
+}: AccountBaseProps) {
   const {
     account: accountOptions,
     additionalFields,
     avatar,
     changeEmail,
     credentials,
-    localization: localizationContext,
     multiSession,
   } = useAuth();
   const { useSession } = useAuthHooks();
   const { data: sessionData } = useSession();
 
-  const localization = useMemo(
-    () => ({ ...localizationContext, ...localizationProp }),
-    [localizationContext, localizationProp],
-  );
+  const localization = useLocalization(localizationProp);
 
   return (
-    <div className={cn('flex w-full flex-col gap-4 md:gap-6', className, classNames?.cards)}>
+    <div className={cn('grid w-full gap-6 md:gap-8', className)}>
       {accountOptions?.fields?.includes('image') && avatar && (
-        <FormAvatarCard classNames={classNames?.card} localization={localization} />
+        <FormAvatarCard classNames={classNames} localization={localization} />
       )}
 
       {credentials?.username && (
-        <FormUsernameCard classNames={classNames?.card} localization={localization} />
+        <FormUsernameCard classNames={classNames} localization={localization} />
       )}
 
       {accountOptions?.fields?.includes('name') && (
-        <FormNameCard classNames={classNames?.card} localization={localization} />
+        <FormNameCard classNames={classNames} localization={localization} />
       )}
 
-      {changeEmail && <FormEmailCard classNames={classNames?.card} localization={localization} />}
+      {changeEmail && <FormEmailCard classNames={classNames} localization={localization} />}
 
       {accountOptions?.fields?.map((field) => {
         if (field === 'image') return null;
@@ -81,25 +68,23 @@ export function SettingsCards({
         return (
           <FormFieldsCard
             key={field}
-            classNames={classNames?.card}
-            value={defaultValue}
+            classNames={classNames}
             description={description}
-            name={field}
             instructions={instructions}
-            label={label}
             localization={localization}
+            name={field}
             placeholder={placeholder}
             required={required}
+            label={label}
             type={type}
             multiline={multiline}
+            value={defaultValue}
             validate={validate}
           />
         );
       })}
 
-      {multiSession && (
-        <MultiAccountCard classNames={classNames?.card} localization={localization} />
-      )}
+      {multiSession && <MultiAccountCard classNames={classNames} localization={localization} />}
     </div>
   );
 }

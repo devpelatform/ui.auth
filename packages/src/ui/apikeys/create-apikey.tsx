@@ -1,16 +1,9 @@
 'use client';
 
-import { type ComponentProps, useMemo } from 'react';
 import { zodResolver } from '@hookform/resolvers/zod';
 
 import {
   Button,
-  Dialog,
-  DialogContent,
-  DialogDescription,
-  DialogFooter,
-  DialogHeader,
-  DialogTitle,
   Form,
   FormControl,
   FormField,
@@ -28,34 +21,25 @@ import {
 import { useForm } from '@pelatform/ui/re/react-hook-form';
 import * as z from '@pelatform/ui/re/zod';
 import { useAuth } from '@/hooks';
-import { useLang } from '@/hooks/private';
-import type { AuthLocalization } from '@/lib/localization';
+import { useLang, useLocalization } from '@/hooks/private';
 import { cn, getLocalizedError } from '@/lib/utils';
 import type { Refetch } from '@/types/generals';
-import type { SettingsCardClassNames } from '../shared/settings-card';
-
-export interface CreateApiKeyDialogProps extends ComponentProps<typeof Dialog> {
-  classNames?: SettingsCardClassNames;
-  localization?: AuthLocalization;
-  onSuccess: (key: string) => void;
-  refetch?: Refetch;
-}
+import type { DialogComponentProps } from '@/types/ui';
+import { DialogComponent, DialogFooterComponent } from '../shared/components/dialog';
 
 export function CreateApiKeyDialog({
   classNames,
   localization: localizationProp,
+  onOpenChange,
+  title,
+  description,
   onSuccess,
   refetch,
-  onOpenChange,
   ...props
-}: CreateApiKeyDialogProps) {
-  const { authClient, apiKey, localization: localizationContext, toast } = useAuth();
+}: DialogComponentProps & { onSuccess: (key: string) => void; refetch?: Refetch }) {
+  const { authClient, apiKey, toast } = useAuth();
 
-  const localization = useMemo(
-    () => ({ ...localizationContext, ...localizationProp }),
-    [localizationContext, localizationProp],
-  );
-
+  const localization = useLocalization(localizationProp);
   const { lang } = useLang();
 
   const formSchema = z.object({
@@ -101,105 +85,93 @@ export function CreateApiKeyDialog({
   const rtf = new Intl.RelativeTimeFormat(lang ?? 'en');
 
   return (
-    <Dialog onOpenChange={onOpenChange} {...props}>
-      <DialogContent
-        onOpenAutoFocus={(e) => e.preventDefault()}
-        className={classNames?.dialog?.content}
-      >
-        <DialogHeader className={classNames?.dialog?.header}>
-          <DialogTitle className={cn('text-lg md:text-xl', classNames?.title)}>
-            {localization.CREATE_API_KEY}
-          </DialogTitle>
+    <DialogComponent
+      classNames={classNames}
+      localization={localization}
+      onOpenChange={onOpenChange}
+      title={title || localization.CREATE_API_KEY}
+      description={description || localization.CREATE_API_KEY_DESCRIPTION}
+      disableFooter={true}
+      {...props}
+    >
+      <Form {...form}>
+        <form onSubmit={form.handleSubmit(onSubmit)}>
+          <div className="flex gap-4">
+            <FormField
+              control={form.control}
+              name="name"
+              render={({ field }) => (
+                <FormItem className="flex-1">
+                  <FormLabel className={classNames?.label}>{localization.NAME}</FormLabel>
 
-          <DialogDescription className={cn('text-xs md:text-sm', classNames?.description)}>
-            {localization.CREATE_API_KEY_DESCRIPTION}
-          </DialogDescription>
-        </DialogHeader>
+                  <FormControl>
+                    <Input
+                      className={classNames?.input}
+                      placeholder={localization.API_KEY_NAME_PLACEHOLDER}
+                      autoFocus
+                      disabled={isSubmitting}
+                      {...field}
+                    />
+                  </FormControl>
 
-        <Form {...form}>
-          <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
-            <div className="flex gap-4">
-              <FormField
-                control={form.control}
-                name="name"
-                render={({ field }) => (
-                  <FormItem className="flex-1">
-                    <FormLabel className={classNames?.label}>{localization.NAME}</FormLabel>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
 
+            <FormField
+              control={form.control}
+              name="expiresInDays"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel className={classNames?.label}>{localization.EXPIRES}</FormLabel>
+
+                  <Select
+                    onValueChange={field.onChange}
+                    defaultValue={field.value}
+                    disabled={isSubmitting}
+                  >
                     <FormControl>
-                      <Input
-                        className={classNames?.input}
-                        placeholder={localization.API_KEY_NAME_PLACEHOLDER}
-                        autoFocus
-                        disabled={isSubmitting}
-                        {...field}
-                      />
+                      <SelectTrigger className={classNames?.input}>
+                        <SelectValue placeholder={localization.NO_EXPIRATION} />
+                      </SelectTrigger>
                     </FormControl>
 
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
+                    <SelectContent>
+                      <SelectItem value="none">{localization.NO_EXPIRATION}</SelectItem>
+                      {[1, 7, 30, 60, 90, 180, 365].map((days) => (
+                        <SelectItem key={days} value={days.toString()}>
+                          {days === 365 ? rtf.format(1, 'year') : rtf.format(days, 'day')}
+                        </SelectItem>
+                      ))}
+                    </SelectContent>
+                  </Select>
 
-              <FormField
-                control={form.control}
-                name="expiresInDays"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel className={classNames?.label}>{localization.EXPIRES}</FormLabel>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+          </div>
 
-                    <Select
-                      onValueChange={field.onChange}
-                      defaultValue={field.value}
-                      disabled={isSubmitting}
-                    >
-                      <FormControl>
-                        <SelectTrigger className={classNames?.input}>
-                          <SelectValue placeholder={localization.NO_EXPIRATION} />
-                        </SelectTrigger>
-                      </FormControl>
-
-                      <SelectContent>
-                        <SelectItem value="none">{localization.NO_EXPIRATION}</SelectItem>
-
-                        {[1, 7, 30, 60, 90, 180, 365].map((days) => (
-                          <SelectItem key={days} value={days.toString()}>
-                            {days === 365 ? rtf.format(1, 'year') : rtf.format(days, 'day')}
-                          </SelectItem>
-                        ))}
-                      </SelectContent>
-                    </Select>
-
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-            </div>
-
-            <DialogFooter className={classNames?.dialog?.footer}>
-              <Button
-                type="button"
-                variant="outline"
-                onClick={() => onOpenChange?.(false)}
-                className={cn(classNames?.button, classNames?.outlineButton)}
-                disabled={isSubmitting}
-              >
-                {localization.CANCEL}
-              </Button>
-
+          <DialogFooterComponent
+            classNames={classNames}
+            localization={localization}
+            onOpenChange={onOpenChange}
+            cancelButton={true}
+            cancelButtonDisabled={isSubmitting}
+            button={
               <Button
                 type="submit"
                 className={cn(classNames?.button, classNames?.primaryButton)}
                 disabled={isSubmitting}
               >
                 {isSubmitting && <Spinner />}
-
                 {localization.CREATE_API_KEY}
               </Button>
-            </DialogFooter>
-          </form>
-        </Form>
-      </DialogContent>
-    </Dialog>
+            }
+          />
+        </form>
+      </Form>
+    </DialogComponent>
   );
 }

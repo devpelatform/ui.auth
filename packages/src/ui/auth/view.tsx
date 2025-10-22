@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useMemo, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { ArrowLeftIcon } from 'lucide-react';
 
 import {
@@ -10,15 +10,17 @@ import {
   CardDescription,
   CardFooter,
   CardHeader,
+  CardHeading,
   CardTitle,
   Separator,
 } from '@pelatform/ui/default';
 import { useAuth } from '@/hooks';
-import { useIsHydrated } from '@/hooks/private';
+import { useIsHydrated, useLocalization } from '@/hooks/private';
 import { socialProviders } from '@/lib/social-providers';
 import { cn } from '@/lib/utils';
 import type { AuthViewPath } from '@/lib/view-paths';
 import { getViewByPath } from '@/lib/view-paths';
+import { AcceptInvitation } from './accept-invitation';
 import { AuthCallback } from './callback';
 import { EmailOTPForm } from './email-otp';
 import { ForgotPasswordForm } from './forgot-password';
@@ -42,12 +44,12 @@ export function AuthView({
   callbackURL,
   cardHeader,
   localization: localizationProp,
+  otpSeparators = 1,
   path: pathProp,
   pathname,
   redirectTo,
   socialLayout: socialLayoutProp = 'auto',
   view: viewProp,
-  otpSeparators = 0,
 }: AuthViewProps) {
   const {
     basePath,
@@ -55,20 +57,16 @@ export function AuthView({
     emailOTP,
     genericOAuth,
     Link,
-    localization: localizationContext,
     magicLink,
     oneTap,
+    organization,
     passkey,
     signUp,
     social,
     viewPaths,
   } = useAuth();
 
-  const localization = useMemo(
-    () => ({ ...localizationContext, ...localizationProp }),
-    [localizationContext, localizationProp],
-  );
-
+  const localization = useLocalization(localizationProp);
   const isHydrated = useIsHydrated();
 
   let socialLayout = socialLayoutProp;
@@ -97,6 +95,8 @@ export function AuthView({
 
   if (view === 'CALLBACK') return <AuthCallback redirectTo={redirectTo} />;
   if (view === 'SIGN_OUT') return <SignOut />;
+  if (organization && view === 'ACCEPT_INVITATION')
+    return <AcceptInvitation localization={localization} />;
 
   const description =
     !credentials && !magicLink && !emailOTP
@@ -104,21 +104,19 @@ export function AuthView({
       : localization[`${view}_DESCRIPTION` as keyof typeof localization];
 
   return (
-    <Card className={cn('w-full max-w-sm', className, classNames?.base)}>
-      <CardHeader className={classNames?.header}>
+    <Card className={cn('w-full max-w-md', className, classNames?.base)}>
+      <CardHeader className={cn('py-4', classNames?.header)}>
         {cardHeader ? (
           cardHeader
         ) : (
-          <>
-            <CardTitle className={cn('text-lg md:text-xl', classNames?.title)}>
+          <CardHeading>
+            <CardTitle className={classNames?.title}>
               {localization[view as keyof typeof localization]}
             </CardTitle>
             {description && (
-              <CardDescription className={cn('text-xs md:text-sm', classNames?.description)}>
-                {description}
-              </CardDescription>
+              <CardDescription className={classNames?.description}>{description}</CardDescription>
             )}
-          </>
+          </CardHeading>
         )}
       </CardHeader>
 
@@ -134,9 +132,9 @@ export function AuthView({
               isSubmitting={isSubmitting}
               localization={localization}
               otpSeparators={otpSeparators}
-              view={view}
               redirectTo={redirectTo}
               setIsSubmitting={setIsSubmitting}
+              view={view}
             />
             {magicLink &&
               ((credentials &&
@@ -146,9 +144,9 @@ export function AuthView({
                 (emailOTP && view === 'EMAIL_OTP')) && (
                 <MagicLinkButton
                   classNames={classNames}
+                  isSubmitting={isSubmitting}
                   localization={localization}
                   view={view}
-                  isSubmitting={isSubmitting}
                 />
               )}
             {emailOTP &&
@@ -159,9 +157,9 @@ export function AuthView({
                 (magicLink && ['SIGN_IN', 'MAGIC_LINK'].includes(view as string))) && (
                 <EmailOTPButton
                   classNames={classNames}
+                  isSubmitting={isSubmitting}
                   localization={localization}
                   view={view}
-                  isSubmitting={isSubmitting}
                 />
               )}
           </div>
@@ -174,11 +172,11 @@ export function AuthView({
             <>
               {(credentials || magicLink || emailOTP) && (
                 <div className={cn('flex items-center gap-2', classNames?.continueWith)}>
-                  <Separator className={cn('!w-auto grow', classNames?.separator)} />
-                  <span className="flex-shrink-0 text-muted-foreground text-sm">
+                  <Separator className={cn('w-auto! grow', classNames?.separator)} />
+                  <span className="shrink-0 text-muted-foreground text-sm">
                     {localization.OR_CONTINUE_WITH}
                   </span>
-                  <Separator className={cn('!w-auto grow', classNames?.separator)} />
+                  <Separator className={cn('w-auto! grow', classNames?.separator)} />
                 </div>
               )}
 
@@ -267,7 +265,6 @@ export function AuthView({
           view === 'EMAIL_OTP' ||
           view === 'SIGN_UP' ? (
             <Link
-              className={cn('text-foreground underline', classNames?.footerLink)}
               href={`${basePath}/${viewPaths[view === 'SIGN_IN' || view === 'MAGIC_LINK' || view === 'EMAIL_OTP' ? 'SIGN_UP' : 'SIGN_IN']}${
                 isHydrated ? window.location.search : ''
               }`}
@@ -276,7 +273,7 @@ export function AuthView({
                 mode="link"
                 underline="dashed"
                 size="sm"
-                className={cn('px-0 text-foreground underline', classNames?.footerLink)}
+                className={cn('px-0 text-foreground', classNames?.footerLink)}
               >
                 {view === 'SIGN_IN' || view === 'MAGIC_LINK' || view === 'EMAIL_OTP'
                   ? localization.SIGN_UP
@@ -288,7 +285,7 @@ export function AuthView({
               mode="link"
               underline="dashed"
               size="sm"
-              className={cn('px-0 text-foreground underline', classNames?.footerLink)}
+              className={cn('px-0 text-foreground', classNames?.footerLink)}
               onClick={() => window.history.back()}
             >
               {localization.GO_BACK}
@@ -306,17 +303,16 @@ export function AuthForm({
   callbackURL,
   isSubmitting,
   localization: localizationProp,
+  otpSeparators = 1,
   pathname,
   redirectTo,
-  view,
-  otpSeparators = 0,
   setIsSubmitting,
+  view,
 }: AuthFormProps) {
   const {
     basePath,
     credentials,
     emailOTP,
-    localization: localizationContext,
     magicLink,
     replace,
     signUp,
@@ -324,10 +320,7 @@ export function AuthForm({
     viewPaths,
   } = useAuth();
 
-  const localization = useMemo(
-    () => ({ ...localizationContext, ...localizationProp }),
-    [localizationContext, localizationProp],
-  );
+  const localization = useLocalization(localizationProp);
 
   const signUpEnabled = !!signUp;
 
@@ -392,9 +385,9 @@ export function AuthForm({
       <SignInForm
         className={className}
         classNames={classNames}
+        isSubmitting={isSubmitting}
         localization={localization}
         redirectTo={redirectTo}
-        isSubmitting={isSubmitting}
         setIsSubmitting={setIsSubmitting}
       />
     ) : magicLink ? (
@@ -402,9 +395,9 @@ export function AuthForm({
         className={className}
         classNames={classNames}
         callbackURL={callbackURL}
+        isSubmitting={isSubmitting}
         localization={localization}
         redirectTo={redirectTo}
-        isSubmitting={isSubmitting}
         setIsSubmitting={setIsSubmitting}
       />
     ) : emailOTP ? (
@@ -412,9 +405,10 @@ export function AuthForm({
         className={className}
         classNames={classNames}
         callbackURL={callbackURL}
-        localization={localization}
-        redirectTo={redirectTo}
         isSubmitting={isSubmitting}
+        localization={localization}
+        otpSeparators={otpSeparators}
+        redirectTo={redirectTo}
         setIsSubmitting={setIsSubmitting}
       />
     ) : null;
@@ -425,10 +419,10 @@ export function AuthForm({
       <TwoFactorForm
         className={className}
         classNames={classNames}
+        isSubmitting={isSubmitting}
         localization={localization}
         otpSeparators={otpSeparators}
         redirectTo={redirectTo}
-        isSubmitting={isSubmitting}
         setIsSubmitting={setIsSubmitting}
       />
     );
@@ -439,9 +433,9 @@ export function AuthForm({
       <RecoverAccountForm
         className={className}
         classNames={classNames}
+        isSubmitting={isSubmitting}
         localization={localization}
         redirectTo={redirectTo}
-        isSubmitting={isSubmitting}
         setIsSubmitting={setIsSubmitting}
       />
     );
@@ -453,9 +447,9 @@ export function AuthForm({
         className={className}
         classNames={classNames}
         callbackURL={callbackURL}
+        isSubmitting={isSubmitting}
         localization={localization}
         redirectTo={redirectTo}
-        isSubmitting={isSubmitting}
         setIsSubmitting={setIsSubmitting}
       />
     );
@@ -467,9 +461,9 @@ export function AuthForm({
         className={className}
         classNames={classNames}
         callbackURL={callbackURL}
+        isSubmitting={isSubmitting}
         localization={localization}
         redirectTo={redirectTo}
-        isSubmitting={isSubmitting}
         setIsSubmitting={setIsSubmitting}
       />
     );
@@ -480,8 +474,8 @@ export function AuthForm({
       <ForgotPasswordForm
         className={className}
         classNames={classNames}
-        localization={localization}
         isSubmitting={isSubmitting}
+        localization={localization}
         setIsSubmitting={setIsSubmitting}
       />
     );
@@ -504,9 +498,9 @@ export function AuthForm({
           className={className}
           classNames={classNames}
           callbackURL={callbackURL}
+          isSubmitting={isSubmitting}
           localization={localization}
           redirectTo={redirectTo}
-          isSubmitting={isSubmitting}
           setIsSubmitting={setIsSubmitting}
         />
       )

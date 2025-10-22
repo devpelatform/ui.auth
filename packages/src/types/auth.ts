@@ -1,5 +1,6 @@
 /* @private */
 
+import type { Account } from 'better-auth';
 import {
   anonymousClient,
   apiKeyClient,
@@ -16,6 +17,7 @@ import {
   twoFactorClient,
   usernameClient,
 } from 'better-auth/client/plugins';
+import type { Organization } from 'better-auth/plugins/organization';
 import { createAuthClient } from 'better-auth/react';
 
 export type AnyAuthClient = Omit<ReturnType<typeof createAuthClient>, 'signUp' | 'getSession'>;
@@ -50,3 +52,5 @@ export type AuthClient = typeof authClient;
 
 export type Session = AuthClient['$Infer']['Session']['session'];
 export type User = AuthClient['$Infer']['Session']['user'];
+
+export type { Account, Organization };

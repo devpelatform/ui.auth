@@ -16,6 +16,7 @@ import {
 import { useForm } from '@pelatform/ui/re/react-hook-form';
 import * as z from '@pelatform/ui/re/zod';
 import { useAuth } from '@/hooks';
+import { useLocalization } from '@/hooks/private';
 import { cn, getLocalizedError, getPasswordSchema } from '@/lib/utils';
 import { PasswordInput } from '../shared/password-input';
 import type { AuthFormProps } from './types';
@@ -26,20 +27,9 @@ export function ResetPasswordForm({
   localization: localizationProp,
   passwordValidation: passwordValidationProp,
 }: AuthFormProps) {
-  const {
-    authClient,
-    basePath,
-    credentials,
-    localization: localizationContext,
-    viewPaths,
-    navigate,
-    toast,
-  } = useAuth();
+  const { authClient, basePath, credentials, viewPaths, navigate, toast } = useAuth();
 
-  const localization = useMemo(
-    () => ({ ...localizationContext, ...localizationProp }),
-    [localizationContext, localizationProp],
-  );
+  const localization = useLocalization(localizationProp);
 
   const confirmPasswordEnabled = credentials?.confirmPassword;
   const passwordValidationContext = credentials?.passwordValidation;

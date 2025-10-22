@@ -66,6 +66,7 @@ export const config = {
   },
   path: {
     auth: {
+      ACCEPT_INVITATION: '/join',
       CALLBACK: '/callback',
       EMAIL_OTP: '/otp',
       FORGOT_PASSWORD: '/forgot-password',
@@ -81,6 +82,7 @@ export const config = {
       SETTINGS: '/account/settings',
       SECURITY: '/account/settings/security',
       API_KEYS: '/account/settings/apikeys',
+      ORGANIZATIONS: '/account/settings/organizations',
     },
     main: {
       ERROR: '/error',
@@ -88,7 +90,6 @@ export const config = {
       PRICING: '/pricing',
     },
     workspaces: {
-      ACCEPT_INVITATION: '/join',
       SETTINGS: '/settings',
       MEMBERS: '/settings/people',
       API_KEYS: '/settings/apikeys',

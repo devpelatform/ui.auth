@@ -1,30 +1,8 @@
 import type { ReactNode } from 'react';
-import type { Organization } from 'better-auth/plugins/organization';
 
 import type { OrganizationViewPaths } from '@/lib/view-paths';
-
-export type OrganizationLogoOptions = {
-  /**
-   * Upload a logo image and return the URL string
-   * @remarks `(file: File) => Promise<string>`
-   */
-  upload?: (file: File) => Promise<string | undefined | null>;
-  /**
-   * Delete a previously uploaded logo image from your storage/CDN
-   * @remarks `(url: string) => Promise<void>`
-   */
-  delete?: (url: string) => Promise<void>;
-  /**
-   * Logo size for resizing
-   * @default 256 if upload is provided, 128 otherwise
-   */
-  size: number;
-  /**
-   * File extension for logo uploads
-   * @default "png"
-   */
-  extension: string;
-};
+import type { Organization } from './auth';
+import type { AvatarOptions } from './options';
 
 export type OrganizationContextOptions = {
   /**
@@ -37,15 +15,40 @@ export type OrganizationContextOptions = {
    */
   basePath: string;
   /**
+   * Current organization path
+   */
+  currentPath?: string;
+  /**
    * Custom roles to add to the built-in roles (owner, admin, member)
    * @default []
    */
   customRoles: Array<{ role: string; label: string }>;
   /**
+   * The current organization
+   */
+  data: Organization | null | undefined;
+  /**
+   * Whether the organization is loading
+   */
+  isLoading: boolean | undefined;
+  /**
+   * Whether the organization is pending
+   */
+  isPending: boolean | undefined;
+  /**
+   * Whether the organization is refetching
+   */
+  isRefetching: boolean | undefined;
+  /**
    * Logo configuration
    * @default undefined
    */
-  logo?: OrganizationLogoOptions;
+  logo?: AvatarOptions;
+  /**
+   * List of organizations
+   * @default undefined
+   */
+  organizations?: Organization[] | null | undefined;
   /**
    * Organization path mode
    * @default "default"
@@ -56,6 +59,14 @@ export type OrganizationContextOptions = {
    */
   personalPath?: string;
   /**
+   * Refetch the organization
+   */
+  refetch: (() => void) | undefined;
+  /**
+   * Set the last visited organization
+   */
+  setLastVisited: (organization: Partial<Organization>) => Promise<void> | void;
+  /**
    * The current organization slug
    */
   slug?: string;
@@ -63,26 +74,6 @@ export type OrganizationContextOptions = {
    * Customize organization view paths
    */
   viewPaths: OrganizationViewPaths;
-  /**
-   * The current organization
-   */
-  data: Organization | null | undefined;
-  /**
-   * Whether the organization is loading
-   */
-  isLoading: boolean | undefined;
-  /**
-   * Whether the organization is refetching
-   */
-  isRefetching: boolean | undefined;
-  /**
-   * Refetch the organization
-   */
-  refetch: (() => void) | undefined;
-  /**
-   * Set the last visited organization
-   */
-  setLastVisited?: (organization: Partial<Organization>) => Promise<void> | void;
 };
 
 export type OrganizationUIProviderProps = {
@@ -90,7 +81,7 @@ export type OrganizationUIProviderProps = {
   apiKey?: boolean;
   basePath?: string;
   customRoles?: Array<{ role: string; label: string }>;
-  logo?: boolean | Partial<OrganizationLogoOptions>;
+  logo?: boolean | Partial<AvatarOptions>;
   pathMode?: 'default' | 'slug';
   personalPath?: string;
   slug?: string;

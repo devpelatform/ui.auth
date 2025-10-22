@@ -1,14 +1,12 @@
 'use client';
 
 import type { ReactNode } from 'react';
-import Image from 'next/image';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { useTranslations } from 'next-intl';
 
 import { AuthUIProvider, createAuthTranslations } from '@pelatform/ui.auth';
 import { authClient } from '@repo/auth/client';
-import { config } from '@repo/config';
 
 export function AuthProvider({ children }: { children: ReactNode }) {
   const router = useRouter();
@@ -19,21 +17,20 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       authClient={authClient}
       // additionalFields
       avatar={{
-        upload: async (file) => {
+        upload: async (file: File) => {
           const formData = new FormData();
           formData.append('avatar', file);
           const res = await fetch('/api/user/avatar', { method: 'POST', body: formData });
           const { file: uploadedFile } = await res.json();
           return uploadedFile.url;
         },
-        delete: async (url) => {
+        delete: async (url: string) => {
           await fetch('/api/user/avatar', {
             method: 'DELETE',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({ url }),
           });
         },
-        Image: Image,
       }}
       // basePath={config.appUrl}
       // baseURL
@@ -54,9 +51,9 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       replace={router.replace}
       // signUp
       // toast
-      viewPaths={Object.fromEntries(
-        Object.entries(config.path.auth).map(([key, value]) => [key, value.replace(/^\//, '')]),
-      )}
+      // viewPaths={Object.fromEntries(
+      //   Object.entries(config.path.auth).map(([key, value]) => [key, value.replace(/^\//, '')]),
+      // )}
       // Plugins Configuration
       apiKey
       captcha={{
@@ -79,6 +76,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       magicLink
       multiSession
       oneTap
+      organization
       passkey
       social={{
         providers: ['github', 'google'],

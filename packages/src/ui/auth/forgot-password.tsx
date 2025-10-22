@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useMemo } from 'react';
+import { useEffect } from 'react';
 import { zodResolver } from '@hookform/resolvers/zod';
 import type { BetterFetchOption } from 'better-auth/react';
 
@@ -18,7 +18,7 @@ import {
 import { useForm } from '@pelatform/ui/re/react-hook-form';
 import * as z from '@pelatform/ui/re/zod';
 import { useAuth } from '@/hooks';
-import { useCaptcha, useIsHydrated } from '@/hooks/private';
+import { useCaptcha, useIsHydrated, useLocalization } from '@/hooks/private';
 import { cn, getLocalizedError } from '@/lib/utils';
 import { Captcha } from '../captcha/captcha';
 import type { AuthFormProps } from './types';
@@ -30,21 +30,9 @@ export function ForgotPasswordForm({
   localization: localizationProp,
   setIsSubmitting,
 }: AuthFormProps) {
-  const {
-    authClient,
-    basePath,
-    baseURL,
-    localization: localizationContext,
-    navigate,
-    toast,
-    viewPaths,
-  } = useAuth();
+  const { authClient, basePath, baseURL, navigate, toast, viewPaths } = useAuth();
 
-  const localization = useMemo(
-    () => ({ ...localizationContext, ...localizationProp }),
-    [localizationContext, localizationProp],
-  );
-
+  const localization = useLocalization(localizationProp);
   const { captchaRef, getCaptchaHeaders, resetCaptcha } = useCaptcha(localization);
   const isHydrated = useIsHydrated();
 
@@ -102,8 +90,8 @@ export function ForgotPasswordForm({
     <Form {...form}>
       <form
         onSubmit={form.handleSubmit(forgotPassword)}
-        noValidate={isHydrated}
         className={cn('grid w-full gap-6', className, classNames?.base)}
+        noValidate={isHydrated}
       >
         <FormField
           control={form.control}
@@ -131,8 +119,8 @@ export function ForgotPasswordForm({
 
         <Button
           type="submit"
-          disabled={isSubmitting}
           className={cn('w-full', classNames?.button, classNames?.primaryButton)}
+          disabled={isSubmitting}
         >
           {isSubmitting ? <Spinner /> : localization.FORGOT_PASSWORD_ACTION}
         </Button>

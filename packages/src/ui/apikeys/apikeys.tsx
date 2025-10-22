@@ -4,43 +4,34 @@ import { useMemo, useState } from 'react';
 import type { Organization } from 'better-auth/plugins/organization';
 import { KeyRoundIcon } from 'lucide-react';
 
-import { Button, Card, CardContent } from '@pelatform/ui/default';
-import { useAuth, useAuthHooks } from '@/hooks';
-import { useLang } from '@/hooks/private';
-import type { AuthLocalization } from '@/lib/localization';
+import { Button, Card } from '@pelatform/ui/default';
+import { useAuthHooks } from '@/hooks';
+import { useLang, useLocalization } from '@/hooks/private';
 import { cn } from '@/lib/utils';
 import type { ApiKey, Refetch } from '@/types/generals';
-import {
-  SettingsCard,
-  type SettingsCardClassNames,
-  type SettingsCardProps,
-} from '../shared/settings-card';
+import type { CardComponentProps } from '@/types/ui';
+import { CardComponent } from '../shared/components/card';
 import { CreateApiKeyDialog } from './create-apikey';
 import { ApiKeyDeleteDialog } from './delete-apikey';
 import { ApiKeyDisplayDialog } from './display-apikey';
-// import { CreateApiKeyDialogOrg } from './create-apikey-org';
-
-export interface ApiKeysCardProps extends SettingsCardProps {
-  organizations?: Organization[] | null | undefined;
-  organizationId?: string;
-}
 
 export function ApiKeysCard({
   className,
   classNames,
   localization: localizationProp,
-  organizations,
+  isOrganization = false,
+  organization,
   organizationId,
   ...props
-}: ApiKeysCardProps) {
-  const { localization: localizationContext } = useAuth();
+}: CardComponentProps & {
+  isOrganization?: boolean;
+  organization?: Organization | null | undefined;
+  organizationId?: string;
+}) {
   const { useListApiKeys } = useAuthHooks();
   const { data: apiKeys, isPending, refetch } = useListApiKeys();
 
-  const localization = useMemo(
-    () => ({ ...localizationContext, ...localizationProp }),
-    [localizationContext, localizationProp],
-  );
+  const localization = useLocalization(localizationProp);
 
   // Filter API keys by organizationId
   const filteredApiKeys = useMemo(() => {
@@ -58,22 +49,19 @@ export function ApiKeysCard({
 
   return (
     <>
-      <SettingsCard
+      <CardComponent
         className={className}
-        classNames={{
-          header: 'border-b-0',
-          ...classNames,
-        }}
-        actionLabel={localization.CREATE_API_KEY}
+        classNames={classNames}
+        title={localization.API_KEYS}
         description={localization.API_KEYS_DESCRIPTION}
         instructions={localization.API_KEYS_INSTRUCTIONS}
-        isPending={isPending}
-        title={localization.API_KEYS}
+        actionLabel={localization.CREATE_API_KEY}
         action={() => setCreateDialogOpen(true)}
+        isPending={isPending}
         {...props}
       >
         {filteredApiKeys && filteredApiKeys.length > 0 && (
-          <CardContent className={cn('grid gap-4 border-t', classNames?.content)}>
+          <div className={cn('grid gap-4', classNames?.grid)}>
             {filteredApiKeys?.map((apiKey) => (
               <ApiKeyCell
                 key={apiKey.id}
@@ -83,11 +71,11 @@ export function ApiKeysCard({
                 refetch={refetch}
               />
             ))}
-          </CardContent>
+          </div>
         )}
-      </SettingsCard>
+      </CardComponent>
 
-      {organizations && organizations.length > 0 ? (
+      {isOrganization && organization && organizationId && (
         // <CreateApiKeyDialogOrg
         //   classNames={classNames}
         //   localization={localization}
@@ -98,7 +86,9 @@ export function ApiKeysCard({
         //   organizationId={organizationId}
         // />
         <>Nothing to see here</>
-      ) : (
+      )}
+
+      {!isOrganization && (
         <CreateApiKeyDialog
           classNames={classNames}
           localization={localization}
@@ -111,34 +101,32 @@ export function ApiKeysCard({
 
       <ApiKeyDisplayDialog
         classNames={classNames}
-        apiKey={createdApiKey}
         localization={localization}
         open={displayDialogOpen}
         onOpenChange={setDisplayDialogOpen}
+        apiKey={createdApiKey}
       />
     </>
   );
 }
 
-interface ApiKeyCellProps {
-  className?: string;
-  classNames?: SettingsCardClassNames;
-  apiKey: ApiKey;
-  localization: AuthLocalization;
-  refetch?: Refetch;
-}
-
-function ApiKeyCell({ className, classNames, apiKey, localization, refetch }: ApiKeyCellProps) {
+function ApiKeyCell({
+  className,
+  classNames,
+  localization,
+  apiKey,
+  refetch,
+}: CardComponentProps & { apiKey: ApiKey; refetch?: Refetch }) {
   const { lang } = useLang();
 
   const [showDeleteDialog, setShowDeleteDialog] = useState(false);
 
   // Format expiration date or show "Never expires"
   const formatExpiration = () => {
-    if (!apiKey.expiresAt) return localization.NEVER_EXPIRES;
+    if (!apiKey.expiresAt) return localization?.NEVER_EXPIRES;
 
     const expiresDate = new Date(apiKey.expiresAt);
-    return `${localization.EXPIRES} ${expiresDate.toLocaleDateString(lang ?? 'en', {
+    return `${localization?.EXPIRES} ${expiresDate.toLocaleDateString(lang ?? 'en', {
       month: 'short',
       day: 'numeric',
       year: 'numeric',
@@ -154,37 +142,35 @@ function ApiKeyCell({ className, classNames, apiKey, localization, refetch }: Ap
           classNames?.cell,
         )}
       >
-        <KeyRoundIcon className={cn('size-4 flex-shrink-0', classNames?.icon)} />
+        <KeyRoundIcon className={cn('size-4 shrink-0', classNames?.icon)} />
 
         <div className="flex flex-col truncate">
           <div className="flex items-center gap-2">
             <span className="truncate font-semibold text-sm">{apiKey.name}</span>
-
             <span className="flex-1 truncate text-muted-foreground text-sm">
               {apiKey.start}
               {'******'}
             </span>
           </div>
-
           <div className="truncate text-muted-foreground text-xs">{formatExpiration()}</div>
         </div>
 
         <Button
-          className={cn('relative ms-auto', classNames?.button, classNames?.outlineButton)}
           size="sm"
           variant="outline"
+          className={cn('relative ms-auto', classNames?.button, classNames?.outlineButton)}
           onClick={() => setShowDeleteDialog(true)}
         >
-          {localization.DELETE}
+          {localization?.DELETE}
         </Button>
       </Card>
 
       <ApiKeyDeleteDialog
         classNames={classNames}
-        apiKey={apiKey}
         localization={localization}
         open={showDeleteDialog}
         onOpenChange={setShowDeleteDialog}
+        apiKey={apiKey}
         refetch={refetch}
       />
     </>

@@ -19,8 +19,8 @@ export const authViewPaths = {
   SIGN_UP: 'sign-up',
   /** @default "two-factor" */
   TWO_FACTOR: 'two-factor',
-  // /** @default "accept-invitation" */
-  // ACCEPT_INVITATION: 'accept-invitation',
+  /** @default "accept-invitation" */
+  ACCEPT_INVITATION: 'accept-invitation',
 };
 
 export type AuthViewPaths = typeof authViewPaths;
@@ -34,8 +34,8 @@ export const accountViewPaths = {
   SECURITY: 'security',
   /** @default "api-keys" */
   API_KEYS: 'api-keys',
-  // /** @default "organizations" */
-  // ORGANIZATIONS: 'organizations',
+  /** @default "organizations" */
+  ORGANIZATIONS: 'organizations',
 };
 
 export type AccountViewPaths = typeof accountViewPaths;

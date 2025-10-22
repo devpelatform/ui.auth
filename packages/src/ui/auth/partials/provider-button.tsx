@@ -1,52 +1,37 @@
 'use client';
 
-import { useCallback, useMemo } from 'react';
+import { useCallback } from 'react';
 import type { SocialProvider } from 'better-auth/social-providers';
 
 import { Button } from '@pelatform/ui/default';
 import { useAuth } from '@/hooks';
-import { useOnSuccessTransition } from '@/hooks/private';
+import { useLocalization, useOnSuccessTransition } from '@/hooks/private';
 import { cn, getLocalizedError } from '@/lib/utils';
 import type { Provider } from '@/types/components';
 import type { AuthButtonProps } from '../types';
 
-export interface ProviderButtonProps extends AuthButtonProps {
+export function ProviderButton({
+  classNames,
+  isSubmitting,
+  localization: localizationProp,
+  redirectTo: redirectToProp,
+  setIsSubmitting,
+  className,
+  callbackURL: callbackURLProp,
+  other,
+  provider,
+  socialLayout,
+}: AuthButtonProps & {
   className?: string;
   callbackURL?: string;
   other?: boolean;
   provider: Provider;
   socialLayout: 'auto' | 'horizontal' | 'grid' | 'vertical';
-}
+}) {
+  const { authClient, basePath, baseURL, genericOAuth, persistClient, social, toast, viewPaths } =
+    useAuth();
 
-export function ProviderButton({
-  className,
-  classNames,
-  callbackURL: callbackURLProp,
-  isSubmitting,
-  localization: localizationProp,
-  other,
-  provider,
-  redirectTo: redirectToProp,
-  setIsSubmitting,
-  socialLayout,
-}: ProviderButtonProps) {
-  const {
-    authClient,
-    basePath,
-    baseURL,
-    genericOAuth,
-    localization: localizationContext,
-    persistClient,
-    social,
-    toast,
-    viewPaths,
-  } = useAuth();
-
-  const localization = useMemo(
-    () => ({ ...localizationContext, ...localizationProp }),
-    [localizationContext, localizationProp],
-  );
-
+  const localization = useLocalization(localizationProp);
   const { redirectTo } = useOnSuccessTransition(redirectToProp);
 
   const getCallbackURL = useCallback(
@@ -108,6 +93,7 @@ export function ProviderButton({
 
   return (
     <Button
+      type="button"
       variant="outline"
       className={cn(
         socialLayout === 'vertical' ? 'w-full' : 'grow',
@@ -116,8 +102,8 @@ export function ProviderButton({
         classNames?.form?.outlineButton,
         classNames?.form?.providerButton,
       )}
-      disabled={isSubmitting}
       onClick={doSignInSocial}
+      disabled={isSubmitting}
     >
       {provider.icon && <provider.icon className={classNames?.form?.icon} />}
       {socialLayout === 'grid' && provider.name}

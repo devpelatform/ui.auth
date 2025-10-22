@@ -19,7 +19,6 @@ import {
 } from 'better-auth/client/plugins';
 import { createAuthClient } from 'better-auth/react';
 
-import { config } from '@repo/config';
 import type { auth } from './auth';
 
 export const authClient = createAuthClient({
@@ -36,11 +35,7 @@ export const authClient = createAuthClient({
     }),
     passkeyClient(),
     phoneNumberClient(),
-    twoFactorClient({
-      onTwoFactorRedirect() {
-        window.location.href = config.path.auth.TWO_FACTOR;
-      },
-    }),
+    twoFactorClient(),
     usernameClient(),
 
     // Authorization

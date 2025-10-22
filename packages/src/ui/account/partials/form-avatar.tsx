@@ -1,48 +1,35 @@
 'use client';
 
-import { type ComponentProps, useMemo, useRef, useState } from 'react';
+import { useRef, useState } from 'react';
 import { Trash2Icon, UploadCloudIcon } from 'lucide-react';
 
 import {
   Button,
-  Card,
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from '@pelatform/ui/default';
 import { useAuth, useAuthHooks } from '@/hooks';
+import { useLocalization } from '@/hooks/private';
 import { fileToBase64, resizeAndCropImage } from '@/lib/images';
-import type { AuthLocalization } from '@/lib/localization';
-import { cn, getLocalizedError } from '@/lib/utils';
-import {
-  type SettingsCardClassNames,
-  SettingsCardFooter,
-  SettingsCardHeader,
-} from '../../shared/settings-card';
-import { UserAvatar } from '../../shared/user-avatar';
-
-export interface FormAvatarCardProps extends ComponentProps<typeof Card> {
-  className?: string;
-  classNames?: SettingsCardClassNames;
-  localization?: AuthLocalization;
-}
+import { getLocalizedError } from '@/lib/utils';
+import type { CardComponentProps } from '@/types/ui';
+import { UserAvatar } from '../../shared/avatar';
+import { CardComponent } from '../../shared/components/card';
 
 export function FormAvatarCard({
   className,
   classNames,
   localization: localizationProp,
   ...props
-}: FormAvatarCardProps) {
-  const { avatar, localization: localizationContext, toast } = useAuth();
+}: CardComponentProps) {
+  const { avatar, toast } = useAuth();
   const { useSession, useUpdateUser } = useAuthHooks();
   const { data: sessionData, isPending, refetch } = useSession();
   const { mutate: updateUser } = useUpdateUser();
 
-  const localization = useMemo(
-    () => ({ ...localizationContext, ...localizationProp }),
-    [localizationContext, localizationProp],
-  );
+  const localization = useLocalization(localizationProp);
 
   const fileInputRef = useRef<HTMLInputElement | null>(null);
   const [loading, setLoading] = useState(false);
@@ -106,73 +93,61 @@ export function FormAvatarCard({
   const openFileDialog = () => fileInputRef.current?.click();
 
   return (
-    <Card className={cn('w-full pb-0 text-start', className, classNames?.base)} {...props}>
+    <CardComponent
+      className={className}
+      classNames={{
+        content: 'flex items-center justify-between',
+        header: 'w-full',
+        ...classNames,
+      }}
+      title={localization.AVATAR}
+      description={localization.AVATAR_DESCRIPTION}
+      instructions={localization.AVATAR_INSTRUCTIONS}
+      isPending={isPending}
+      {...props}
+    >
       <input
+        type="file"
+        hidden
         ref={fileInputRef}
         accept="image/*"
         disabled={loading}
-        hidden
-        type="file"
         onChange={(e) => {
           const file = e.target.files?.item(0);
           if (file) handleAvatarChange(file);
-
           e.target.value = '';
         }}
       />
+      <DropdownMenu>
+        <DropdownMenuTrigger asChild>
+          <Button variant="ghost" size="icon" className="size-fit rounded-full">
+            <UserAvatar
+              key={sessionData?.user.image}
+              className="size-16 lg:size-20"
+              classNames={{
+                fallback: 'text-xl lg:text-2xl',
+                ...classNames?.avatar,
+              }}
+              isPending={isPending || loading}
+              localization={localization}
+              user={sessionData?.user}
+            />
+          </Button>
+        </DropdownMenuTrigger>
 
-      <div className="flex items-center justify-between">
-        <SettingsCardHeader
-          className="!border-none grow self-start"
-          title={localization.AVATAR}
-          description={localization.AVATAR_DESCRIPTION}
-          isPending={isPending}
-          classNames={classNames}
-        />
-
-        <DropdownMenu>
-          <DropdownMenuTrigger asChild>
-            <Button className="me-5 size-fit rounded-full" size="icon" variant="ghost">
-              <UserAvatar
-                isPending={isPending || loading}
-                key={sessionData?.user.image}
-                className="size-16 lg:size-18"
-                classNames={{
-                  fallback: 'text-xl lg:text-2xl',
-                  ...classNames?.avatar,
-                }}
-                user={sessionData?.user}
-                localization={localization}
-              />
-            </Button>
-          </DropdownMenuTrigger>
-
-          <DropdownMenuContent align="end" onCloseAutoFocus={(e) => e.preventDefault()}>
-            <DropdownMenuItem onClick={openFileDialog} disabled={loading}>
-              <UploadCloudIcon />
-              {localization.UPLOAD_AVATAR}
+        <DropdownMenuContent align="end" onCloseAutoFocus={(e) => e.preventDefault()}>
+          <DropdownMenuItem onClick={openFileDialog} disabled={loading}>
+            <UploadCloudIcon />
+            {localization.UPLOAD_AVATAR}
+          </DropdownMenuItem>
+          {sessionData?.user.image && (
+            <DropdownMenuItem variant="destructive" onClick={handleDeleteAvatar} disabled={loading}>
+              <Trash2Icon />
+              {localization.DELETE_AVATAR}
             </DropdownMenuItem>
-            {sessionData?.user.image && (
-              <DropdownMenuItem
-                onClick={handleDeleteAvatar}
-                disabled={loading}
-                variant="destructive"
-              >
-                <Trash2Icon />
-                {localization.DELETE_AVATAR}
-              </DropdownMenuItem>
-            )}
-          </DropdownMenuContent>
-        </DropdownMenu>
-      </div>
-
-      <SettingsCardFooter
-        className="!py-5"
-        instructions={localization.AVATAR_INSTRUCTIONS}
-        classNames={classNames}
-        isPending={isPending}
-        isSubmitting={loading}
-      />
-    </Card>
+          )}
+        </DropdownMenuContent>
+      </DropdownMenu>
+    </CardComponent>
   );
 }

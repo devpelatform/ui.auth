@@ -25,12 +25,17 @@ import {
 import { useForm } from '@pelatform/ui/re/react-hook-form';
 import * as z from '@pelatform/ui/re/zod';
 import { useAuth } from '@/hooks';
-import { useCaptcha, useIsHydrated, useOnSuccessTransition } from '@/hooks/private';
+import {
+  useCaptcha,
+  useIsHydrated,
+  useLocalization,
+  useOnSuccessTransition,
+} from '@/hooks/private';
 import { fileToBase64, resizeAndCropImage } from '@/lib/images';
 import { cn, getLocalizedError, getPasswordSchema } from '@/lib/utils';
 import { Captcha } from '../captcha/captcha';
+import { UserAvatar } from '../shared/avatar';
 import { PasswordInput } from '../shared/password-input';
-import { UserAvatar } from '../shared/user-avatar';
 import type { AuthFormProps } from './types';
 
 export function SignUpForm({
@@ -50,7 +55,6 @@ export function SignUpForm({
     basePath,
     baseURL,
     credentials,
-    localization: localizationContext,
     nameRequired,
     navigate,
     persistClient,
@@ -59,11 +63,7 @@ export function SignUpForm({
     toast,
   } = useAuth();
 
-  const localization = useMemo(
-    () => ({ ...localizationContext, ...localizationProp }),
-    [localizationContext, localizationProp],
-  );
-
+  const localization = useLocalization(localizationProp);
   const { captchaRef, getCaptchaHeaders, resetCaptcha } = useCaptcha(localization);
   const isHydrated = useIsHydrated();
   const {
@@ -344,8 +344,8 @@ export function SignUpForm({
     <Form {...form}>
       <form
         onSubmit={form.handleSubmit(signUp)}
-        noValidate={isHydrated}
         className={cn('grid w-full gap-6', className, classNames?.base)}
+        noValidate={isHydrated}
       >
         {signUpFields?.includes('image') && avatar && (
           <>
@@ -378,8 +378,9 @@ export function SignUpForm({
                           className="size-fit rounded-full"
                         >
                           <UserAvatar
-                            isPending={uploadingAvatar}
                             className="size-16"
+                            isPending={uploadingAvatar}
+                            localization={localization}
                             user={
                               avatarImage
                                 ? {
@@ -389,7 +390,6 @@ export function SignUpForm({
                                   }
                                 : null
                             }
-                            localization={localization}
                           />
                         </Button>
                       </DropdownMenuTrigger>
@@ -568,18 +568,18 @@ export function SignUpForm({
                 control={form.control}
                 name={field}
                 render={({ field: formField }) => (
-                  <FormItem className="flex">
-                    <FormControl>
-                      <Checkbox
-                        checked={formField.value as boolean}
-                        onCheckedChange={formField.onChange}
-                        disabled={isSubmitting}
-                      />
-                    </FormControl>
-
-                    <FormLabel className={classNames?.label}>{additionalField.label}</FormLabel>
-
-                    <FormMessage className={classNames?.error} />
+                  <FormItem>
+                    <div className="flex items-center space-x-2">
+                      <FormControl>
+                        <Checkbox
+                          checked={formField.value as boolean}
+                          onCheckedChange={formField.onChange}
+                          disabled={isSubmitting}
+                        />
+                      </FormControl>
+                      <FormLabel className={classNames?.label}>{additionalField.label}</FormLabel>
+                      <FormMessage className={classNames?.error} />
+                    </div>
                   </FormItem>
                 )}
               />

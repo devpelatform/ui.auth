@@ -19,7 +19,12 @@ import {
 import { useForm } from '@pelatform/ui/re/react-hook-form';
 import * as z from '@pelatform/ui/re/zod';
 import { useAuth } from '@/hooks';
-import { useCaptcha, useIsHydrated, useOnSuccessTransition } from '@/hooks/private';
+import {
+  useCaptcha,
+  useIsHydrated,
+  useLocalization,
+  useOnSuccessTransition,
+} from '@/hooks/private';
 import { cn, getLocalizedError, getPasswordSchema, isValidEmail } from '@/lib/utils';
 import { Captcha } from '../captcha/captcha';
 import { PasswordInput } from '../shared/password-input';
@@ -34,22 +39,9 @@ export function SignInForm({
   setIsSubmitting,
   passwordValidation: passwordValidationProp,
 }: AuthFormProps) {
-  const {
-    authClient,
-    basePath,
-    credentials,
-    localization: localizationContext,
-    viewPaths,
-    navigate,
-    toast,
-    Link,
-  } = useAuth();
+  const { authClient, basePath, credentials, viewPaths, navigate, toast, Link } = useAuth();
 
-  const localization = useMemo(
-    () => ({ ...localizationContext, ...localizationProp }),
-    [localizationContext, localizationProp],
-  );
-
+  const localization = useLocalization(localizationProp);
   const { captchaRef, getCaptchaHeaders, resetCaptcha } = useCaptcha(localization);
   const isHydrated = useIsHydrated();
   const { onSuccess, isPending: transitionPending } = useOnSuccessTransition(redirectToProp);
@@ -139,8 +131,8 @@ export function SignInForm({
     <Form {...form}>
       <form
         onSubmit={form.handleSubmit(signIn)}
-        noValidate={isHydrated}
         className={cn('grid w-full gap-6', className, classNames?.base)}
+        noValidate={isHydrated}
       >
         <FormField
           control={form.control}
@@ -181,10 +173,16 @@ export function SignInForm({
 
                 {credentials?.forgotPassword && (
                   <Link
-                    className={cn('text-sm hover:underline', classNames?.forgotPasswordLink)}
                     href={`${basePath}/${viewPaths.FORGOT_PASSWORD}${isHydrated ? window.location.search : ''}`}
                   >
-                    {localization.FORGOT_PASSWORD_LINK}
+                    <Button
+                      mode="link"
+                      underline="dashed"
+                      size="sm"
+                      className={cn('px-0 text-foreground text-sm', classNames?.forgotPasswordLink)}
+                    >
+                      {localization.FORGOT_PASSWORD_LINK}
+                    </Button>
                   </Link>
                 )}
               </div>
@@ -195,6 +193,7 @@ export function SignInForm({
                   className={classNames?.input}
                   placeholder={localization.PASSWORD_PLACEHOLDER}
                   disabled={isSubmitting}
+                  enableToggle={true}
                   {...field}
                 />
               </FormControl>
@@ -209,15 +208,17 @@ export function SignInForm({
             control={form.control}
             name="rememberMe"
             render={({ field }) => (
-              <FormItem className="flex">
-                <FormControl>
-                  <Checkbox
-                    checked={field.value}
-                    onCheckedChange={field.onChange}
-                    disabled={isSubmitting}
-                  />
-                </FormControl>
-                <FormLabel>{localization.REMEMBER_ME}</FormLabel>
+              <FormItem>
+                <div className="flex items-center space-x-2">
+                  <FormControl>
+                    <Checkbox
+                      checked={field.value}
+                      onCheckedChange={field.onChange}
+                      disabled={isSubmitting}
+                    />
+                  </FormControl>
+                  <FormLabel>{localization.REMEMBER_ME}</FormLabel>
+                </div>
               </FormItem>
             )}
           />

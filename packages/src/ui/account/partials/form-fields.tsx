@@ -1,10 +1,9 @@
 'use client';
 
-import { type ReactNode, useMemo } from 'react';
+import type { ReactNode } from 'react';
 import { zodResolver } from '@hookform/resolvers/zod';
 
 import {
-  CardContent,
   Checkbox,
   Form,
   FormControl,
@@ -19,26 +18,11 @@ import {
 import { useForm } from '@pelatform/ui/re/react-hook-form';
 import * as z from '@pelatform/ui/re/zod';
 import { useAuth, useAuthHooks } from '@/hooks';
-import type { AuthLocalization } from '@/lib/localization';
+import { useLocalization } from '@/hooks/private';
 import { cn, getLocalizedError } from '@/lib/utils';
 import type { FieldType } from '@/types/components';
-import { SettingsCard, type SettingsCardClassNames } from '../../shared/settings-card';
-
-export interface FormFieldCardProps {
-  className?: string;
-  classNames?: SettingsCardClassNames;
-  description?: ReactNode;
-  instructions?: ReactNode;
-  localization?: Partial<AuthLocalization>;
-  name: string;
-  placeholder?: string;
-  required?: boolean;
-  label?: ReactNode;
-  type?: FieldType;
-  multiline?: boolean;
-  value?: unknown;
-  validate?: (value: string) => boolean | Promise<boolean>;
-}
+import type { CardComponentProps } from '@/types/ui';
+import { CardComponent } from '../../shared/components/card';
 
 export function FormFieldsCard({
   className,
@@ -54,16 +38,23 @@ export function FormFieldsCard({
   multiline,
   value,
   validate,
-}: FormFieldCardProps) {
-  const { localization: localizationContext, toast } = useAuth();
+  ...props
+}: CardComponentProps & {
+  name: string;
+  placeholder?: string;
+  required?: boolean;
+  label?: ReactNode;
+  type?: FieldType;
+  multiline?: boolean;
+  value?: unknown;
+  validate?: (value: string) => boolean | Promise<boolean>;
+}) {
+  const { toast } = useAuth();
   const { useSession, useUpdateUser } = useAuthHooks();
   const { isPending } = useSession();
   const { mutate: updateUser } = useUpdateUser();
 
-  const localization = useMemo(
-    () => ({ ...localizationContext, ...localizationProp }),
-    [localizationContext, localizationProp],
-  );
+  const localization = useLocalization(localizationProp);
 
   let fieldSchema = z.unknown() as z.ZodType<unknown>;
 
@@ -105,6 +96,7 @@ export function FormFieldsCard({
   });
 
   const { isSubmitting } = form.formState;
+  const disableSubmit = isSubmitting || !form.formState.isValid || !form.formState.isDirty;
 
   const updateField = async (values: Record<string, unknown>) => {
     await new Promise((resolve) => setTimeout(resolve));
@@ -138,25 +130,27 @@ export function FormFieldsCard({
   return (
     <Form {...form}>
       <form onSubmit={form.handleSubmit(updateField)}>
-        <SettingsCard
+        <CardComponent
           className={className}
           classNames={classNames}
+          title={label}
           description={description}
           instructions={instructions}
-          isPending={isPending}
-          title={label}
           actionLabel={localization.SAVE}
-          optimistic={true}
+          disabled={disableSubmit}
+          isPending={isPending}
+          {...props}
         >
-          <CardContent className={classNames?.content}>
-            {type === 'boolean' ? (
-              <FormField
-                control={form.control}
-                name={name}
-                render={({ field }) => (
-                  <FormItem className="flex">
+          {type === 'boolean' ? (
+            <FormField
+              control={form.control}
+              name={name}
+              render={({ field }) => (
+                <FormItem>
+                  <div className="flex items-center space-x-2">
                     <FormControl>
                       <Checkbox
+                        size="lg"
                         checked={field.value as boolean}
                         onCheckedChange={field.onChange}
                         disabled={isSubmitting}
@@ -167,54 +161,57 @@ export function FormFieldsCard({
                     <FormLabel className={classNames?.label}>{label}</FormLabel>
 
                     <FormMessage className={classNames?.error} />
-                  </FormItem>
-                )}
-              />
-            ) : isPending ? (
-              <Skeleton className={cn('h-9 w-full', classNames?.skeleton)} />
-            ) : (
-              <FormField
-                control={form.control}
-                name={name}
-                render={({ field }) => (
-                  <FormItem>
-                    <FormControl>
-                      {type === 'number' ? (
-                        <Input
-                          className={classNames?.input}
-                          type="number"
-                          placeholder={placeholder || (typeof label === 'string' ? label : '')}
-                          disabled={isSubmitting}
-                          {...field}
-                          value={field.value as string}
-                        />
-                      ) : multiline ? (
-                        <Textarea
-                          className={classNames?.input}
-                          placeholder={placeholder || (typeof label === 'string' ? label : '')}
-                          disabled={isSubmitting}
-                          {...field}
-                          value={field.value as string}
-                        />
-                      ) : (
-                        <Input
-                          className={classNames?.input}
-                          type="text"
-                          placeholder={placeholder || (typeof label === 'string' ? label : '')}
-                          disabled={isSubmitting}
-                          {...field}
-                          value={field.value as string}
-                        />
-                      )}
-                    </FormControl>
+                  </div>
+                </FormItem>
+              )}
+            />
+          ) : isPending ? (
+            <Skeleton className={cn('h-9 w-full', classNames?.skeleton)} />
+          ) : (
+            <FormField
+              control={form.control}
+              name={name}
+              render={({ field }) => (
+                <FormItem>
+                  <FormControl>
+                    {type === 'number' ? (
+                      <Input
+                        type="number"
+                        variant="lg"
+                        className={classNames?.input}
+                        placeholder={placeholder || (typeof label === 'string' ? label : '')}
+                        disabled={isSubmitting}
+                        {...field}
+                        value={field.value as string}
+                      />
+                    ) : multiline ? (
+                      <Textarea
+                        variant="lg"
+                        className={classNames?.input}
+                        placeholder={placeholder || (typeof label === 'string' ? label : '')}
+                        disabled={isSubmitting}
+                        {...field}
+                        value={field.value as string}
+                      />
+                    ) : (
+                      <Input
+                        type="text"
+                        variant="lg"
+                        className={classNames?.input}
+                        placeholder={placeholder || (typeof label === 'string' ? label : '')}
+                        disabled={isSubmitting}
+                        {...field}
+                        value={field.value as string}
+                      />
+                    )}
+                  </FormControl>
 
-                    <FormMessage className={classNames?.error} />
-                  </FormItem>
-                )}
-              />
-            )}
-          </CardContent>
-        </SettingsCard>
+                  <FormMessage className={classNames?.error} />
+                </FormItem>
+              )}
+            />
+          )}
+        </CardComponent>
       </form>
     </Form>
   );

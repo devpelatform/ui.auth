@@ -1,10 +1,9 @@
 'use client';
 
-import { useMemo } from 'react';
-
-import { useAuth, useAuthHooks } from '@/hooks';
+import { useAuthHooks } from '@/hooks';
+import { useLocalization } from '@/hooks/private';
 import type { User } from '@/types/auth';
-import type { SettingsCardProps } from '../../shared/settings-card';
+import type { CardComponentProps } from '@/types/ui';
 import { FormFieldsCard } from './form-fields';
 
 export function FormUsernameCard({
@@ -12,15 +11,11 @@ export function FormUsernameCard({
   classNames,
   localization: localizationProp,
   ...props
-}: SettingsCardProps) {
-  const { localization: localizationContext } = useAuth();
+}: CardComponentProps) {
   const { useSession } = useAuthHooks();
   const { data: sessionData } = useSession();
 
-  const localization = useMemo(
-    () => ({ ...localizationContext, ...localizationProp }),
-    [localizationContext, localizationProp],
-  );
+  const localization = useLocalization(localizationProp);
 
   const value =
     (sessionData?.user as User)?.displayUsername || (sessionData?.user as User)?.username;
@@ -29,14 +24,14 @@ export function FormUsernameCard({
     <FormFieldsCard
       className={className}
       classNames={classNames}
-      value={value}
       description={localization.USERNAME_DESCRIPTION}
-      name="username"
       instructions={localization.USERNAME_INSTRUCTIONS}
-      label={localization.USERNAME}
       localization={localization}
+      name="username"
       placeholder={localization.USERNAME_PLACEHOLDER}
       required
+      label={localization.USERNAME}
+      value={value}
       {...props}
     />
   );

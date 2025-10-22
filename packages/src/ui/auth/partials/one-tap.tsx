@@ -1,9 +1,9 @@
 'use client';
 
-import { useEffect, useMemo, useRef } from 'react';
+import { useEffect, useRef } from 'react';
 
 import { useAuth } from '@/hooks';
-import { useOnSuccessTransition } from '@/hooks/private';
+import { useLocalization, useOnSuccessTransition } from '@/hooks/private';
 import { getLocalizedError } from '@/lib/utils';
 import type { AuthButtonProps } from '../types';
 
@@ -11,13 +11,9 @@ export function OneTap({
   localization: localizationProp,
   redirectTo: redirectToProp,
 }: AuthButtonProps) {
-  const { authClient, localization: localizationContext, toast } = useAuth();
+  const { authClient, toast } = useAuth();
 
-  const localization = useMemo(
-    () => ({ ...localizationContext, ...localizationProp }),
-    [localizationContext, localizationProp],
-  );
-
+  const localization = useLocalization(localizationProp);
   const { onSuccess } = useOnSuccessTransition(redirectToProp);
   const oneTapFetched = useRef(false);
 

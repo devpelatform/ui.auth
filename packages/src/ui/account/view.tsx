@@ -1,54 +1,31 @@
 'use client';
 
-import { useMemo } from 'react';
-import { MenuIcon } from 'lucide-react';
+import { type ReactNode, useEffect, useMemo, useState } from 'react';
 
-import {
-  Button,
-  Drawer,
-  DrawerContent,
-  DrawerHeader,
-  DrawerTitle,
-  DrawerTrigger,
-  Label,
-} from '@pelatform/ui/default';
+import { Tabs, TabsList, TabsTrigger } from '@pelatform/ui/default';
 import { useAuth } from '@/hooks';
+import { useLocalization } from '@/hooks/private';
 import { useAuthenticate } from '@/hooks/use-authenticate';
-import type { AuthLocalization } from '@/lib/localization';
 import { cn } from '@/lib/utils';
 import type { AccountViewPath } from '@/lib/view-paths';
 import { getViewByPath } from '@/lib/view-paths';
 import { ApiKeysCard } from '../apikeys/apikeys';
-import type { SettingsCardClassNames } from '../shared/settings-card';
+import { OrganizationsCard } from './organizations';
 import { SecurityCards } from './security';
 import { SettingsCards } from './settings';
-
-export interface AccountViewProps {
-  className?: string;
-  classNames?: {
-    base?: string;
-    cards?: string;
-    drawer?: { menuItem?: string };
-    sidebar?: { base?: string; button?: string; buttonActive?: string };
-    card?: SettingsCardClassNames;
-  };
-  localization?: AuthLocalization;
-  path?: string;
-  pathname?: string;
-  view?: AccountViewPath;
-  hideNav?: boolean;
-}
+import type { AccountViewProps } from './types';
+import { UserInvitationsCard } from './user-invitations';
 
 export function AccountView({
   className,
   classNames,
   localization: localizationProp,
+  disableNavigation,
   path: pathProp,
   pathname,
   view: viewProp,
-  hideNav,
 }: AccountViewProps) {
-  const { account: accountOptions, apiKey, localization: localizationContext, Link } = useAuth();
+  const { account: accountOptions, apiKey, navigate, organization } = useAuth();
 
   if (!accountOptions) {
     return null;
@@ -56,112 +33,122 @@ export function AccountView({
 
   useAuthenticate();
 
-  const localization = useMemo(
-    () => ({ ...localizationContext, ...localizationProp }),
-    [localizationContext, localizationProp],
-  );
+  const localization = useLocalization(localizationProp);
 
   const path = pathProp ?? pathname?.split('/').pop();
-
   const view = viewProp || getViewByPath(accountOptions.viewPaths, path!) || 'SETTINGS';
 
-  const navItems: {
-    view: AccountViewPath;
-    label: string;
-  }[] = [
-    { view: 'SETTINGS', label: localization.ACCOUNT },
-    { view: 'SECURITY', label: localization.SECURITY },
-  ];
+  const navItems = useMemo(() => {
+    const items: {
+      view: AccountViewPath;
+      label: string;
+    }[] = [
+      { view: 'SETTINGS', label: localization.ACCOUNT },
+      { view: 'SECURITY', label: localization.SECURITY },
+    ];
 
-  if (apiKey) {
-    navItems.push({
-      view: 'API_KEYS',
-      label: localization.API_KEYS,
-    });
-  }
+    if (apiKey) {
+      items.push({
+        view: 'API_KEYS',
+        label: localization.API_KEYS,
+      });
+    }
 
-  return (
-    <div
-      className={cn(
-        'flex w-full grow flex-col gap-4 md:flex-row md:gap-12',
-        className,
-        classNames?.base,
-      )}
-    >
-      {!hideNav && (
-        <div className="flex justify-between gap-2 md:hidden">
-          <Label className="font-semibold text-base">
-            {navItems.find((i) => i.view === view)?.label}
-          </Label>
+    if (organization) {
+      items.push({
+        view: 'ORGANIZATIONS',
+        label: localization.ORGANIZATIONS,
+      });
+    }
 
-          <Drawer>
-            <DrawerTrigger asChild>
-              <Button variant="outline">
-                <MenuIcon />
-              </Button>
-            </DrawerTrigger>
-            <DrawerContent>
-              <DrawerHeader>
-                <DrawerTitle className="hidden">{localization.SETTINGS}</DrawerTitle>
-              </DrawerHeader>
-              <div className="flex flex-col px-4 pb-4">
-                {navItems.map((item) => (
-                  <Link
-                    key={item.view}
-                    href={`${accountOptions?.basePath}/${accountOptions?.viewPaths[item.view]}`}
-                  >
-                    <Button
-                      size="lg"
-                      className={cn(
-                        'w-full justify-start px-4 transition-none',
-                        classNames?.drawer?.menuItem,
-                        view === item.view ? 'font-semibold' : 'text-foreground/70',
-                      )}
-                      variant="ghost"
-                    >
-                      {item.label}
-                    </Button>
-                  </Link>
-                ))}
-              </div>
-            </DrawerContent>
-          </Drawer>
-        </div>
-      )}
+    return items;
+  }, [
+    apiKey,
+    organization,
+    localization.ACCOUNT,
+    localization.SECURITY,
+    localization.API_KEYS,
+    localization.ORGANIZATIONS,
+  ]);
 
-      {!hideNav && (
-        <div className="hidden md:block">
-          <div className={cn('flex w-48 flex-col gap-1 lg:w-60', classNames?.sidebar?.base)}>
-            {navItems.map((item) => (
-              <Link
-                key={item.view}
-                href={`${accountOptions?.basePath}/${accountOptions?.viewPaths[item.view]}`}
-              >
-                <Button
-                  size="lg"
-                  className={cn(
-                    'w-full justify-start px-4 transition-none',
-                    classNames?.sidebar?.button,
-                    view === item.view ? 'font-semibold' : 'text-foreground/70',
-                    view === item.view && classNames?.sidebar?.buttonActive,
-                  )}
-                  variant="ghost"
-                >
-                  {item.label}
-                </Button>
-              </Link>
-            ))}
-          </div>
-        </div>
+  // Local state to instantly update the active tab on click
+  const [activeTab, setActiveTab] = useState<string>('');
+
+  // Keep the local state in sync with the current pathname, in case navigation happens externally
+  useEffect(() => {
+    const found = navItems.findIndex((item) => path === item.view);
+    if (found !== -1) {
+      setActiveTab(navItems[found].view);
+    } else {
+      setActiveTab(view);
+    }
+  }, [navItems, path, view]);
+
+  // Handle tab click: update local state immediately and trigger navigation
+  const handleTabClick = (key: string, view: AccountViewPath) => {
+    setActiveTab(key);
+    // Navigate after a short delay (or immediately) so that the UI updates first
+    navigate(`${accountOptions?.basePath}/${accountOptions?.viewPaths[view]}`);
+  };
+
+  const navigations = (children: ReactNode) => (
+    <div className={cn('container mx-auto max-w-5xl', className, classNames?.nav?.base)}>
+      <Tabs
+        defaultValue={activeTab}
+        value={activeTab}
+        className={cn('space-y-5', classNames?.nav?.tabs)}
+      >
+        <TabsList variant="line" className={classNames?.nav?.tabsList}>
+          {navItems.map(({ label, view }) => (
+            <TabsTrigger
+              key={view}
+              value={view}
+              className={cn('justify-start', classNames?.nav?.tabsTrigger)}
+              onClick={() => handleTabClick(view, view)}
+            >
+              {label}
+            </TabsTrigger>
+          ))}
+        </TabsList>
+      </Tabs>
+      <div className={cn('mt-6 grow md:mt-8', classNames?.nav?.content)}>{children}</div>
+    </div>
+  );
+
+  const contents = (
+    <>
+      {view === 'SETTINGS' && (
+        <SettingsCards
+          className={classNames?.baseCards}
+          classNames={classNames?.card}
+          localization={localization}
+        />
       )}
 
-      {view === 'SETTINGS' && <SettingsCards classNames={classNames} localization={localization} />}
-
-      {view === 'SECURITY' && <SecurityCards classNames={classNames} localization={localization} />}
+      {view === 'SECURITY' && (
+        <SecurityCards
+          className={classNames?.baseCards}
+          classNames={classNames?.card}
+          localization={localization}
+        />
+      )}
 
       {view === 'API_KEYS' && (
         <ApiKeysCard classNames={classNames?.card} localization={localization} />
       )}
-    </div>
+
+      {organization && view === 'ORGANIZATIONS' && (
+        <div className="grid w-full gap-6 md:gap-8">
+          <OrganizationsCard classNames={classNames?.card} localization={localization} />
+          <UserInvitationsCard classNames={classNames?.card} localization={localization} />
+        </div>
+      )}
+    </>
   );
+
+  if (disableNavigation) {
+    return contents;
+  }
+
+  return navigations(contents);
 }

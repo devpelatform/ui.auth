@@ -258,7 +258,7 @@ const pluginList = {
         const locale = getLocaleFromRequest(request);
         const templateId = 'workspaceInvitation';
 
-        const acceptUrl = new URL(config.path.workspaces.ACCEPT_INVITATION, config.appUrl);
+        const acceptUrl = new URL(config.path.auth.ACCEPT_INVITATION, config.appUrl);
         acceptUrl.searchParams.set('invitationId', data.id);
 
         const url = acceptUrl.toString();

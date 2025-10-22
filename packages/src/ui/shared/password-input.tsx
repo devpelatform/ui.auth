@@ -8,6 +8,7 @@ import { cn } from '@/lib/utils';
 
 export function PasswordInput({
   className,
+  variant,
   enableToggle,
   onChange,
   ...props
@@ -19,7 +20,8 @@ export function PasswordInput({
     <div className="relative">
       <Input
         type={isVisible && enableToggle ? 'text' : 'password'}
-        className={cn(enableToggle && 'pr-10', className)}
+        variant={variant}
+        className={cn(enableToggle && 'pe-10', className)}
         {...props}
         onChange={(event) => {
           setDisabled(!event.target.value);
@@ -33,9 +35,9 @@ export function PasswordInput({
             type="button"
             variant="ghost"
             size="icon"
-            className="!bg-transparent absolute top-0 right-0"
-            disabled={disabled}
+            className="absolute end-0 top-0 bg-transparent!"
             onClick={() => setIsVisible(!isVisible)}
+            disabled={disabled}
           >
             {isVisible ? <EyeIcon /> : <EyeOffIcon />}
           </Button>

@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useMemo } from 'react';
+import { useEffect } from 'react';
 import { zodResolver } from '@hookform/resolvers/zod';
 
 import {
@@ -17,7 +17,7 @@ import {
 import { useForm } from '@pelatform/ui/re/react-hook-form';
 import * as z from '@pelatform/ui/re/zod';
 import { useAuth } from '@/hooks';
-import { useOnSuccessTransition } from '@/hooks/private';
+import { useLocalization, useOnSuccessTransition } from '@/hooks/private';
 import { cn, getLocalizedError } from '@/lib/utils';
 import type { AuthFormProps } from './types';
 
@@ -29,13 +29,9 @@ export function RecoverAccountForm({
   redirectTo: redirectToProp,
   setIsSubmitting,
 }: AuthFormProps) {
-  const { authClient, localization: localizationContext, toast } = useAuth();
+  const { authClient, toast } = useAuth();
 
-  const localization = useMemo(
-    () => ({ ...localizationContext, ...localizationProp }),
-    [localizationContext, localizationProp],
-  );
-
+  const localization = useLocalization(localizationProp);
   const { onSuccess, isPending: transitionPending } = useOnSuccessTransition(redirectToProp);
 
   const formSchema = z.object({

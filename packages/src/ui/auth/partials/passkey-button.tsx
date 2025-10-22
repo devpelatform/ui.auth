@@ -1,11 +1,10 @@
 'use client';
 
-import { useMemo } from 'react';
 import { FingerprintIcon } from 'lucide-react';
 
 import { Button } from '@pelatform/ui/default';
 import { useAuth } from '@/hooks';
-import { useOnSuccessTransition } from '@/hooks/private';
+import { useLocalization, useOnSuccessTransition } from '@/hooks/private';
 import { cn, getLocalizedError } from '@/lib/utils';
 import type { AuthButtonProps } from '../types';
 
@@ -16,13 +15,9 @@ export function PasskeyButton({
   redirectTo: redirectToProp,
   setIsSubmitting,
 }: AuthButtonProps) {
-  const { authClient, localization: localizationContext, toast } = useAuth();
+  const { authClient, toast } = useAuth();
 
-  const localization = useMemo(
-    () => ({ ...localizationContext, ...localizationProp }),
-    [localizationContext, localizationProp],
-  );
-
+  const localization = useLocalization(localizationProp);
   const { onSuccess } = useOnSuccessTransition(redirectToProp);
 
   const signInPassKey = async () => {
@@ -56,12 +51,13 @@ export function PasskeyButton({
 
   return (
     <Button
+      type="button"
       variant="secondary"
       name="passkey"
       value="true"
       className={cn('w-full', classNames?.form?.button, classNames?.form?.secondaryButton)}
-      disabled={isSubmitting}
       onClick={signInPassKey}
+      disabled={isSubmitting}
       formNoValidate
     >
       <FingerprintIcon />

@@ -1,12 +1,13 @@
 'use client';
 
 import { useCallback, useContext, useEffect, useMemo } from 'react';
-import type { Organization } from 'better-auth/plugins/organization';
 
 import { AuthUIContext, OrganizationContext } from '@/hooks';
 import { useActiveOrganization, useListOrganizations, useSession } from '@/hooks/main';
 import { organizationViewPaths } from '@/lib/view-paths';
-import type { OrganizationLogoOptions, OrganizationUIProviderProps } from '@/types/organization';
+import type { Organization } from '@/types/auth';
+import type { AvatarOptions } from '@/types/options';
+import type { OrganizationUIProviderProps } from '@/types/organization';
 
 export const LAST_VISITED_ORG = 'last-visited-org';
 
@@ -28,7 +29,7 @@ export const OrganizationUIProvider = (options: OrganizationUIProviderProps) => 
     viewPaths: viewPathsProp,
   } = options;
 
-  const logo = useMemo<OrganizationLogoOptions | undefined>(() => {
+  const logo = useMemo<AvatarOptions | undefined>(() => {
     if (!logoProp) return;
 
     if (logoProp === true) {
@@ -125,17 +126,20 @@ export const OrganizationUIProvider = (options: OrganizationUIProviderProps) => 
       value={{
         apiKey,
         basePath: basePath === '/' ? '' : basePath,
+        currentPath: pathMode === 'slug' ? `/${slug}` : '',
         customRoles,
-        logo,
-        pathMode,
-        personalPath,
-        slug,
-        viewPaths,
         data,
         isLoading,
+        isPending: isLoading,
         isRefetching,
+        logo,
+        organizations,
+        pathMode,
+        personalPath,
         refetch,
         setLastVisited,
+        slug,
+        viewPaths,
       }}
     >
       {children}

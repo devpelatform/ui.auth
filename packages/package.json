@@ -1,6 +1,6 @@
 {
   "name": "@pelatform/ui.auth",
-  "version": "0.2.0",
+  "version": "0.3.0",
   "description": "Plug & play UI components for Better Auth.",
   "author": "Pelatform Dev",
   "license": "MIT",
@@ -57,13 +57,14 @@
     "@react-email/components": "^0.5.7",
     "@wojtekmaj/react-recaptcha-v3": "^0.1.4",
     "lucide-react": "^0.546.0",
+    "qrcode": "^1.5.4",
     "react-google-recaptcha": "^3.1.0",
-    "react-qr-code": "^2.0.18",
     "ua-parser-js": "^2.0.6"
   },
   "devDependencies": {
     "@pelatform/ui": "^1.5.0",
-    "@types/node": "^24.8.1",
+    "@types/node": "^24.9.1",
+    "@types/qrcode": "^1.5.5",
     "@types/react": "^19.2.2",
     "@types/react-dom": "^19.2.2",
     "@types/react-google-recaptcha": "^2.1.9",

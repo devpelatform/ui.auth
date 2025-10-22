@@ -15,7 +15,7 @@
   },
   "dependencies": {
     "@polar-sh/better-auth": "^1.1.9",
-    "@polar-sh/sdk": "^0.37.0",
+    "@polar-sh/sdk": "^0.38.1",
     "@repo/config": "workspace:*",
     "@repo/db": "workspace:*",
     "@repo/mail": "workspace:*",

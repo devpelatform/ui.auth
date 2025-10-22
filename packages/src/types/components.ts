@@ -5,12 +5,6 @@ import type { ComponentType, ReactNode } from 'react';
 import type { AlertToastOptions } from '@pelatform/ui/components';
 import type { buttonVariants } from '@pelatform/ui/default';
 
-export type Image = ComponentType<{
-  src: string;
-  alt: string;
-  className?: string;
-}>;
-
 export type Link = ComponentType<{
   href: string;
   className?: string;

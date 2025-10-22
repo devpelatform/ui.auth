@@ -175,6 +175,11 @@ export type AuthUIOptions = {
    */
   oneTap?: boolean;
   /**
+   * Enable or disable organization support
+   * @default false
+   */
+  organization?: boolean;
+  /**
    * Enable or disable Passkey support
    * @default false
    */

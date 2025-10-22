@@ -4,7 +4,7 @@ import type { SocialProvider } from 'better-auth/social-providers';
 
 import type { AccountViewPaths } from '@/lib/view-paths';
 import type { AuthClient } from './auth';
-import type { Image, Provider } from './components';
+import type { Provider } from './components';
 import type { PasswordValidation } from './generals';
 
 export type AccountOptionsProps = {
@@ -51,11 +51,6 @@ export type AvatarOptions = {
    * @default "png"
    */
   extension: string;
-  /**
-   * Custom Image component for rendering avatar images
-   * @default AvatarImage from Radix UI
-   */
-  Image?: Image;
 };
 
 export type CaptchaOptions = {

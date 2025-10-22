@@ -1,46 +1,29 @@
 'use client';
 
-import { type ComponentProps, useMemo, useState } from 'react';
-import { FingerprintIcon, Loader2 } from 'lucide-react';
+import { useState } from 'react';
+import { FingerprintIcon } from 'lucide-react';
 
-import {
-  Button,
-  Card,
-  CardContent,
-  Dialog,
-  DialogContent,
-  DialogDescription,
-  DialogFooter,
-  DialogHeader,
-  DialogTitle,
-  Form,
-} from '@pelatform/ui/default';
+import { Button, Card, Form, Spinner } from '@pelatform/ui/default';
 import { useForm } from '@pelatform/ui/re/react-hook-form';
 import { useAuth, useAuthHooks } from '@/hooks';
-import type { AuthLocalization } from '@/lib/localization';
+import { useLocalization } from '@/hooks/private';
 import { cn, getLocalizedError } from '@/lib/utils';
-import { SettingsCard, type SettingsCardClassNames } from '../../shared/settings-card';
-
-export interface PasskeysCardProps {
-  className?: string;
-  classNames?: SettingsCardClassNames;
-  localization?: AuthLocalization;
-}
+import type { CardComponentProps } from '@/types/ui';
+import { CardComponent } from '../../shared/components/card';
+import { SessionFreshnessDialog } from '../dialogs/session-freshness';
 
 export function PasskeysCard({
   className,
   classNames,
   localization: localizationProp,
-}: PasskeysCardProps) {
-  const { authClient, freshAge, localization: localizationContext, toast } = useAuth();
+  ...props
+}: CardComponentProps) {
+  const { authClient, freshAge, toast } = useAuth();
   const { useListPasskeys, useSession } = useAuthHooks();
   const { data: passkeys, isPending, refetch } = useListPasskeys();
   const { data: sessionData } = useSession();
 
-  const localization = useMemo(
-    () => ({ ...localizationContext, ...localizationProp }),
-    [localizationContext, localizationProp],
-  );
+  const localization = useLocalization(localizationProp);
 
   const session = sessionData?.session;
   const isFresh = session
@@ -73,25 +56,26 @@ export function PasskeysCard({
   return (
     <>
       <SessionFreshnessDialog
-        open={showFreshnessDialog}
-        onOpenChange={setShowFreshnessDialog}
         classNames={classNames}
         localization={localization}
+        open={showFreshnessDialog}
+        onOpenChange={setShowFreshnessDialog}
       />
 
       <Form {...form}>
         <form onSubmit={form.handleSubmit(addPasskey)}>
-          <SettingsCard
+          <CardComponent
             className={className}
             classNames={classNames}
-            actionLabel={localization.ADD_PASSKEY}
+            title={localization.PASSKEYS}
             description={localization.PASSKEYS_DESCRIPTION}
             instructions={localization.PASSKEYS_INSTRUCTIONS}
+            actionLabel={localization.ADD_PASSKEY}
             isPending={isPending}
-            title={localization.PASSKEYS}
+            {...props}
           >
             {passkeys && passkeys.length > 0 && (
-              <CardContent className={cn('grid gap-4', classNames?.content)}>
+              <div className={cn('grid gap-4', classNames?.grid)}>
                 {passkeys?.map((passkey) => (
                   <PasskeyCell
                     key={passkey.id}
@@ -100,23 +84,23 @@ export function PasskeysCard({
                     passkey={passkey}
                   />
                 ))}
-              </CardContent>
+              </div>
             )}
-          </SettingsCard>
+          </CardComponent>
         </form>
       </Form>
     </>
   );
 }
 
-interface PasskeyCellProps {
-  className?: string;
-  classNames?: SettingsCardClassNames;
-  localization: AuthLocalization;
+function PasskeyCell({
+  className,
+  classNames,
+  localization,
+  passkey,
+}: CardComponentProps & {
   passkey: { id: string; createdAt: Date };
-}
-
-function PasskeyCell({ className, classNames, localization, passkey }: PasskeyCellProps) {
+}) {
   const { freshAge, toast } = useAuth();
   const { useSession, useListPasskeys, useDeletePasskey } = useAuthHooks();
   const { refetch } = useListPasskeys();
@@ -155,10 +139,10 @@ function PasskeyCell({ className, classNames, localization, passkey }: PasskeyCe
   return (
     <>
       <SessionFreshnessDialog
-        open={showFreshnessDialog}
-        onOpenChange={setShowFreshnessDialog}
         classNames={classNames}
         localization={localization}
+        open={showFreshnessDialog}
+        onOpenChange={setShowFreshnessDialog}
       />
 
       <Card className={cn('flex-row items-center p-4', className, classNames?.cell)}>
@@ -168,79 +152,17 @@ function PasskeyCell({ className, classNames, localization, passkey }: PasskeyCe
         </div>
 
         <Button
-          className={cn('relative ms-auto', classNames?.button, classNames?.outlineButton)}
-          disabled={isLoading}
-          size="sm"
+          type="button"
           variant="outline"
+          size="sm"
+          className={cn('relative ms-auto', classNames?.button, classNames?.outlineButton)}
           onClick={handleDeletePasskey}
+          disabled={isLoading}
         >
-          {isLoading && <Loader2 className="animate-spin" />}
-
-          {localization.DELETE}
+          {isLoading && <Spinner />}
+          {localization?.DELETE}
         </Button>
       </Card>
     </>
-  );
-}
-
-export interface SessionFreshnessDialogProps extends ComponentProps<typeof Dialog> {
-  classNames?: SettingsCardClassNames;
-  localization?: AuthLocalization;
-  title?: string;
-  description?: string;
-}
-
-export function SessionFreshnessDialog({
-  classNames,
-  localization: localizationProp,
-  title,
-  description,
-  onOpenChange,
-  ...props
-}: SessionFreshnessDialogProps) {
-  const { basePath, localization: localizationContext, navigate, viewPaths } = useAuth();
-
-  const localization = useMemo(
-    () => ({ ...localizationContext, ...localizationProp }),
-    [localizationContext, localizationProp],
-  );
-
-  const handleSignOut = () => {
-    navigate(`${basePath}/${viewPaths.SIGN_OUT}`);
-    onOpenChange?.(false);
-  };
-
-  return (
-    <Dialog onOpenChange={onOpenChange} {...props}>
-      <DialogContent className={cn('sm:max-w-md', classNames?.dialog?.content)}>
-        <DialogHeader className={classNames?.dialog?.header}>
-          <DialogTitle className={cn('text-lg md:text-xl', classNames?.title)}>
-            {title || localization?.SESSION_EXPIRED || 'Session Expired'}
-          </DialogTitle>
-
-          <DialogDescription className={cn('text-xs md:text-sm', classNames?.description)}>
-            {description || localization?.SESSION_NOT_FRESH}
-          </DialogDescription>
-        </DialogHeader>
-
-        <DialogFooter className={classNames?.dialog?.footer}>
-          <Button
-            type="button"
-            variant="secondary"
-            className={cn(classNames?.button, classNames?.secondaryButton)}
-            onClick={() => onOpenChange?.(false)}
-          >
-            {localization.CANCEL}
-          </Button>
-
-          <Button
-            className={cn(classNames?.button, classNames?.primaryButton)}
-            onClick={handleSignOut}
-          >
-            {localization?.SIGN_OUT}
-          </Button>
-        </DialogFooter>
-      </DialogContent>
-    </Dialog>
   );
 }

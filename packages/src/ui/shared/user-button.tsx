@@ -6,7 +6,6 @@ import {
   type ReactNode,
   useCallback,
   useEffect,
-  useMemo,
   useState,
 } from 'react';
 import {
@@ -27,38 +26,35 @@ import {
   DropdownMenuTrigger,
 } from '@pelatform/ui/default';
 import { useAuth, useAuthHooks } from '@/hooks';
-import { useIsHydrated } from '@/hooks/private';
-import type { AuthLocalization } from '@/lib/localization';
+import { useIsHydrated, useLocalization } from '@/hooks/private';
 import { cn, getLocalizedError } from '@/lib/utils';
 import type { AnyAuthClient, User } from '@/types/auth';
-import { UserAvatar, type UserAvatarClassNames } from './user-avatar';
-import { UserView, type UserViewClassNames } from './user-view';
+import type { AvatarClassNames, BaseProps, ViewClassNames } from '@/types/ui';
+import { UserAvatar } from './avatar';
+import { UserView } from './view';
 
-export interface UserButtonClassNames {
+export type UserButtonClassNames = {
   base?: string;
-  skeleton?: string;
   trigger?: {
     base?: string;
-    avatar?: UserAvatarClassNames;
-    user?: UserViewClassNames;
-    skeleton?: string;
+    avatar?: AvatarClassNames;
+    user?: ViewClassNames;
   };
   content?: {
     base?: string;
-    user?: UserViewClassNames;
-    avatar?: UserAvatarClassNames;
     menuItem?: string;
     separator?: string;
+    user?: ViewClassNames;
   };
-}
+};
 
-export interface UserButtonProps {
-  className?: string;
+export interface UserButtonProps extends BaseProps, ComponentProps<typeof Button> {
   classNames?: UserButtonClassNames;
   align?: 'center' | 'start' | 'end';
   alignOffset?: number;
   side?: 'top' | 'right' | 'bottom' | 'left';
   sideOffset?: number;
+  trigger?: ReactNode;
   additionalLinks?: {
     href: string;
     icon?: ReactNode;
@@ -66,24 +62,13 @@ export interface UserButtonProps {
     signedIn?: boolean;
     separator?: boolean;
   }[];
-  trigger?: ReactNode;
   disableDefaultLinks?: boolean;
-  localization?: AuthLocalization;
 }
 
-/**
- * Displays an interactive user button with dropdown menu functionality
- *
- * Renders a user interface element that can be displayed as either an icon or full button:
- * - Shows a user avatar or placeholder when in icon mode
- * - Displays user name and email with dropdown indicator in full mode
- * - Provides dropdown menu with authentication options (sign in/out, settings, etc.)
- * - Supports multi-session functionality for switching between accounts
- * - Can be customized with additional links and styling options
- */
 export function UserButton({
   className,
   classNames,
+  localization: localizationProp,
   align,
   alignOffset,
   side,
@@ -91,15 +76,13 @@ export function UserButton({
   trigger,
   additionalLinks,
   disableDefaultLinks,
-  localization: localizationProp,
   size,
   ...props
-}: UserButtonProps & ComponentProps<typeof Button>) {
+}: UserButtonProps) {
   const {
     account: accountOptions,
     basePath,
     Link,
-    localization: localizationContext,
     multiSession,
     onSessionChange,
     signUp,
@@ -111,11 +94,7 @@ export function UserButton({
   const { data: sessionData, isPending: sessionPending } = useSession();
   const user = sessionData?.user;
 
-  const localization = useMemo(
-    () => ({ ...localizationContext, ...localizationProp }),
-    [localizationContext, localizationProp],
-  );
-
+  const localization = useLocalization(localizationProp);
   const isHydrated = useIsHydrated();
 
   let deviceSessions: AnyAuthClient['$Infer']['Session'][] | undefined | null = null;
@@ -168,28 +147,28 @@ export function UserButton({
             <Button variant="ghost" size="icon" className="size-fit rounded-full">
               <UserAvatar
                 key={user?.image}
-                isPending={isPending}
                 className={cn(className, classNames?.base)}
                 classNames={classNames?.trigger?.avatar}
+                isPending={isPending}
+                localization={localization}
                 user={user}
                 aria-label={localization.ACCOUNT}
-                localization={localization}
               />
             </Button>
           ) : (
             <Button
               size={size}
-              className={cn('!p-2 h-fit', className, classNames?.trigger?.base)}
+              className={cn('h-fit p-2!', className, classNames?.trigger?.base)}
               {...props}
             >
               <UserView
+                classNames={classNames?.trigger?.user}
+                isPending={isPending}
+                localization={localization}
                 size={size}
                 user={!(user as User)?.isAnonymous ? user : null}
-                isPending={isPending}
-                classNames={classNames?.trigger?.user}
-                localization={localization}
               />
-              <ChevronsUpDown className="ml-auto" />
+              <ChevronsUpDown className="ms-auto" />
             </Button>
           ))}
       </DropdownMenuTrigger>
@@ -208,10 +187,10 @@ export function UserButton({
         <div className={cn('p-2', classNames?.content?.menuItem)}>
           {(user && !(user as User).isAnonymous) || isPending ? (
             <UserView
-              user={user}
-              isPending={isPending}
               classNames={classNames?.content?.user}
+              isPending={isPending}
               localization={localization}
+              user={user}
             />
           ) : (
             <div className="-my-1 text-muted-foreground text-xs">{localization.ACCOUNT}</div>
@@ -280,7 +259,7 @@ export function UserButton({
             {!deviceSessions && deviceSessionsPending && (
               <>
                 <DropdownMenuItem disabled className={classNames?.content?.menuItem}>
-                  <UserView isPending={true} classNames={classNames?.content?.user} />
+                  <UserView classNames={classNames?.content?.user} isPending={true} />
                 </DropdownMenuItem>
 
                 <DropdownMenuSeparator className={classNames?.content?.separator} />
@@ -295,7 +274,7 @@ export function UserButton({
                     className={classNames?.content?.menuItem}
                     onClick={() => switchAccount(session.token)}
                   >
-                    <UserView user={user} classNames={classNames?.content?.user} />
+                    <UserView classNames={classNames?.content?.user} user={user} />
                   </DropdownMenuItem>
 
                   <DropdownMenuSeparator className={classNames?.content?.separator} />

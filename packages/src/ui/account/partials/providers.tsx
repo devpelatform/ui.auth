@@ -1,46 +1,38 @@
 'use client';
 
-import { useMemo, useState } from 'react';
-import type { Account } from 'better-auth';
+import { useState } from 'react';
 import type { SocialProvider } from 'better-auth/social-providers';
-import { Loader2 } from 'lucide-react';
 
-import { Button, Card, CardContent, Skeleton } from '@pelatform/ui/default';
+import { Button, Card, Skeleton, Spinner } from '@pelatform/ui/default';
 import { useAuth, useAuthHooks } from '@/hooks';
-import type { AuthLocalization } from '@/lib/localization';
+import { useLocalization } from '@/hooks/private';
 import { socialProviders } from '@/lib/social-providers';
 import { cn, getLocalizedError } from '@/lib/utils';
+import type { Account } from '@/types/auth';
 import type { Provider } from '@/types/components';
 import type { Refetch } from '@/types/generals';
-import { SettingsCard, type SettingsCardClassNames } from '../../shared/settings-card';
-import { SettingsCellSkeleton } from '../../shared/settings-skeleton';
-
-export interface ProvidersCardProps {
-  className?: string;
-  classNames?: SettingsCardClassNames;
-  accounts?: Account[] | null;
-  isPending?: boolean;
-  localization?: AuthLocalization;
-  skipHook?: boolean;
-  refetch?: Refetch;
-}
+import type { CardComponentProps } from '@/types/ui';
+import { CardComponent } from '../../shared/components/card';
+import { SkeletonCellComponent } from '../../shared/components/skeleton';
 
 export function ProvidersCard({
   className,
   classNames,
-  accounts,
   isPending,
   localization: localizationProp,
-  skipHook,
+  accounts,
   refetch,
-}: ProvidersCardProps) {
-  const { genericOAuth, localization: localizationContext, social } = useAuth();
+  skipHook,
+  ...props
+}: CardComponentProps & {
+  accounts?: Account[] | null;
+  refetch?: Refetch;
+  skipHook?: boolean;
+}) {
+  const { genericOAuth, social } = useAuth();
   const { useListAccounts } = useAuthHooks();
 
-  const localization = useMemo(
-    () => ({ ...localizationContext, ...localizationProp }),
-    [localizationContext, localizationProp],
-  );
+  const localization = useLocalization(localizationProp);
 
   if (!skipHook) {
     const result = useListAccounts();
@@ -50,17 +42,18 @@ export function ProvidersCard({
   }
 
   return (
-    <SettingsCard
+    <CardComponent
       className={className}
       classNames={classNames}
       title={localization.PROVIDERS}
       description={localization.PROVIDERS_DESCRIPTION}
       isPending={isPending}
+      {...props}
     >
-      <CardContent className={cn('grid gap-4', classNames?.content)}>
+      <div className={cn('grid gap-4', classNames?.grid)}>
         {isPending ? (
           social?.providers?.map((provider) => (
-            <SettingsCellSkeleton key={provider} classNames={classNames} />
+            <SkeletonCellComponent key={provider} classNames={classNames} />
           ))
         ) : (
           <>
@@ -75,10 +68,10 @@ export function ProvidersCard({
                 <ProviderCell
                   key={provider}
                   classNames={classNames}
+                  localization={localization}
                   account={accounts?.find((acc) => acc.providerId === provider)}
                   provider={socialProvider}
                   refetch={refetch}
-                  localization={localization}
                 />
               );
             })}
@@ -87,40 +80,34 @@ export function ProvidersCard({
               <ProviderCell
                 key={provider.provider}
                 classNames={classNames}
+                localization={localization}
                 account={accounts?.find((acc) => acc.providerId === provider.provider)}
                 provider={provider}
                 refetch={refetch}
-                localization={localization}
                 other
               />
             ))}
           </>
         )}
-      </CardContent>
-    </SettingsCard>
+      </div>
+    </CardComponent>
   );
-}
-
-interface ProviderCellProps {
-  className?: string;
-  classNames?: SettingsCardClassNames;
-  account?: Account | null;
-  isPending?: boolean;
-  localization: AuthLocalization;
-  other?: boolean;
-  provider: Provider;
-  refetch?: Refetch;
 }
 
 function ProviderCell({
   className,
   classNames,
-  account,
   localization,
+  account,
   other,
   provider,
   refetch,
-}: ProviderCellProps) {
+}: CardComponentProps & {
+  account?: Account | null;
+  other?: boolean;
+  provider: Provider;
+  refetch?: Refetch;
+}) {
   const { authClient, basePath, baseURL, viewPaths, toast } = useAuth();
   const { useUnlinkAccount } = useAuthHooks();
   const { mutate: unlinkAccount } = useUnlinkAccount();
@@ -179,20 +166,19 @@ function ProviderCell({
 
       <div className="flex-col">
         <div className="text-sm">{provider.name}</div>
-
         {account && <AccountInfo account={account} />}
       </div>
 
       <Button
-        className={cn('relative ms-auto', classNames?.button)}
-        disabled={isLoading}
-        size="sm"
         type="button"
         variant={account ? 'outline' : 'primary'}
+        size="sm"
+        className={cn('relative ms-auto', classNames?.button)}
         onClick={account ? handleUnlink : handleLink}
+        disabled={isLoading}
       >
-        {isLoading && <Loader2 className="animate-spin" />}
-        {account ? localization.UNLINK : localization.LINK}
+        {isLoading && <Spinner />}
+        {account ? localization?.UNLINK : localization?.LINK}
       </Button>
     </Card>
   );

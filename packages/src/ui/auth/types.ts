@@ -1,74 +1,69 @@
 import type { ReactNode } from 'react';
 
-import type { AuthLocalization } from '@/lib/localization';
 import type { AuthViewPath, AuthViewPaths } from '@/lib/view-paths';
 import type { PasswordValidation } from '@/types/generals';
+import type { BaseProps } from '@/types/ui';
 
 export type AuthViewClassNames = {
   base?: string;
-  content?: string;
+  header?: string;
+  title?: string;
   description?: string;
+  content?: string;
+  continueWith?: string;
+  separator?: string;
   footer?: string;
   footerLink?: string;
-  continueWith?: string;
   form?: AuthFormClassNames;
-  header?: string;
-  separator?: string;
-  title?: string;
 };
 
-export interface AuthViewProps {
-  className?: string;
+export type AuthFormClassNames = {
+  base?: string;
+  button?: string;
+  icon?: string;
+  label?: string;
+  input?: string;
+  error?: string;
+  checkbox?: string;
+  description?: string;
+  forgotPasswordLink?: string;
+  otpInput?: string;
+  otpInputContainer?: string;
+  qrCode?: string;
+  primaryButton?: string;
+  secondaryButton?: string;
+  outlineButton?: string;
+  providerButton?: string;
+};
+
+export interface AuthViewProps extends BaseProps {
   classNames?: AuthViewClassNames;
   callbackURL?: string;
   cardHeader?: ReactNode;
-  localization?: AuthLocalization;
+  otpSeparators?: 0 | 1 | 2;
   path?: string;
   pathname?: string;
   redirectTo?: string;
   socialLayout?: 'auto' | 'horizontal' | 'grid' | 'vertical';
   view?: keyof AuthViewPaths;
-  otpSeparators?: 0 | 1 | 2;
 }
 
-export type AuthFormClassNames = {
-  base?: string;
-  button?: string;
-  checkbox?: string;
-  description?: string;
-  error?: string;
-  forgotPasswordLink?: string;
-  icon?: string;
-  input?: string;
-  label?: string;
-  otpInput?: string;
-  otpInputContainer?: string;
-  outlineButton?: string;
-  primaryButton?: string;
-  providerButton?: string;
-  qrCode?: string;
-  secondaryButton?: string;
-};
-
-export interface AuthFormProps {
-  className?: string;
+export interface AuthFormProps extends BaseProps {
   classNames?: AuthFormClassNames;
   callbackURL?: string;
   isSubmitting?: boolean;
-  localization?: AuthLocalization;
+  otpSeparators?: 0 | 1 | 2;
+  passwordValidation?: PasswordValidation;
   pathname?: string;
   redirectTo?: string;
-  view?: AuthViewPath;
-  otpSeparators?: 0 | 1 | 2;
   setIsSubmitting?: (isSubmitting: boolean) => void;
-  passwordValidation?: PasswordValidation;
+  view?: AuthViewPath;
 }
 
-export interface AuthButtonProps {
+export interface AuthButtonProps extends BaseProps {
   classNames?: AuthViewClassNames;
   isSubmitting?: boolean;
-  localization?: AuthLocalization;
-  view?: AuthViewPath;
   redirectTo?: string;
   setIsSubmitting?: (isSubmitting: boolean) => void;
+  view?: AuthViewPath;
 }

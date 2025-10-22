@@ -43,13 +43,10 @@ const sanitizeActionName = (action: string): string => {
   return result;
 };
 
-export function useCaptcha(propLocalization?: AuthLocalization) {
-  const { captcha, localization: contextLocalization } = useContext(AuthUIContext);
+export function useCaptcha(localizationProp?: AuthLocalization) {
+  const { captcha } = useContext(AuthUIContext);
 
-  const localization = useMemo(
-    () => ({ ...contextLocalization, ...propLocalization }),
-    [contextLocalization, propLocalization],
-  );
+  const localization = useLocalization(localizationProp);
 
   // biome-ignore lint/suspicious/noExplicitAny: disable
   const captchaRef = useRef<any>(null);
@@ -195,6 +192,17 @@ export function useLang() {
   }, []);
 
   return { lang };
+}
+
+export function useLocalization(localizationProp?: AuthLocalization) {
+  const { localization: localizationContext } = useContext(AuthUIContext);
+
+  const localization = useMemo(
+    () => ({ ...localizationContext, ...localizationProp }),
+    [localizationContext, localizationProp],
+  );
+
+  return localization;
 }
 
 export function useOnSuccessTransition(redirectTo?: string) {

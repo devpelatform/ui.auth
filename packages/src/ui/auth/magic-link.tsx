@@ -1,6 +1,6 @@
 'use client';
 
-import { useCallback, useEffect, useMemo } from 'react';
+import { useCallback, useEffect } from 'react';
 import { zodResolver } from '@hookform/resolvers/zod';
 import type { BetterFetchOption } from 'better-auth/react';
 
@@ -18,7 +18,12 @@ import {
 import { useForm } from '@pelatform/ui/re/react-hook-form';
 import * as z from '@pelatform/ui/re/zod';
 import { useAuth } from '@/hooks';
-import { useCaptcha, useIsHydrated, useOnSuccessTransition } from '@/hooks/private';
+import {
+  useCaptcha,
+  useIsHydrated,
+  useLocalization,
+  useOnSuccessTransition,
+} from '@/hooks/private';
 import { cn, getLocalizedError } from '@/lib/utils';
 import { Captcha } from '../captcha/captcha';
 import type { AuthFormProps } from './types';
@@ -32,21 +37,9 @@ export function MagicLinkForm({
   redirectTo: redirectToProp,
   setIsSubmitting,
 }: AuthFormProps) {
-  const {
-    authClient,
-    basePath,
-    baseURL,
-    localization: localizationContext,
-    persistClient,
-    toast,
-    viewPaths,
-  } = useAuth();
+  const { authClient, basePath, baseURL, persistClient, toast, viewPaths } = useAuth();
 
-  const localization = useMemo(
-    () => ({ ...localizationContext, ...localizationProp }),
-    [localizationContext, localizationProp],
-  );
-
+  const localization = useLocalization(localizationProp);
   const { captchaRef, getCaptchaHeaders, resetCaptcha } = useCaptcha(localization);
   const isHydrated = useIsHydrated();
   const { redirectTo } = useOnSuccessTransition(redirectToProp);
@@ -112,8 +105,8 @@ export function MagicLinkForm({
     <Form {...form}>
       <form
         onSubmit={form.handleSubmit(sendMagicLink)}
-        noValidate={isHydrated}
         className={cn('grid w-full gap-6', className, classNames?.base)}
+        noValidate={isHydrated}
       >
         <FormField
           control={form.control}

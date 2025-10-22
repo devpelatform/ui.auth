@@ -2,22 +2,24 @@ import Link from 'next/link';
 import { getTranslations } from 'next-intl/server';
 
 import { AuthView } from '@pelatform/ui.auth';
-import { config } from '@repo/config';
+import { authViewPaths } from '@pelatform/ui.auth/server';
+import { OrganizationProvider } from '@/components/organization-provider';
 import { createMetadata } from '@/lib/metadata';
 
 export const dynamicParams = false;
 
 export function generateStaticParams() {
-  return Object.entries(config.path.auth).map(([_key, value]) => ({
-    path: value.replace(/^\//, ''),
-  }));
+  // return Object.entries(config.path.auth).map(([_key, value]) => ({
+  //   path: value.replace(/^\//, ''),
+  // }));
+  return Object.values(authViewPaths).map((path) => ({ path }));
 }
 
 export async function generateMetadata({ params }: { params: Promise<{ path: string }> }) {
   const { path } = await params;
   const t = await getTranslations();
 
-  const authKey = Object.entries(config.path.auth).find(
+  const authKey = Object.entries(authViewPaths).find(
     ([_key, value]) => value.replace(/^\//, '') === path,
   )?.[0];
 
@@ -31,7 +33,13 @@ export default async function AuthPage({ params }: { params: Promise<{ path: str
 
   return (
     <main className="container flex grow flex-col items-center justify-center gap-4 self-center p-4 md:p-6">
-      <AuthView path={path} socialLayout="grid" />
+      {path === 'accept-invitation' ? (
+        <OrganizationProvider>
+          <AuthView path={path} socialLayout="grid" />
+        </OrganizationProvider>
+      ) : (
+        <AuthView path={path} socialLayout="grid" />
+      )}
 
       {!['callback', 'sign-out'].includes(path) && (
         <p className="w-3xs text-center text-muted-foreground text-xs">

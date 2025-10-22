@@ -1,74 +1,68 @@
 'use client';
 
-import { useMemo, useState } from 'react';
+import { useState } from 'react';
 import type { Session } from 'better-auth';
-import { LaptopIcon, Loader2, SmartphoneIcon } from 'lucide-react';
+import { LaptopIcon, SmartphoneIcon } from 'lucide-react';
 import { UAParser } from 'ua-parser-js';
 
-import { Button, Card, CardContent } from '@pelatform/ui/default';
+import { Button, Card, Spinner } from '@pelatform/ui/default';
 import { useAuth, useAuthHooks } from '@/hooks';
-import type { AuthLocalization } from '@/lib/localization';
+import { useLocalization } from '@/hooks/private';
 import { cn, getLocalizedError } from '@/lib/utils';
 import type { Refetch } from '@/types/generals';
-import { SettingsCard, type SettingsCardClassNames } from '../../shared/settings-card';
-import { SettingsCellSkeleton } from '../../shared/settings-skeleton';
-
-export interface SessionsCardProps {
-  className?: string;
-  classNames?: SettingsCardClassNames;
-  localization?: AuthLocalization;
-}
+import type { CardComponentProps } from '@/types/ui';
+import { CardComponent } from '../../shared/components/card';
+import { SkeletonCellComponent } from '../../shared/components/skeleton';
 
 export function SessionsCard({
   className,
   classNames,
   localization: localizationProp,
-}: SessionsCardProps) {
-  const { localization: localizationContext } = useAuth();
+  ...props
+}: CardComponentProps) {
   const { useListSessions } = useAuthHooks();
   const { data: sessions, isPending, refetch } = useListSessions();
 
-  const localization = useMemo(
-    () => ({ ...localizationContext, ...localizationProp }),
-    [localizationContext, localizationProp],
-  );
+  const localization = useLocalization(localizationProp);
 
   return (
-    <SettingsCard
+    <CardComponent
       className={className}
       classNames={classNames}
+      title={localization.SESSIONS}
       description={localization.SESSIONS_DESCRIPTION}
       isPending={isPending}
-      title={localization.SESSIONS}
+      {...props}
     >
-      <CardContent className={cn('grid gap-4', classNames?.content)}>
+      <div className={cn('grid gap-4', classNames?.grid)}>
         {isPending ? (
-          <SettingsCellSkeleton classNames={classNames} />
+          <SkeletonCellComponent classNames={classNames} />
         ) : (
           sessions?.map((session) => (
             <SessionCell
               key={session.id}
               classNames={classNames}
               localization={localization}
-              session={session}
               refetch={refetch}
+              session={session}
             />
           ))
         )}
-      </CardContent>
-    </SettingsCard>
+      </div>
+    </CardComponent>
   );
 }
 
-interface SessionCellProps {
-  className?: string;
-  classNames?: SettingsCardClassNames;
-  localization: AuthLocalization;
-  session: Session;
+function SessionCell({
+  className,
+  classNames,
+  localization,
+  refetch,
+  session,
+}: CardComponentProps & {
   refetch?: Refetch;
-}
-
-function SessionCell({ className, classNames, localization, session, refetch }: SessionCellProps) {
+  session: Session;
+}) {
   const { basePath, navigate, toast, viewPaths } = useAuth();
   const { useSession, useRevokeSession } = useAuthHooks();
   const { data: sessionData } = useSession();
@@ -111,27 +105,28 @@ function SessionCell({ className, classNames, localization, session, refetch }: 
 
       <div className="flex flex-col">
         <span className="font-semibold text-sm">
-          {isCurrentSession ? localization.CURRENT_SESSION : session?.ipAddress}
+          {isCurrentSession ? localization?.CURRENT_SESSION : session?.ipAddress}
         </span>
 
         <span className="text-muted-foreground text-xs">
           {session.userAgent?.includes('tauri-plugin-http')
-            ? localization.APP
+            ? localization?.APP
             : parser.os.name && parser.browser.name
               ? `${parser.os.name}, ${parser.browser.name}`
-              : parser.os.name || parser.browser.name || session.userAgent || localization.UNKNOWN}
+              : parser.os.name || parser.browser.name || session.userAgent || localization?.UNKNOWN}
         </span>
       </div>
 
       <Button
-        className={cn('relative ms-auto', classNames?.button, classNames?.outlineButton)}
-        disabled={isLoading}
-        size="sm"
+        type="button"
         variant="outline"
+        size="sm"
+        className={cn('relative ms-auto', classNames?.button, classNames?.outlineButton)}
         onClick={handleRevoke}
+        disabled={isLoading}
       >
-        {isLoading && <Loader2 className="animate-spin" />}
-        {isCurrentSession ? localization.SIGN_OUT : localization.REVOKE}
+        {isLoading && <Spinner />}
+        {isCurrentSession ? localization?.SIGN_OUT : localization?.REVOKE}
       </Button>
     </Card>
   );

@@ -1,41 +1,24 @@
 'use client';
 
-import { type ComponentProps, useMemo, useState } from 'react';
+import { useState } from 'react';
 import { CheckIcon, CopyIcon } from 'lucide-react';
 
-import {
-  Button,
-  Dialog,
-  DialogContent,
-  DialogDescription,
-  DialogFooter,
-  DialogHeader,
-  DialogTitle,
-} from '@pelatform/ui/default';
-import { useAuth } from '@/hooks';
-import type { AuthLocalization } from '@/lib/localization';
+import { Button } from '@pelatform/ui/default';
+import { useLocalization } from '@/hooks/private';
 import { cn } from '@/lib/utils';
-import type { SettingsCardClassNames } from '../shared/settings-card';
-
-export interface ApiKeyDisplayDialogProps extends ComponentProps<typeof Dialog> {
-  classNames?: SettingsCardClassNames;
-  localization?: AuthLocalization;
-  apiKey: string;
-}
+import type { DialogComponentProps } from '@/types/ui';
+import { DialogComponent } from '../shared/components/dialog';
 
 export function ApiKeyDisplayDialog({
   classNames,
-  apiKey,
   localization: localizationProp,
   onOpenChange,
+  title,
+  description,
+  apiKey,
   ...props
-}: ApiKeyDisplayDialogProps) {
-  const { localization: localizationContext } = useAuth();
-
-  const localization = useMemo(
-    () => ({ ...localizationContext, ...localizationProp }),
-    [localizationContext, localizationProp],
-  );
+}: DialogComponentProps & { apiKey: string }) {
+  const localization = useLocalization(localizationProp);
 
   const [copied, setCopied] = useState(false);
 
@@ -46,30 +29,20 @@ export function ApiKeyDisplayDialog({
   };
 
   return (
-    <Dialog onOpenChange={onOpenChange} {...props}>
-      <DialogContent
-        onOpenAutoFocus={(e) => e.preventDefault()}
-        className={classNames?.dialog?.content}
-      >
-        <DialogHeader className={classNames?.dialog?.header}>
-          <DialogTitle className={cn('text-lg md:text-xl', classNames?.title)}>
-            {localization.API_KEY_CREATED}
-          </DialogTitle>
-
-          <DialogDescription className={cn('text-xs md:text-sm', classNames?.description)}>
-            {localization.CREATE_API_KEY_SUCCESS}
-          </DialogDescription>
-        </DialogHeader>
-
-        <div className="break-all rounded-md bg-muted p-4 font-mono text-sm">{apiKey}</div>
-
-        <DialogFooter className={classNames?.dialog?.footer}>
+    <DialogComponent
+      classNames={classNames}
+      localization={localization}
+      onOpenChange={onOpenChange}
+      title={title || localization.API_KEY_CREATED}
+      description={description || localization.CREATE_API_KEY_SUCCESS}
+      button={
+        <>
           <Button
             type="button"
             variant="outline"
+            className={cn(classNames?.button, classNames?.outlineButton)}
             onClick={handleCopy}
             disabled={copied}
-            className={cn(classNames?.button, classNames?.outlineButton)}
           >
             {copied ? (
               <>
@@ -83,16 +56,18 @@ export function ApiKeyDisplayDialog({
               </>
             )}
           </Button>
-
           <Button
             type="button"
-            onClick={() => onOpenChange?.(false)}
             className={cn(classNames?.button, classNames?.primaryButton)}
+            onClick={() => onOpenChange?.(false)}
           >
             {localization.DONE}
           </Button>
-        </DialogFooter>
-      </DialogContent>
-    </Dialog>
+        </>
+      }
+      {...props}
+    >
+      <div className="break-all rounded-md bg-muted p-4 font-mono text-sm">{apiKey}</div>
+    </DialogComponent>
   );
 }

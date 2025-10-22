@@ -1,10 +1,9 @@
 'use client';
 
-import { useMemo, useState } from 'react';
+import { useState } from 'react';
 import { zodResolver } from '@hookform/resolvers/zod';
 
 import {
-  CardContent,
   Form,
   FormControl,
   FormField,
@@ -16,23 +15,22 @@ import {
 import { useForm } from '@pelatform/ui/re/react-hook-form';
 import * as z from '@pelatform/ui/re/zod';
 import { useAuth, useAuthHooks } from '@/hooks';
+import { useLocalization } from '@/hooks/private';
 import { cn, getLocalizedError } from '@/lib/utils';
-import { SettingsCard, type SettingsCardProps } from '../../shared/settings-card';
+import type { CardComponentProps } from '@/types/ui';
+import { CardComponent } from '../../shared/components/card';
 
 export function FormEmailCard({
   className,
   classNames,
   localization: localizationProp,
   ...props
-}: SettingsCardProps) {
-  const { authClient, emailVerification, localization: localizationContext, toast } = useAuth();
+}: CardComponentProps) {
+  const { authClient, emailVerification, toast } = useAuth();
   const { useSession } = useAuthHooks();
   const { data: sessionData, isPending, refetch } = useSession();
 
-  const localization = useMemo(
-    () => ({ ...localizationContext, ...localizationProp }),
-    [localizationContext, localizationProp],
-  );
+  const localization = useLocalization(localizationProp);
 
   const [resendDisabled, setResendDisabled] = useState(false);
 
@@ -50,6 +48,7 @@ export function FormEmailCard({
   const resendForm = useForm();
 
   const { isSubmitting } = form.formState;
+  const disableSubmit = isSubmitting || !form.formState.isValid || !form.formState.isDirty;
 
   const changeEmail = async ({ email }: z.infer<typeof formSchema>) => {
     if (email === sessionData?.user.email) {
@@ -115,49 +114,50 @@ export function FormEmailCard({
     <>
       <Form {...form}>
         <form noValidate onSubmit={form.handleSubmit(changeEmail)}>
-          <SettingsCard
+          <CardComponent
             className={className}
             classNames={classNames}
+            title={localization.EMAIL}
             description={localization.EMAIL_DESCRIPTION}
             instructions={localization.EMAIL_INSTRUCTIONS}
-            isPending={isPending}
-            title={localization.EMAIL}
             actionLabel={localization.SAVE}
+            disabled={disableSubmit}
+            isPending={isPending}
             {...props}
           >
-            <CardContent className={classNames?.content}>
-              {isPending ? (
-                <Skeleton className={cn('h-9 w-full', classNames?.skeleton)} />
-              ) : (
-                <FormField
-                  control={form.control}
-                  name="email"
-                  render={({ field }) => (
-                    <FormItem>
-                      <FormControl>
-                        <Input
-                          className={classNames?.input}
-                          placeholder={localization.EMAIL_PLACEHOLDER}
-                          type="email"
-                          disabled={isSubmitting}
-                          {...field}
-                        />
-                      </FormControl>
+            {isPending ? (
+              <Skeleton className={cn('h-9 w-full', classNames?.skeleton)} />
+            ) : (
+              <FormField
+                control={form.control}
+                name="email"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormControl>
+                      <Input
+                        type="email"
+                        variant="lg"
+                        className={classNames?.input}
+                        placeholder={localization.EMAIL_PLACEHOLDER}
+                        disabled={isSubmitting}
+                        {...field}
+                        value={field.value as string}
+                      />
+                    </FormControl>
 
-                      <FormMessage className={classNames?.error} />
-                    </FormItem>
-                  )}
-                />
-              )}
-            </CardContent>
-          </SettingsCard>
+                    <FormMessage className={classNames?.error} />
+                  </FormItem>
+                )}
+              />
+            )}
+          </CardComponent>
         </form>
       </Form>
 
       {emailVerification && sessionData?.user && !sessionData?.user.emailVerified && (
         <Form {...resendForm}>
           <form onSubmit={resendForm.handleSubmit(resendVerification)}>
-            <SettingsCard
+            <CardComponent
               className={className}
               classNames={classNames}
               title={localization.VERIFY_YOUR_EMAIL}

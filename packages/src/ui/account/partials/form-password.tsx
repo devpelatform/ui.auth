@@ -4,7 +4,6 @@ import { useMemo } from 'react';
 import { zodResolver } from '@hookform/resolvers/zod';
 
 import {
-  CardContent,
   Form,
   FormControl,
   FormField,
@@ -15,48 +14,33 @@ import {
 import { useForm } from '@pelatform/ui/re/react-hook-form';
 import * as z from '@pelatform/ui/re/zod';
 import { useAuth, useAuthHooks } from '@/hooks';
-import type { AuthLocalization } from '@/lib/localization';
+import { useLocalization } from '@/hooks/private';
 import { cn, getLocalizedError, getPasswordSchema } from '@/lib/utils';
 import type { PasswordValidation } from '@/types/generals';
+import type { CardComponentProps } from '@/types/ui';
+import { CardComponent } from '../../shared/components/card';
+import { SkeletonInputComponent } from '../../shared/components/skeleton';
 import { PasswordInput } from '../../shared/password-input';
-import { SettingsCard, type SettingsCardClassNames } from '../../shared/settings-card';
-import { InputFieldSkeleton } from '../../shared/settings-skeleton';
-
-export interface FormPasswordCardProps {
-  className?: string;
-  classNames?: SettingsCardClassNames;
-  accounts?: { providerId: string }[] | null;
-  isPending?: boolean;
-  localization?: AuthLocalization;
-  skipHook?: boolean;
-  passwordValidation?: PasswordValidation;
-}
 
 export function FormPasswordCard({
   className,
   classNames,
-  accounts,
   isPending,
   localization: localizationProp,
-  skipHook,
+  accounts,
   passwordValidation: propPasswordValidation,
-}: FormPasswordCardProps) {
-  const {
-    authClient,
-    basePath,
-    baseURL,
-    credentials,
-    localization: localizationContext,
-    toast,
-    viewPaths,
-  } = useAuth();
+  skipHook,
+  ...props
+}: CardComponentProps & {
+  accounts?: { providerId: string }[] | null;
+  passwordValidation?: PasswordValidation;
+  skipHook?: boolean;
+}) {
+  const { authClient, basePath, baseURL, credentials, toast, viewPaths } = useAuth();
   const { useSession, useListAccounts } = useAuthHooks();
   const { data: sessionData } = useSession();
 
-  const localization = useMemo(
-    () => ({ ...localizationContext, ...localizationProp }),
-    [localizationContext, localizationProp],
-  );
+  const localization = useLocalization(localizationProp);
 
   const confirmPasswordEnabled = credentials?.confirmPassword;
   const contextPasswordValidation = credentials?.passwordValidation;
@@ -107,6 +91,7 @@ export function FormPasswordCard({
   const setPasswordForm = useForm();
 
   const { isSubmitting } = form.formState;
+  const disableSubmit = isSubmitting || !form.formState.isValid || !form.formState.isDirty;
 
   const setPassword = async () => {
     if (!sessionData) return;
@@ -158,13 +143,15 @@ export function FormPasswordCard({
     return (
       <Form {...setPasswordForm}>
         <form onSubmit={setPasswordForm.handleSubmit(setPassword)}>
-          <SettingsCard
+          <CardComponent
+            className={className}
+            classNames={classNames}
             title={localization.SET_PASSWORD}
             description={localization.SET_PASSWORD_DESCRIPTION}
             actionLabel={localization.SET_PASSWORD}
+            disabled={disableSubmit}
             isPending={isPending}
-            className={className}
-            classNames={classNames}
+            {...props}
           />
         </form>
       </Form>
@@ -174,22 +161,23 @@ export function FormPasswordCard({
   return (
     <Form {...form}>
       <form onSubmit={form.handleSubmit(changePassword)}>
-        <SettingsCard
+        <CardComponent
           className={className}
           classNames={classNames}
-          actionLabel={localization.SAVE}
+          title={localization.CHANGE_PASSWORD}
           description={localization.CHANGE_PASSWORD_DESCRIPTION}
           instructions={localization.CHANGE_PASSWORD_INSTRUCTIONS}
+          actionLabel={localization.SAVE}
+          disabled={disableSubmit}
           isPending={isPending}
-          title={localization.CHANGE_PASSWORD}
+          {...props}
         >
-          <CardContent className={cn('grid gap-6', classNames?.content)}>
+          <div className={cn('grid gap-4.5', classNames?.grid)}>
             {isPending || !accounts ? (
               <>
-                <InputFieldSkeleton classNames={classNames} />
-                <InputFieldSkeleton classNames={classNames} />
-
-                {confirmPasswordEnabled && <InputFieldSkeleton classNames={classNames} />}
+                <SkeletonInputComponent classNames={classNames} />
+                <SkeletonInputComponent classNames={classNames} />
+                {confirmPasswordEnabled && <SkeletonInputComponent classNames={classNames} />}
               </>
             ) : (
               <>
@@ -254,6 +242,7 @@ export function FormPasswordCard({
 
                         <FormControl>
                           <PasswordInput
+                            variant="lg"
                             className={classNames?.input}
                             autoComplete="new-password"
                             placeholder={localization.CONFIRM_PASSWORD_PLACEHOLDER}
@@ -270,8 +259,8 @@ export function FormPasswordCard({
                 )}
               </>
             )}
-          </CardContent>
-        </SettingsCard>
+          </div>
+        </CardComponent>
       </form>
     </Form>
   );

@@ -30,6 +30,7 @@ export type AuthConfig = {
 
 export type PathConfig = {
   auth: {
+    ACCEPT_INVITATION: string;
     CALLBACK: string;
     EMAIL_OTP: string;
     FORGOT_PASSWORD: string;
@@ -45,6 +46,7 @@ export type PathConfig = {
     SETTINGS: string;
     SECURITY: string;
     API_KEYS: string;
+    ORGANIZATIONS: string;
   };
   main: {
     ERROR: string;
@@ -52,7 +54,6 @@ export type PathConfig = {
     PRICING: string;
   };
   workspaces: {
-    ACCEPT_INVITATION: string;
     SETTINGS: string;
     MEMBERS: string;
     API_KEYS: string;

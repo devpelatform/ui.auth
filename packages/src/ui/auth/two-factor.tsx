@@ -4,7 +4,7 @@ import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import type { BetterFetchError } from '@better-fetch/fetch';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { QrCodeIcon, SendIcon } from 'lucide-react';
-import QRCode from 'react-qr-code';
+import QRCode from 'qrcode';
 
 import {
   Button,
@@ -22,7 +22,7 @@ import {
 import { useForm } from '@pelatform/ui/re/react-hook-form';
 import * as z from '@pelatform/ui/re/zod';
 import { useAuth, useAuthHooks } from '@/hooks';
-import { useIsHydrated, useOnSuccessTransition } from '@/hooks/private';
+import { useIsHydrated, useLocalization, useOnSuccessTransition } from '@/hooks/private';
 import { cn, getLocalizedError, getSearchParam } from '@/lib/utils';
 import type { User } from '@/types/auth';
 import { OTPInputGroup } from './partials/otp-input-group';
@@ -33,32 +33,20 @@ export function TwoFactorForm({
   classNames,
   isSubmitting,
   localization: localizationProp,
-  otpSeparators = 0,
+  otpSeparators = 1,
   redirectTo: redirectToProp,
   setIsSubmitting,
 }: AuthFormProps) {
-  const {
-    authClient,
-    basePath,
-    localization: localizationContext,
-    twoFactor,
-    viewPaths,
-    toast,
-    Link,
-  } = useAuth();
+  const { authClient, basePath, twoFactor, viewPaths, toast, Link } = useAuth();
   const { data: sessionData } = useAuthHooks().useSession();
   const isTwoFactorEnabled = (sessionData?.user as User)?.twoFactorEnabled;
 
-  const localization = useMemo(
-    () => ({ ...localizationContext, ...localizationProp }),
-    [localizationContext, localizationProp],
-  );
-
+  const localization = useLocalization(localizationProp);
   const { onSuccess, isPending: transitionPending } = useOnSuccessTransition(redirectToProp);
   const isHydrated = useIsHydrated();
   const totpURI = isHydrated ? getSearchParam('totpURI') : null;
-  const initialSendRef = useRef(false);
 
+  const initialSendRef = useRef(false);
   const [method, setMethod] = useState<'totp' | 'otp' | null>(
     twoFactor?.length === 1 ? twoFactor[0] : null,
   );
@@ -91,6 +79,23 @@ export function TwoFactorForm({
     setIsSubmitting?.(form.formState.isSubmitting || transitionPending);
   }, [form.formState.isSubmitting, transitionPending, setIsSubmitting]);
 
+  // biome-ignore lint/correctness/useExhaustiveDependencies: ignore
+  useEffect(() => {
+    if (method === 'otp' && cooldownSeconds <= 0 && !initialSendRef.current) {
+      initialSendRef.current = true;
+      sendOtp();
+    }
+  }, [method]);
+
+  useEffect(() => {
+    if (cooldownSeconds <= 0) return;
+
+    const timer = setTimeout(() => {
+      setCooldownSeconds((prev) => prev - 1);
+    }, 1000);
+    return () => clearTimeout(timer);
+  }, [cooldownSeconds]);
+
   const sendOtp = useCallback(async () => {
     if (isSendingOtp || cooldownSeconds > 0) return;
 
@@ -114,22 +119,6 @@ export function TwoFactorForm({
     setIsSendingOtp(false);
   }, [isSendingOtp, cooldownSeconds, authClient, localization, toast]);
 
-  useEffect(() => {
-    if (method === 'otp' && cooldownSeconds <= 0 && !initialSendRef.current) {
-      initialSendRef.current = true;
-      sendOtp();
-    }
-  }, [method, cooldownSeconds, sendOtp]);
-
-  useEffect(() => {
-    if (cooldownSeconds <= 0) return;
-
-    const timer = setTimeout(() => {
-      setCooldownSeconds((prev) => prev - 1);
-    }, 1000);
-    return () => clearTimeout(timer);
-  }, [cooldownSeconds]);
-
   async function verifyCode({ code, trustDevice }: z.infer<typeof formSchema>) {
     try {
       const verifyMethod =
@@ -145,7 +134,7 @@ export function TwoFactorForm({
 
       if (sessionData && !isTwoFactorEnabled) {
         toast({
-          message: localization?.TWO_FACTOR_ENABLED,
+          message: localization.TWO_FACTOR_ENABLED,
           icon: 'success',
         });
       }
@@ -166,8 +155,10 @@ export function TwoFactorForm({
       >
         {twoFactor?.includes('totp') && totpURI && method === 'totp' && (
           <div className="space-y-3">
-            <Label className={classNames?.label}>{localization.TWO_FACTOR_TOTP_LABEL}</Label>
-            <QRCode className={cn('border shadow-xs', classNames?.qrCode)} value={totpURI} />
+            <Label className={cn('block', classNames?.label)}>
+              {localization.TWO_FACTOR_TOTP_LABEL}
+            </Label>
+            <QRCodeComponent className={classNames?.qrCode} value={totpURI} />
           </div>
         )}
 
@@ -219,17 +210,18 @@ export function TwoFactorForm({
               control={form.control}
               name="trustDevice"
               render={({ field }) => (
-                <FormItem className="flex">
-                  <FormControl>
-                    <Checkbox
-                      checked={field.value}
-                      onCheckedChange={field.onChange}
-                      disabled={isSubmitting}
-                      className={classNames?.checkbox}
-                    />
-                  </FormControl>
-
-                  <FormLabel className={classNames?.label}>{localization.TRUST_DEVICE}</FormLabel>
+                <FormItem>
+                  <div className="flex items-center space-x-2">
+                    <FormControl>
+                      <Checkbox
+                        className={classNames?.checkbox}
+                        checked={field.value}
+                        onCheckedChange={field.onChange}
+                        disabled={isSubmitting}
+                      />
+                    </FormControl>
+                    <FormLabel className={classNames?.label}>{localization.TRUST_DEVICE}</FormLabel>
+                  </div>
                 </FormItem>
               )}
             />
@@ -290,5 +282,58 @@ export function TwoFactorForm({
         </div>
       </form>
     </Form>
+  );
+}
+
+function QRCodeComponent({
+  value,
+  size = 128,
+  level = 'M',
+  as = 'svg',
+  className,
+}: {
+  value: string;
+  size?: number; // px
+  level?: 'L' | 'M' | 'Q' | 'H';
+  as?: 'svg' | 'img'; // render as inline SVG string or <img src="data:...">
+  className?: string;
+}) {
+  const [src, setSrc] = useState<string>('');
+
+  const opts = useMemo(
+    () => ({ errorCorrectionLevel: level, margin: 1, width: size }),
+    [level, size],
+  );
+
+  useEffect(() => {
+    let cancelled = false;
+
+    if (as === 'img') {
+      QRCode.toDataURL(value, opts).then((url) => !cancelled && setSrc(url));
+    } else {
+      // inline SVG string
+      QRCode.toString(value, { ...opts, type: 'svg' }).then((svg) => {
+        if (!cancelled) setSrc(svg);
+      });
+    }
+
+    return () => {
+      cancelled = true;
+    };
+  }, [value, opts, as]);
+
+  if (!src) return null;
+
+  if (as === 'img') {
+    return <img src={src} width={size} height={size} alt="QR code" className={className} />;
+  }
+
+  // Inline SVG – no extra request, stylable with CSS
+  return (
+    <span
+      className={cn('block', className)}
+      // biome-ignore lint/security/noDangerouslySetInnerHtml: disable
+      dangerouslySetInnerHTML={{ __html: src }}
+    />
   );
 }

@@ -1,89 +1,69 @@
 'use client';
 
-import { useMemo } from 'react';
-import type { Account } from 'better-auth';
-
 import { useAuth, useAuthHooks } from '@/hooks';
-import type { AuthLocalization } from '@/lib/localization';
+import { useLocalization } from '@/hooks/private';
 import { cn } from '@/lib/utils';
-import type { SettingsCardClassNames } from '../shared/settings-card';
+import type { Account } from '@/types/auth';
 import { DeleteAccountCard } from './partials/delete-account';
 import { FormPasswordCard } from './partials/form-password';
 import { PasskeysCard } from './partials/passkeys';
 import { ProvidersCard } from './partials/providers';
 import { SessionsCard } from './partials/sessions';
 import { TwoFactorCard } from './partials/two-factor';
+import type { AccountBaseProps } from './types';
 
 export function SecurityCards({
   className,
   classNames,
   localization: localizationProp,
-}: {
-  className?: string;
-  classNames?: {
-    card?: SettingsCardClassNames;
-    cards?: string;
-  };
-  localization?: AuthLocalization;
-}) {
-  const {
-    credentials,
-    deleteUser,
-    genericOAuth,
-    localization: localizationContext,
-    passkey,
-    social,
-    twoFactor,
-  } = useAuth();
+}: AccountBaseProps) {
+  const { credentials, deleteUser, genericOAuth, passkey, social, twoFactor } = useAuth();
   const { useListAccounts } = useAuthHooks();
   const { data, isPending: accountsPending, refetch: refetchAccounts } = useListAccounts();
 
-  const localization = useMemo(
-    () => ({ ...localizationContext, ...localizationProp }),
-    [localizationContext, localizationProp],
-  );
+  const localization = useLocalization(localizationProp);
 
   const accounts = data as unknown as Account[];
 
   const credentialsLinked = accounts?.some((acc) => acc.providerId === 'credential');
 
   return (
-    <div className={cn('flex w-full flex-col gap-4 md:gap-6', className, classNames?.cards)}>
+    <div className={cn('grid w-full gap-6 md:gap-8', className)}>
       {credentials && (
         <FormPasswordCard
-          accounts={accounts}
-          classNames={classNames?.card}
+          classNames={classNames}
           isPending={accountsPending}
           localization={localization}
+          accounts={accounts}
           skipHook
         />
       )}
 
       {(social?.providers?.length || genericOAuth?.providers?.length) && (
         <ProvidersCard
-          accounts={accounts}
-          classNames={classNames?.card}
+          classNames={classNames}
           isPending={accountsPending}
           localization={localization}
+          accounts={accounts}
           refetch={refetchAccounts}
           skipHook
         />
       )}
 
       {twoFactor && credentialsLinked && (
-        <TwoFactorCard classNames={classNames?.card} localization={localization} />
+        <TwoFactorCard classNames={classNames} localization={localization} />
       )}
 
-      {passkey && <PasskeysCard classNames={classNames?.card} localization={localization} />}
+      {passkey && <PasskeysCard classNames={classNames} localization={localization} />}
 
-      <SessionsCard classNames={classNames?.card} localization={localization} />
+      <SessionsCard classNames={classNames} localization={localization} />
 
       {deleteUser && (
         <DeleteAccountCard
-          accounts={accounts}
-          classNames={classNames?.card}
+          classNames={classNames}
           isPending={accountsPending}
           localization={localization}
+          accounts={accounts}
           skipHook
         />
       )}

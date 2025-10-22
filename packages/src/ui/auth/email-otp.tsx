@@ -1,6 +1,7 @@
 'use client';
 
-import { useEffect, useMemo, useState } from 'react';
+import { useEffect, useState } from 'react';
+import type { BetterFetchOption } from '@better-fetch/fetch';
 import { zodResolver } from '@hookform/resolvers/zod';
 
 import {
@@ -18,8 +19,14 @@ import {
 import { useForm } from '@pelatform/ui/re/react-hook-form';
 import * as z from '@pelatform/ui/re/zod';
 import { useAuth } from '@/hooks';
-import { useIsHydrated, useOnSuccessTransition } from '@/hooks/private';
+import {
+  useCaptcha,
+  useIsHydrated,
+  useLocalization,
+  useOnSuccessTransition,
+} from '@/hooks/private';
 import { cn, getLocalizedError } from '@/lib/utils';
+import { Captcha } from '../captcha/captcha';
 import { OTPInputGroup } from './partials/otp-input-group';
 import type { AuthFormProps } from './types';
 
@@ -43,13 +50,9 @@ function EmailForm({
 }: AuthFormProps & {
   setEmail: (email: string) => void;
 }) {
-  const { authClient, localization: localizationContext, toast } = useAuth();
+  const { authClient, toast } = useAuth();
 
-  const localization = useMemo(
-    () => ({ ...localizationContext, ...localizationProp }),
-    [localizationContext, localizationProp],
-  );
-
+  const localization = useLocalization(localizationProp);
   const isHydrated = useIsHydrated();
 
   const formSchema = z.object({
@@ -96,8 +99,8 @@ function EmailForm({
     <Form {...form}>
       <form
         onSubmit={form.handleSubmit(sendEmailOTP)}
-        noValidate={isHydrated}
         className={cn('grid w-full gap-6', className, classNames?.base)}
+        noValidate={isHydrated}
       >
         <FormField
           control={form.control}
@@ -138,20 +141,17 @@ function OTPForm({
   classNames,
   isSubmitting,
   localization: localizationProp,
-  otpSeparators = 0,
+  otpSeparators = 1,
   redirectTo: redirectToProp,
   setIsSubmitting,
   email,
 }: AuthFormProps & {
   email: string;
 }) {
-  const { authClient, localization: localizationContext, toast } = useAuth();
+  const { authClient, toast } = useAuth();
 
-  const localization = useMemo(
-    () => ({ ...localizationContext, ...localizationProp }),
-    [localizationContext, localizationProp],
-  );
-
+  const localization = useLocalization(localizationProp);
+  const { captchaRef, getCaptchaHeaders, resetCaptcha } = useCaptcha(localization);
   const { onSuccess, isPending: transitionPending } = useOnSuccessTransition(redirectToProp);
 
   const formSchema = z.object({
@@ -180,10 +180,15 @@ function OTPForm({
 
   async function verifyCode({ code }: z.infer<typeof formSchema>) {
     try {
+      const fetchOptions: BetterFetchOption = {
+        throw: true,
+        headers: await getCaptchaHeaders('/sign-in/email'),
+      };
+
       await authClient.signIn.emailOtp({
         email,
         otp: code,
-        fetchOptions: { throw: true },
+        fetchOptions,
       });
 
       await onSuccess();
@@ -193,6 +198,7 @@ function OTPForm({
       });
 
       form.reset();
+      resetCaptcha();
     }
   }
 
@@ -232,16 +238,15 @@ function OTPForm({
           )}
         />
 
-        <div className="grid gap-4">
-          <Button
-            type="submit"
-            className={cn(classNames?.button, classNames?.primaryButton)}
-            disabled={isSubmitting}
-          >
-            {isSubmitting && <Spinner />}
-            {localization.EMAIL_OTP_VERIFY_ACTION}
-          </Button>
-        </div>
+        <Captcha ref={captchaRef} localization={localization} action="/sign-in/email" />
+
+        <Button
+          type="submit"
+          className={cn('w-full', classNames?.button, classNames?.primaryButton)}
+          disabled={isSubmitting}
+        >
+          {isSubmitting ? <Spinner /> : localization.EMAIL_OTP_VERIFY_ACTION}
+        </Button>
       </form>
     </Form>
   );

@@ -1,3 +1,5 @@
+// biome-ignore-all assist/source/organizeImports: disable
+
 /************************************
  **** HOOKS
  *************************************/
@@ -10,6 +12,7 @@ export * from './hooks/other';
 export * from './hooks/passkeys';
 export * from './hooks/sessions';
 export * from './hooks/use-authenticate';
+
 /************************************
  **** LIB
  *************************************/
@@ -19,15 +22,23 @@ export * from './lib/localization';
 export * from './lib/prefetch-session';
 export * from './lib/social-providers';
 export * from './lib/view-paths';
+
 /************************************
  **** TYPES
  *************************************/
 export * from './types/main';
 export * from './types/organization';
 export * from './types/query';
+export * from './types/ui';
+
 /************************************
  **** UI - account
  *************************************/
+export * from './ui/account/dialogs/backup-codes';
+export * from './ui/account/dialogs/delete-account';
+export * from './ui/account/dialogs/session-freshness';
+export * from './ui/account/dialogs/two-factor-password';
+
 export * from './ui/account/partials/delete-account';
 export * from './ui/account/partials/form-avatar';
 export * from './ui/account/partials/form-email';
@@ -40,30 +51,37 @@ export * from './ui/account/partials/passkeys';
 export * from './ui/account/partials/providers';
 export * from './ui/account/partials/sessions';
 export * from './ui/account/partials/two-factor';
+
+export * from './ui/account/organizations';
 export * from './ui/account/security';
 export * from './ui/account/settings';
+export * from './ui/account/types';
+export * from './ui/account/user-invitations';
 export * from './ui/account/view';
+
 /************************************
  **** UI - apikeys
  *************************************/
 export * from './ui/apikeys/apikeys';
 export * from './ui/apikeys/create-apikey';
-//  export * from './ui/apikeys/create-apikey-org';
 export * from './ui/apikeys/delete-apikey';
 export * from './ui/apikeys/display-apikey';
+
 /************************************
  **** UI - auth
  *************************************/
-export * from './ui/auth/callback';
-export * from './ui/auth/email-otp';
-export * from './ui/auth/forgot-password';
-export * from './ui/auth/magic-link';
 export * from './ui/auth/partials/email-otp-button';
 export * from './ui/auth/partials/magic-link-button';
 export * from './ui/auth/partials/one-tap';
 export * from './ui/auth/partials/otp-input-group';
 export * from './ui/auth/partials/passkey-button';
 export * from './ui/auth/partials/provider-button';
+
+export * from './ui/auth/accept-invitation';
+export * from './ui/auth/callback';
+export * from './ui/auth/email-otp';
+export * from './ui/auth/forgot-password';
+export * from './ui/auth/magic-link';
 export * from './ui/auth/recover-account';
 export * from './ui/auth/reset-password';
 export * from './ui/auth/sign-in';
@@ -72,22 +90,31 @@ export * from './ui/auth/sign-up';
 export * from './ui/auth/two-factor';
 export * from './ui/auth/types';
 export * from './ui/auth/view';
+
+/************************************
+ **** UI - organizations
+ *************************************/
+export * from './ui/organizations/dialogs/create-organization';
+export * from './ui/organizations/dialogs/leave-organization';
+
+export * from './ui/organizations/partials/create-organization-form';
+
 /************************************
  **** UI - providers
  *************************************/
 export * from './ui/providers/auth';
 export * from './ui/providers/organization';
+
 /************************************
  **** UI - shared
  *************************************/
+export * from './ui/shared/components/card';
+export * from './ui/shared/components/dialog';
+export * from './ui/shared/components/skeleton';
+
+export * from './ui/shared/avatar';
 export * from './ui/shared/helpers';
-export * from './ui/shared/organization-logo';
-// export * from './ui/shared/organization-switcher';
 export * from './ui/shared/password-input';
-export * from './ui/shared/personal-account';
 export * from './ui/shared/provider-icons';
-export * from './ui/shared/settings-card';
-export * from './ui/shared/settings-skeleton';
-export * from './ui/shared/user-avatar';
 export * from './ui/shared/user-button';
-export * from './ui/shared/user-view';
+export * from './ui/shared/view';
