@@ -77,7 +77,7 @@ export function LeaveOrganizationDialog({
       }
       {...props}
     >
-      <Card className={cn('my-2 flex-row p-4', classNames?.cell)}>
+      <Card className={cn('flex-row p-4', classNames?.cell)}>
         <OrganizationView localization={localization} organization={organization} />
       </Card>
     </DialogComponent>

@@ -1,6 +1,6 @@
 'use client';
 
-import { useCallback, useContext, useEffect, useMemo } from 'react';
+import { useCallback, useContext, useEffect, useMemo, useRef } from 'react';
 
 import { AuthUIContext, OrganizationContext } from '@/hooks';
 import { useActiveOrganization, useListOrganizations, useSession } from '@/hooks/main';
@@ -104,14 +104,18 @@ export const OrganizationUIProvider = (options: OrganizationUIProviderProps) => 
 
   const { data: sessionData } = useSession(authClient);
 
+  // Ensure we only refetch once per session change to avoid loops
+  const hasRefetchedForSessionRef = useRef<string | null>(null);
   useEffect(() => {
-    if (!sessionData?.user.id) return;
+    const sessionUserId = sessionData?.user.id || null;
+    if (!sessionUserId) return;
 
-    if (data || organizations) {
-      refetch?.();
-      refetchListOrganizations?.();
-    }
-  }, [sessionData?.user.id, data, organizations, refetch, refetchListOrganizations]);
+    if (hasRefetchedForSessionRef.current === sessionUserId) return;
+    hasRefetchedForSessionRef.current = sessionUserId;
+
+    refetch?.();
+    refetchListOrganizations?.();
+  }, [sessionData?.user.id, refetch, refetchListOrganizations]);
 
   useEffect(() => {
     if (isLoading || isRefetching) return;

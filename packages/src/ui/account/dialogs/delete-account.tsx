@@ -11,7 +11,6 @@ import {
   FormItem,
   FormLabel,
   FormMessage,
-  Input,
   Spinner,
 } from '@pelatform/ui/default';
 import { useForm } from '@pelatform/ui/re/react-hook-form';
@@ -22,6 +21,7 @@ import { cn, getLocalizedError } from '@/lib/utils';
 import type { Account } from '@/types/auth';
 import type { DialogComponentProps } from '@/types/ui';
 import { DialogComponent, DialogFooterComponent } from '../../shared/components/dialog';
+import { PasswordInput } from '../../shared/password-input';
 import { UserView } from '../../shared/view';
 
 export function DeleteAccountDialog({
@@ -62,7 +62,6 @@ export function DeleteAccountDialog({
   });
 
   const { isSubmitting } = form.formState;
-  const disableSubmit = isSubmitting || !form.formState.isValid || !form.formState.isDirty;
 
   const deleteAccount = async ({ password }: z.infer<typeof formSchema>) => {
     const params = {} as Record<string, string>;
@@ -124,7 +123,7 @@ export function DeleteAccountDialog({
       </Card>
 
       <Form {...form}>
-        <form onSubmit={form.handleSubmit(deleteAccount)} className="grid gap-6">
+        <form onSubmit={form.handleSubmit(deleteAccount)}>
           {credentialsLinked && (
             <FormField
               control={form.control}
@@ -134,11 +133,11 @@ export function DeleteAccountDialog({
                   <FormLabel className={classNames?.label}>{localization.PASSWORD}</FormLabel>
 
                   <FormControl>
-                    <Input
-                      autoComplete="current-password"
-                      placeholder={localization.PASSWORD_PLACEHOLDER}
-                      type="password"
+                    <PasswordInput
                       className={classNames?.input}
+                      placeholder={localization.PASSWORD_PLACEHOLDER}
+                      autoComplete="current-password"
+                      enableToggle
                       {...field}
                     />
                   </FormControl>
@@ -150,7 +149,6 @@ export function DeleteAccountDialog({
           )}
 
           <DialogFooterComponent
-            className="mt-0"
             classNames={classNames}
             localization={localization}
             onOpenChange={onOpenChange}
@@ -160,12 +158,8 @@ export function DeleteAccountDialog({
               <Button
                 type="submit"
                 variant="destructive"
-                className={cn(
-                  disableSubmit && 'pointer-events-auto! cursor-not-allowed',
-                  classNames?.button,
-                  classNames?.destructiveButton,
-                )}
-                disabled={disableSubmit}
+                className={cn(classNames?.button, classNames?.destructiveButton)}
+                disabled={isSubmitting}
               >
                 {isSubmitting && <Spinner />}
                 {isFresh ? localization.DELETE_ACCOUNT : localization.SIGN_OUT}

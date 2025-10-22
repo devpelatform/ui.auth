@@ -1,9 +1,11 @@
 'use client';
 
+import { KeyRoundIcon } from 'lucide-react';
+
 import { Skeleton } from '@pelatform/ui/default';
-import { useLocalization } from '@/hooks/private';
+import { useLang, useLocalization } from '@/hooks/private';
 import { cn } from '@/lib/utils';
-import type { Profile } from '@/types/generals';
+import type { ApiKey, Profile } from '@/types/generals';
 import type { ViewProps } from '@/types/ui';
 import { OrganizationLogo, UserAvatar } from './avatar';
 
@@ -236,6 +238,46 @@ export function OrganizationView({
             )}
           </>
         )}
+      </div>
+    </div>
+  );
+}
+
+export function ApiKeyView({
+  className,
+  classNames,
+  localization: localizationProp,
+  apiKey,
+}: ViewProps & { apiKey: ApiKey }) {
+  const localization = useLocalization(localizationProp);
+  const { lang } = useLang();
+
+  // Format expiration date or show "Never expires"
+  const formatExpiration = () => {
+    if (!apiKey.expiresAt) return localization?.NEVER_EXPIRES;
+
+    const expiresDate = new Date(apiKey.expiresAt);
+    return `${localization?.EXPIRES} ${expiresDate.toLocaleDateString(lang ?? 'en', {
+      month: 'short',
+      day: 'numeric',
+      year: 'numeric',
+    })}`;
+  };
+
+  return (
+    <div className={cn('flex items-center gap-3 truncate', className, classNames?.base)}>
+      <KeyRoundIcon className={cn('size-4 shrink-0', classNames?.icon)} />
+
+      <div className="flex flex-col truncate text-start">
+        <div className="flex items-center gap-2">
+          <span className="truncate font-semibold text-sm">{apiKey.name}</span>
+          <span className="flex-1 truncate text-muted-foreground text-sm">
+            {apiKey.start}
+            {'******'}
+          </span>
+        </div>
+
+        <div className="truncate text-muted-foreground text-xs">{formatExpiration()}</div>
       </div>
     </div>
   );

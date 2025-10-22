@@ -12,7 +12,7 @@ import { cn, getLocalizedError } from '@/lib/utils';
 import type { Refetch } from '@/types/generals';
 import type { CardComponentProps } from '@/types/ui';
 import { CardComponent } from '../../shared/components/card';
-import { SkeletonCellComponent } from '../../shared/components/skeleton';
+import { SkeletonViewComponent } from '../../shared/components/skeleton';
 
 export function SessionsCard({
   className,
@@ -36,7 +36,7 @@ export function SessionsCard({
     >
       <div className={cn('grid gap-4', classNames?.grid)}>
         {isPending ? (
-          <SkeletonCellComponent classNames={classNames} />
+          <SkeletonViewComponent classNames={classNames} />
         ) : (
           sessions?.map((session) => (
             <SessionCell
@@ -96,25 +96,30 @@ function SessionCell({
   const isMobile = parser.device.type === 'mobile';
 
   return (
-    <Card className={cn('flex-row items-center gap-3 px-4 py-3', className, classNames?.cell)}>
-      {isMobile ? (
-        <SmartphoneIcon className={cn('size-4', classNames?.icon)} />
-      ) : (
-        <LaptopIcon className={cn('size-4', classNames?.icon)} />
-      )}
+    <Card className={cn('flex-row items-center p-4', className, classNames?.cell)}>
+      <div className="flex items-center gap-3">
+        {isMobile ? (
+          <SmartphoneIcon className={cn('size-4', classNames?.icon)} />
+        ) : (
+          <LaptopIcon className={cn('size-4', classNames?.icon)} />
+        )}
 
-      <div className="flex flex-col">
-        <span className="font-semibold text-sm">
-          {isCurrentSession ? localization?.CURRENT_SESSION : session?.ipAddress}
-        </span>
+        <div className="flex flex-col">
+          <span className="font-semibold text-sm">
+            {isCurrentSession ? localization?.CURRENT_SESSION : session?.ipAddress}
+          </span>
 
-        <span className="text-muted-foreground text-xs">
-          {session.userAgent?.includes('tauri-plugin-http')
-            ? localization?.APP
-            : parser.os.name && parser.browser.name
-              ? `${parser.os.name}, ${parser.browser.name}`
-              : parser.os.name || parser.browser.name || session.userAgent || localization?.UNKNOWN}
-        </span>
+          <span className="text-muted-foreground text-xs">
+            {session.userAgent?.includes('tauri-plugin-http')
+              ? localization?.APP
+              : parser.os.name && parser.browser.name
+                ? `${parser.os.name}, ${parser.browser.name}`
+                : parser.os.name ||
+                  parser.browser.name ||
+                  session.userAgent ||
+                  localization?.UNKNOWN}
+          </span>
+        </div>
       </div>
 
       <Button

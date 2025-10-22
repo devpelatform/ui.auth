@@ -13,7 +13,7 @@ import type { Provider } from '@/types/components';
 import type { Refetch } from '@/types/generals';
 import type { CardComponentProps } from '@/types/ui';
 import { CardComponent } from '../../shared/components/card';
-import { SkeletonCellComponent } from '../../shared/components/skeleton';
+import { SkeletonViewComponent } from '../../shared/components/skeleton';
 
 export function ProvidersCard({
   className,
@@ -53,7 +53,7 @@ export function ProvidersCard({
       <div className={cn('grid gap-4', classNames?.grid)}>
         {isPending ? (
           social?.providers?.map((provider) => (
-            <SkeletonCellComponent key={provider} classNames={classNames} />
+            <SkeletonViewComponent key={provider} classNames={classNames} />
           ))
         ) : (
           <>
@@ -161,12 +161,14 @@ function ProviderCell({
   };
 
   return (
-    <Card className={cn('flex-row items-center gap-3 px-4 py-3', className, classNames?.cell)}>
-      {provider.icon && <provider.icon className={cn('size-4', classNames?.icon)} />}
+    <Card className={cn('flex-row items-center p-4', className, classNames?.cell)}>
+      <div className="flex items-center gap-3">
+        {provider.icon && <provider.icon className={cn('size-4', classNames?.icon)} />}
 
-      <div className="flex-col">
-        <div className="text-sm">{provider.name}</div>
-        {account && <AccountInfo account={account} />}
+        <div className="flex-col">
+          <div className="text-sm">{provider.name}</div>
+          {account && <AccountInfo account={account} />}
+        </div>
       </div>
 
       <Button

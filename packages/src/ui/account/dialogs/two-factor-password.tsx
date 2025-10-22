@@ -52,7 +52,6 @@ export function TwoFactorPasswordDialog({
   });
 
   const { isSubmitting } = form.formState;
-  const disableSubmit = isSubmitting || !form.formState.isValid || !form.formState.isDirty;
 
   async function enableTwoFactor({ password }: z.infer<typeof formSchema>) {
     try {
@@ -129,6 +128,7 @@ export function TwoFactorPasswordDialog({
                       className={classNames?.input}
                       placeholder={localization.PASSWORD_PLACEHOLDER}
                       autoComplete="current-password"
+                      enableToggle
                       {...field}
                     />
                   </FormControl>
@@ -147,12 +147,8 @@ export function TwoFactorPasswordDialog({
               button={
                 <Button
                   type="submit"
-                  className={cn(
-                    disableSubmit && 'pointer-events-auto! cursor-not-allowed',
-                    classNames?.button,
-                    classNames?.primaryButton,
-                  )}
-                  disabled={disableSubmit}
+                  className={cn(classNames?.button, classNames?.primaryButton)}
+                  disabled={isSubmitting}
                 >
                   {isSubmitting && <Spinner />}
                   {isTwoFactorEnabled

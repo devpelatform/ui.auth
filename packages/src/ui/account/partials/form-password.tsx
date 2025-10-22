@@ -91,7 +91,6 @@ export function FormPasswordCard({
   const setPasswordForm = useForm();
 
   const { isSubmitting } = form.formState;
-  const disableSubmit = isSubmitting || !form.formState.isValid || !form.formState.isDirty;
 
   const setPassword = async () => {
     if (!sessionData) return;
@@ -149,7 +148,6 @@ export function FormPasswordCard({
             title={localization.SET_PASSWORD}
             description={localization.SET_PASSWORD_DESCRIPTION}
             actionLabel={localization.SET_PASSWORD}
-            disabled={disableSubmit}
             isPending={isPending}
             {...props}
           />
@@ -168,7 +166,7 @@ export function FormPasswordCard({
           description={localization.CHANGE_PASSWORD_DESCRIPTION}
           instructions={localization.CHANGE_PASSWORD_INSTRUCTIONS}
           actionLabel={localization.SAVE}
-          disabled={disableSubmit}
+          disabled={isSubmitting}
           isPending={isPending}
           {...props}
         >
@@ -193,8 +191,8 @@ export function FormPasswordCard({
                       <FormControl>
                         <PasswordInput
                           className={classNames?.input}
-                          autoComplete="current-password"
                           placeholder={localization.CURRENT_PASSWORD_PLACEHOLDER}
+                          autoComplete="current-password"
                           disabled={isSubmitting}
                           {...field}
                         />
@@ -217,9 +215,9 @@ export function FormPasswordCard({
                       <FormControl>
                         <PasswordInput
                           className={classNames?.input}
+                          placeholder={localization.NEW_PASSWORD_PLACEHOLDER}
                           autoComplete="new-password"
                           disabled={isSubmitting}
-                          placeholder={localization.NEW_PASSWORD_PLACEHOLDER}
                           enableToggle
                           {...field}
                         />
@@ -242,10 +240,9 @@ export function FormPasswordCard({
 
                         <FormControl>
                           <PasswordInput
-                            variant="lg"
                             className={classNames?.input}
-                            autoComplete="new-password"
                             placeholder={localization.CONFIRM_PASSWORD_PLACEHOLDER}
+                            autoComplete="new-password"
                             disabled={isSubmitting}
                             enableToggle
                             {...field}

@@ -2,15 +2,16 @@
 
 import { useMemo, useState } from 'react';
 import type { Organization } from 'better-auth/plugins/organization';
-import { KeyRoundIcon } from 'lucide-react';
 
 import { Button, Card } from '@pelatform/ui/default';
 import { useAuthHooks } from '@/hooks';
-import { useLang, useLocalization } from '@/hooks/private';
+import { useLocalization } from '@/hooks/private';
 import { cn } from '@/lib/utils';
 import type { ApiKey, Refetch } from '@/types/generals';
 import type { CardComponentProps } from '@/types/ui';
 import { CardComponent } from '../shared/components/card';
+import { SkeletonViewComponent } from '../shared/components/skeleton';
+import { ApiKeyView } from '../shared/view';
 import { CreateApiKeyDialog } from './create-apikey';
 import { ApiKeyDeleteDialog } from './delete-apikey';
 import { ApiKeyDisplayDialog } from './display-apikey';
@@ -60,18 +61,25 @@ export function ApiKeysCard({
         isPending={isPending}
         {...props}
       >
-        {filteredApiKeys && filteredApiKeys.length > 0 && (
+        {isPending ? (
           <div className={cn('grid gap-4', classNames?.grid)}>
-            {filteredApiKeys?.map((apiKey) => (
-              <ApiKeyCell
-                key={apiKey.id}
-                classNames={classNames}
-                apiKey={apiKey}
-                localization={localization}
-                refetch={refetch}
-              />
-            ))}
+            <SkeletonViewComponent classNames={classNames} />
           </div>
+        ) : (
+          filteredApiKeys &&
+          filteredApiKeys.length > 0 && (
+            <div className={cn('grid gap-4', classNames?.grid)}>
+              {filteredApiKeys?.map((apiKey) => (
+                <ApiKeyCell
+                  key={apiKey.id}
+                  classNames={classNames}
+                  localization={localization}
+                  apiKey={apiKey}
+                  refetch={refetch}
+                />
+              ))}
+            </div>
+          )
         )}
       </CardComponent>
 
@@ -117,43 +125,12 @@ function ApiKeyCell({
   apiKey,
   refetch,
 }: CardComponentProps & { apiKey: ApiKey; refetch?: Refetch }) {
-  const { lang } = useLang();
-
   const [showDeleteDialog, setShowDeleteDialog] = useState(false);
-
-  // Format expiration date or show "Never expires"
-  const formatExpiration = () => {
-    if (!apiKey.expiresAt) return localization?.NEVER_EXPIRES;
-
-    const expiresDate = new Date(apiKey.expiresAt);
-    return `${localization?.EXPIRES} ${expiresDate.toLocaleDateString(lang ?? 'en', {
-      month: 'short',
-      day: 'numeric',
-      year: 'numeric',
-    })}`;
-  };
 
   return (
     <>
-      <Card
-        className={cn(
-          'flex-row items-center gap-3 truncate px-4 py-3',
-          className,
-          classNames?.cell,
-        )}
-      >
-        <KeyRoundIcon className={cn('size-4 shrink-0', classNames?.icon)} />
-
-        <div className="flex flex-col truncate">
-          <div className="flex items-center gap-2">
-            <span className="truncate font-semibold text-sm">{apiKey.name}</span>
-            <span className="flex-1 truncate text-muted-foreground text-sm">
-              {apiKey.start}
-              {'******'}
-            </span>
-          </div>
-          <div className="truncate text-muted-foreground text-xs">{formatExpiration()}</div>
-        </div>
+      <Card className={cn('flex-row p-4', className, classNames?.cell)}>
+        <ApiKeyView apiKey={apiKey} classNames={{ icon: classNames?.icon }} />
 
         <Button
           size="sm"

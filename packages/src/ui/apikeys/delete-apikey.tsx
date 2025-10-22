@@ -1,15 +1,15 @@
 'use client';
 
 import { useState } from 'react';
-import { KeyRoundIcon } from 'lucide-react';
 
 import { Button, Card, Spinner } from '@pelatform/ui/default';
 import { useAuth, useAuthHooks } from '@/hooks';
-import { useLang, useLocalization } from '@/hooks/private';
+import { useLocalization } from '@/hooks/private';
 import { cn, getLocalizedError } from '@/lib/utils';
 import type { ApiKey, Refetch } from '@/types/generals';
 import type { DialogComponentProps } from '@/types/ui';
 import { DialogComponent } from '../shared/components/dialog';
+import { ApiKeyView } from '../shared/view';
 
 export function ApiKeyDeleteDialog({
   classNames,
@@ -27,7 +27,6 @@ export function ApiKeyDeleteDialog({
 
   const localization = useLocalization(localizationProp);
 
-  const { lang } = useLang();
   const [isLoading, setIsLoading] = useState(false);
 
   const handleDelete = async () => {
@@ -42,18 +41,6 @@ export function ApiKeyDeleteDialog({
     }
 
     setIsLoading(false);
-  };
-
-  // Format expiration date or show "Never expires"
-  const formatExpiration = () => {
-    if (!apiKey.expiresAt) return localization.NEVER_EXPIRES;
-
-    const expiresDate = new Date(apiKey.expiresAt);
-    return `${localization.EXPIRES} ${expiresDate.toLocaleDateString(lang ?? 'en', {
-      month: 'short',
-      day: 'numeric',
-      year: 'numeric',
-    })}`;
   };
 
   return (
@@ -80,17 +67,7 @@ export function ApiKeyDeleteDialog({
       {...props}
     >
       <Card className={cn('my-2 flex-row items-center gap-3 px-4 py-3', classNames?.cell)}>
-        <KeyRoundIcon className={cn('size-4', classNames?.icon)} />
-        <div className="flex flex-col">
-          <div className="flex items-center gap-2">
-            <span className="font-semibold text-sm">{apiKey.name}</span>
-            <span className="text-muted-foreground text-sm">
-              {apiKey.start}
-              {'******'}
-            </span>
-          </div>
-          <div className="text-muted-foreground text-xs">{formatExpiration()}</div>
-        </div>
+        <ApiKeyView apiKey={apiKey} classNames={{ icon: classNames?.icon }} />
       </Card>
     </DialogComponent>
   );

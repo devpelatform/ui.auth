@@ -19,6 +19,7 @@ import { cn, getLocalizedError } from '@/lib/utils';
 import type { Refetch } from '@/types/generals';
 import type { CardComponentProps } from '@/types/ui';
 import { CardComponent } from '../../shared/components/card';
+import { SkeletonViewComponent } from '../../shared/components/skeleton';
 import { UserView } from '../../shared/view';
 
 export function MultiAccountCard({
@@ -50,27 +51,34 @@ export function MultiAccountCard({
       isPending={isPending}
       {...props}
     >
-      {deviceSessions?.length && (
+      {isPending ? (
         <div className={cn('grid gap-4', classNames?.grid)}>
-          {sessionData && (
-            <MultiAccountCell
-              classNames={classNames}
-              localization={localization}
-              deviceSession={sessionData}
-              refetch={refetch}
-            />
-          )}
-
-          {otherDeviceSessions.map((deviceSession) => (
-            <MultiAccountCell
-              key={deviceSession.session.id}
-              classNames={classNames}
-              localization={localization}
-              deviceSession={deviceSession}
-              refetch={refetch}
-            />
-          ))}
+          <SkeletonViewComponent classNames={classNames} />
         </div>
+      ) : (
+        deviceSessions &&
+        deviceSessions.length > 0 && (
+          <div className={cn('grid gap-4', classNames?.grid)}>
+            {sessionData && (
+              <MultiAccountCell
+                classNames={classNames}
+                localization={localization}
+                deviceSession={sessionData}
+                refetch={refetch}
+              />
+            )}
+
+            {otherDeviceSessions.map((deviceSession) => (
+              <MultiAccountCell
+                key={deviceSession.session.id}
+                classNames={classNames}
+                localization={localization}
+                deviceSession={deviceSession}
+                refetch={refetch}
+              />
+            ))}
+          </div>
+        )
       )}
     </CardComponent>
   );
@@ -129,7 +137,7 @@ function MultiAccountCell({
   const isCurrentSession = deviceSession.session.id === sessionData?.session.id;
 
   return (
-    <Card className={cn('flex-row p-4', className, classNames?.cell)}>
+    <Card className={cn('flex-row items-center p-4', className, classNames?.cell)}>
       <UserView localization={localization} user={deviceSession.user} />
 
       <DropdownMenu>

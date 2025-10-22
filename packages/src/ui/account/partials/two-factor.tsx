@@ -27,10 +27,7 @@ export function TwoFactorCard({
     <>
       <CardComponent
         className={className}
-        classNames={{
-          header: 'border-b-0',
-          ...classNames,
-        }}
+        classNames={classNames}
         title={localization.TWO_FACTOR}
         description={localization.TWO_FACTOR_CARD_DESCRIPTION}
         instructions={

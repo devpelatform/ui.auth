@@ -20,6 +20,7 @@ export type ViewClassNames = {
   title?: string;
   subtitle?: string;
   skeleton?: string;
+  icon?: string;
   avatar?: AvatarClassNames;
 };
 

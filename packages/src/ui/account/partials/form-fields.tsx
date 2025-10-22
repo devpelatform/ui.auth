@@ -148,17 +148,26 @@ export function FormFieldsCard({
               render={({ field }) => (
                 <FormItem>
                   <div className="flex items-center space-x-2">
-                    <FormControl>
-                      <Checkbox
-                        size="lg"
-                        checked={field.value as boolean}
-                        onCheckedChange={field.onChange}
-                        disabled={isSubmitting}
-                        className={classNames?.checkbox}
-                      />
-                    </FormControl>
+                    {isPending ? (
+                      <>
+                        <Skeleton className={cn('size-5.5', classNames?.skeleton)} />
+                        <Skeleton className={cn('h-3.5 w-32', classNames?.skeleton)} />
+                      </>
+                    ) : (
+                      <>
+                        <FormControl>
+                          <Checkbox
+                            size="lg"
+                            checked={field.value as boolean}
+                            onCheckedChange={field.onChange}
+                            disabled={isSubmitting}
+                            className={classNames?.checkbox}
+                          />
+                        </FormControl>
 
-                    <FormLabel className={classNames?.label}>{label}</FormLabel>
+                        <FormLabel className={classNames?.label}>{label}</FormLabel>
+                      </>
+                    )}
 
                     <FormMessage className={classNames?.error} />
                   </div>

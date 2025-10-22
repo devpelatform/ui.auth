@@ -15,7 +15,31 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   return (
     <AuthUIProvider
       authClient={authClient}
-      // additionalFields
+      additionalFields={{
+        company: {
+          label: 'Company',
+          placeholder: 'Your company name',
+          description: 'Enter your company name',
+          required: true,
+          type: 'string',
+        },
+        age: {
+          label: 'Age',
+          placeholder: 'Your age',
+          description: 'Enter your age',
+          instructions: 'You must be 18 or older',
+          required: true,
+          type: 'number',
+          validate: async (value: string) => parseInt(value) >= 18,
+        },
+        primary: {
+          label: 'Primary Account',
+          placeholder: 'Is primary',
+          description: 'Is this your primary account?',
+          required: false,
+          type: 'boolean',
+        },
+      }}
       avatar={{
         upload: async (file: File) => {
           const formData = new FormData();
@@ -49,7 +73,9 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       persistClient={false}
       // redirectTo
       replace={router.replace}
-      // signUp
+      signUp={{
+        fields: ['company', 'age', 'primary'],
+      }}
       // toast
       // viewPaths={Object.fromEntries(
       //   Object.entries(config.path.auth).map(([key, value]) => [key, value.replace(/^\//, '')]),
@@ -83,16 +109,16 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       }}
       twoFactor={['otp', 'totp']}
       // Account Configuration
-      account={true}
-      // account={{
-      //   basePath: '/',
-      //   viewPaths: Object.fromEntries(
-      //     Object.entries(config.path.account).map(([key, value]) => [
-      //       key,
-      //       value.replace(/^\//, ''),
-      //     ]),
-      //   ),
-      // }}
+      account={{
+        // basePath: '/',
+        fields: ['image', 'name', 'company', 'age', 'primary'],
+        // viewPaths: Object.fromEntries(
+        //   Object.entries(config.path.account).map(([key, value]) => [
+        //     key,
+        //     value.replace(/^\//, ''),
+        //   ]),
+        // ),
+      }}
     >
       {children}
     </AuthUIProvider>

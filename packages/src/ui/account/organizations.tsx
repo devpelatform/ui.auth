@@ -19,7 +19,7 @@ import { cn, getLocalizedError } from '@/lib/utils';
 import { CreateOrganizationDialog } from '../organizations/dialogs/create-organization';
 import { LeaveOrganizationDialog } from '../organizations/dialogs/leave-organization';
 import { CardComponent } from '../shared/components/card';
-import { SkeletonCellComponent } from '../shared/components/skeleton';
+import { SkeletonViewComponent } from '../shared/components/skeleton';
 import { OrganizationView } from '../shared/view';
 import type { AccountBaseProps } from './types';
 
@@ -51,18 +51,24 @@ export function OrganizationsCard({
         isPending={isPending}
         {...props}
       >
-        {organizations && organizations.length > 0 && (
+        {isPending ? (
           <div className={cn('grid gap-4', classNames?.grid)}>
-            {isPending && <SkeletonCellComponent />}
-            {organizations?.map((organization) => (
-              <OrganizationCell
-                key={organization.id}
-                classNames={classNames}
-                localization={localization}
-                organization={organization}
-              />
-            ))}
+            <SkeletonViewComponent classNames={classNames} />
           </div>
+        ) : (
+          organizations &&
+          organizations.length > 0 && (
+            <div className={cn('grid gap-4', classNames?.grid)}>
+              {organizations?.map((organization) => (
+                <OrganizationCell
+                  key={organization.id}
+                  classNames={classNames}
+                  localization={localization}
+                  organization={organization}
+                />
+              ))}
+            </div>
+          )
         )}
       </CardComponent>
 
@@ -127,7 +133,7 @@ function OrganizationCell({
 
   return (
     <>
-      <Card className={cn('flex-row p-4', className, classNames?.cell)}>
+      <Card className={cn('flex-row items-center p-4', className, classNames?.cell)}>
         <OrganizationView localization={localization} organization={organization} />
 
         <DropdownMenu>

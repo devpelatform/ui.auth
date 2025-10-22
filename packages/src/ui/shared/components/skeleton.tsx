@@ -4,7 +4,7 @@ import { Card, Skeleton } from '@pelatform/ui/default';
 import { cn } from '@/lib/utils';
 import type { CardClassNames } from '@/types/ui';
 
-export function SkeletonCellComponent({ classNames }: { classNames?: CardClassNames }) {
+export function SkeletonViewComponent({ classNames }: { classNames?: CardClassNames }) {
   return (
     <Card className={cn('flex-row items-center gap-3 px-4 py-3', classNames?.cell)}>
       <div className="flex items-center gap-2">

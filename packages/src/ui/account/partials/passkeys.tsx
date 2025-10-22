@@ -10,6 +10,7 @@ import { useLocalization } from '@/hooks/private';
 import { cn, getLocalizedError } from '@/lib/utils';
 import type { CardComponentProps } from '@/types/ui';
 import { CardComponent } from '../../shared/components/card';
+import { SkeletonViewComponent } from '../../shared/components/skeleton';
 import { SessionFreshnessDialog } from '../dialogs/session-freshness';
 
 export function PasskeysCard({
@@ -74,17 +75,24 @@ export function PasskeysCard({
             isPending={isPending}
             {...props}
           >
-            {passkeys && passkeys.length > 0 && (
+            {isPending ? (
               <div className={cn('grid gap-4', classNames?.grid)}>
-                {passkeys?.map((passkey) => (
-                  <PasskeyCell
-                    key={passkey.id}
-                    classNames={classNames}
-                    localization={localization}
-                    passkey={passkey}
-                  />
-                ))}
+                <SkeletonViewComponent classNames={classNames} />
               </div>
+            ) : (
+              passkeys &&
+              passkeys.length > 0 && (
+                <div className={cn('grid gap-4', classNames?.grid)}>
+                  {passkeys?.map((passkey) => (
+                    <PasskeyCell
+                      key={passkey.id}
+                      classNames={classNames}
+                      localization={localization}
+                      passkey={passkey}
+                    />
+                  ))}
+                </div>
+              )
             )}
           </CardComponent>
         </form>

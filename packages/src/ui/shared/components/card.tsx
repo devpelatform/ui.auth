@@ -68,10 +68,8 @@ export function CardHeaderComponent({
     <div className={cn('flex flex-col space-y-2', className, classNames?.header)}>
       {isPending ? (
         <>
-          <Skeleton className={cn('my-0.5 h-5 w-1/3 md:h-5.5', classNames?.skeleton)} />
-          {description && (
-            <Skeleton className={cn('mt-1.5 mb-0.5 h-3 w-2/3 md:h-3.5', classNames?.skeleton)} />
-          )}
+          <Skeleton className={cn('h-7 w-1/3', classNames?.skeleton)} />
+          {description && <Skeleton className={cn('h-5 w-2/3', classNames?.skeleton)} />}
         </>
       ) : (
         <>
@@ -102,7 +100,6 @@ export function CardFooterComponent({
     <CardFooter
       className={cn(
         'flex items-center justify-between space-x-4 bg-muted p-3 sm:px-10',
-        // (actionLabel || instructions) && 'border-t py-4!',
         isDestructive && 'border-destructive/70',
         className,
         classNames?.footer,
@@ -113,14 +110,14 @@ export function CardFooterComponent({
           {instructions && (
             <Skeleton
               className={cn(
-                'my-0.5 h-3 w-48 max-w-full bg-muted-foreground/20 md:h-4 md:w-60',
+                'h-4 w-48 max-w-full bg-muted-foreground/10 md:h-5 md:w-60',
                 classNames?.skeleton,
               )}
             />
           )}
           {actionLabel && (
             <Skeleton
-              className={cn('h-8 w-20 bg-muted-foreground/20 md:ms-auto', classNames?.skeleton)}
+              className={cn('h-8 w-20 bg-muted-foreground/10 md:ms-auto', classNames?.skeleton)}
             />
           )}
         </>

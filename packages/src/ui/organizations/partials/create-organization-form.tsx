@@ -3,6 +3,7 @@
 import { useRef, useState } from 'react';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { Trash2Icon, UploadCloudIcon } from 'lucide-react';
+import slugify from 'slugify';
 
 import {
   Button,
@@ -21,7 +22,7 @@ import {
 } from '@pelatform/ui/default';
 import { useForm } from '@pelatform/ui/re/react-hook-form';
 import * as z from '@pelatform/ui/re/zod';
-import { useAuth, useOrganization } from '@/hooks';
+import { useAuth, useAuthHooks, useOrganization } from '@/hooks';
 import { useLocalization } from '@/hooks/private';
 import { fileToBase64, resizeAndCropImage } from '@/lib/images';
 import { cn, getLocalizedError } from '@/lib/utils';
@@ -39,6 +40,8 @@ export function CreateOrganizationForm({
   onOpenChange?: ((open: boolean) => void) | undefined;
 }) {
   const { authClient, navigate, toast } = useAuth();
+  const { useListOrganizations } = useAuthHooks();
+  const { refetch: refetchOrganizations } = useListOrganizations();
   const { basePath, logo: organizationLogo, pathMode, setLastVisited } = useOrganization();
 
   const localization = useLocalization(localizationProp);
@@ -73,8 +76,23 @@ export function CreateOrganizationForm({
     },
   });
 
+  const watchedName = form.watch('name');
+  const watchedSlug = form.watch('slug');
+
   const isSubmitting = form.formState.isSubmitting;
-  const disableSubmit = isSubmitting || !form.formState.isValid || !form.formState.isDirty;
+  const disableSubmit = isSubmitting || !form.formState.isValid || !watchedName || !watchedSlug;
+
+  // // Auto-generate slug based on name
+  // useEffect(() => {
+  //   if (watchedName) {
+  //     const generatedSlug = slugify(watchedName, {
+  //       lower: true,
+  //       strict: true,
+  //       remove: /[*+~.()'"!:@]/g,
+  //     });
+  //     form.setValue('slug', generatedSlug);
+  //   }
+  // }, [watchedName, form]);
 
   const handleLogoChange = async (file: File) => {
     if (!organizationLogo) return;
@@ -89,13 +107,14 @@ export function CreateOrganizationForm({
         organizationLogo.extension,
       );
 
-      let image: string | undefined | null;
+      // let image: string | undefined | null;
+      // if (organizationLogo.upload) {
+      //   image = await organizationLogo.upload(resizedFile);
+      // } else {
+      //   image = await fileToBase64(resizedFile);
+      // }
 
-      if (organizationLogo.upload) {
-        image = await organizationLogo.upload(resizedFile);
-      } else {
-        image = await fileToBase64(resizedFile);
-      }
+      const image = await fileToBase64(resizedFile);
 
       setLogo(image || null);
       form.setValue('logo', image || '');
@@ -140,6 +159,8 @@ export function CreateOrganizationForm({
         organizationId: organization.id,
       });
 
+      await refetchOrganizations?.();
+
       onOpenChange?.(false);
       form.reset();
       setLogo(null);
@@ -154,6 +175,10 @@ export function CreateOrganizationForm({
       });
     }
   }
+
+  const handleSlugify = (slug: string) => {
+    return slugify(slug, { lower: true, strict: true, remove: /[*+~.()'"!:@]/g });
+  };
 
   return (
     <Form {...form}>
@@ -193,7 +218,7 @@ export function CreateOrganizationForm({
                           isPending={logoPending}
                           localization={localization}
                           organization={{
-                            name: form.watch('name'),
+                            name: watchedName,
                             logo,
                           }}
                         />
@@ -244,7 +269,22 @@ export function CreateOrganizationForm({
               <FormLabel>{localization.ORGANIZATION_NAME}</FormLabel>
 
               <FormControl>
-                <Input placeholder={localization.ORGANIZATION_NAME_PLACEHOLDER} {...field} />
+                <Input
+                  placeholder={localization.ORGANIZATION_NAME_PLACEHOLDER}
+                  {...field}
+                  onChange={(e) => {
+                    const v = e.target.value;
+                    field.onChange(v);
+                    form.setValue('slug', handleSlugify(v), {
+                      shouldValidate: true,
+                      shouldDirty: true,
+                    });
+                  }}
+                  onBlur={() => {
+                    field.onBlur();
+                    void handleSlugify(form.getValues('slug'));
+                  }}
+                />
               </FormControl>
 
               <FormMessage />
