@@ -113,14 +113,14 @@ export function CardFooterComponent({
           {instructions && (
             <Skeleton
               className={cn(
-                'my-0.5 h-3 w-48 max-w-full bg-muted-foreground/60 md:h-4 md:w-60',
+                'my-0.5 h-3 w-48 max-w-full bg-muted-foreground/20 md:h-4 md:w-60',
                 classNames?.skeleton,
               )}
             />
           )}
           {actionLabel && (
             <Skeleton
-              className={cn('h-8 w-20 bg-muted-foreground/60 md:ms-auto', classNames?.skeleton)}
+              className={cn('h-8 w-20 bg-muted-foreground/20 md:ms-auto', classNames?.skeleton)}
             />
           )}
         </>

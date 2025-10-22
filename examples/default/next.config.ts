@@ -47,25 +47,25 @@ const nextConfig: NextConfig = {
       },
     ],
   },
-  // async redirects() {
-  //   return [
-  //     {
-  //       source: '/account',
-  //       destination: '/account/settings',
-  //       permanent: true,
-  //     },
-  //     {
-  //       source: '/admin',
-  //       destination: '/admin/overview',
-  //       permanent: true,
-  //     },
-  //     {
-  //       source: '/onboarding',
-  //       destination: '/onboarding/welcome',
-  //       permanent: true,
-  //     },
-  //   ];
-  // },
+  async redirects() {
+    return [
+      {
+        source: '/account',
+        destination: '/account/settings',
+        permanent: true,
+      },
+      // {
+      //   source: '/admin',
+      //   destination: '/admin/overview',
+      //   permanent: true,
+      // },
+      // {
+      //   source: '/onboarding',
+      //   destination: '/onboarding/welcome',
+      //   permanent: true,
+      // },
+    ];
+  },
 };
 
 // export default nextConfig;

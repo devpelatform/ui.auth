@@ -19,7 +19,6 @@ export default async function proxy(request: NextRequest) {
   return NextResponse.next();
 }
 
-// export const config = {
-//   runtime: 'nodejs',
-//   matcher: ['/account'],
-// };
+export const config = {
+  matcher: ['/account/:path*'],
+};
