@@ -14,7 +14,7 @@
     "generate": "dotenv -e ../../.env.local -- npx @better-auth/cli@latest generate --config ./src/auth.ts --output ../db/src/generated-schema.ts"
   },
   "dependencies": {
-    "@polar-sh/better-auth": "^1.1.9",
+    "@polar-sh/better-auth": "^1.1.11",
     "@polar-sh/sdk": "^0.38.1",
     "@repo/config": "workspace:*",
     "@repo/db": "workspace:*",
