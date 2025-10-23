@@ -40,7 +40,7 @@ export function ApiKeyDisplayDialog({
           >
             {copied ? (
               <>
-                <CheckIcon className={classNames?.icon} />
+                <CheckIcon className={cn('stroke-green-600', classNames?.icon)} />
                 {localization.COPIED_TO_CLIPBOARD}
               </>
             ) : (

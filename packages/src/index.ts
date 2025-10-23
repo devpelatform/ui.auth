@@ -122,6 +122,7 @@ export * from './ui/shared/components/dialog';
 export * from './ui/shared/components/skeleton';
 
 export * from './ui/shared/avatar';
+export * from './ui/shared/display-id';
 export * from './ui/shared/helpers';
 export * from './ui/shared/password-input';
 export * from './ui/shared/provider-icons';

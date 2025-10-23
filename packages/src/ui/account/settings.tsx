@@ -3,6 +3,7 @@
 import { useAuth, useAuthHooks } from '@/hooks';
 import { useLocalization } from '@/hooks/private';
 import { cn } from '@/lib/utils';
+import { DisplayIdCard } from '../shared/display-id';
 import { FormAvatarCard } from './partials/form-avatar';
 import { FormEmailCard } from './partials/form-email';
 import { FormFieldsCard } from './partials/form-fields';
@@ -22,10 +23,11 @@ export function SettingsCards({
     avatar,
     changeEmail,
     credentials,
+    displayId,
     multiSession,
   } = useAuth();
   const { useSession } = useAuthHooks();
-  const { data: sessionData } = useSession();
+  const { data: sessionData, isPending } = useSession();
 
   const localization = useLocalization(localizationProp);
 
@@ -83,6 +85,17 @@ export function SettingsCards({
           />
         );
       })}
+
+      {displayId && (
+        <DisplayIdCard
+          classNames={classNames}
+          localization={localization}
+          isPending={isPending}
+          id={sessionData?.user?.id}
+          title={localization.DISPLAY_USER_TITLE}
+          description={localization.DISPLAY_USER_DESCRIPTION}
+        />
+      )}
 
       {multiSession && <MultiAccountCard classNames={classNames} localization={localization} />}
     </div>

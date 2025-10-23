@@ -57,6 +57,11 @@ export type AuthUIOptions = {
    */
   deleteUser?: DeleteUserOptions;
   /**
+   * Display User ID
+   * @default false
+   */
+  displayId?: boolean;
+  /**
    * Show Verify Email card for unverified emails
    */
   emailVerification?: boolean;

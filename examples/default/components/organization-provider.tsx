@@ -10,6 +10,7 @@ export function OrganizationProvider({ children }: { children: ReactNode }) {
       apiKey={true}
       // basePath='/organization'
       // customRoles
+      displayId
       logo={{
         upload: async (file: File) => {
           const formData = new FormData();

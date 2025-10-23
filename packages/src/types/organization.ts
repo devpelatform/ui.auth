@@ -28,6 +28,11 @@ export type OrganizationContextOptions = {
    */
   data: Organization | null | undefined;
   /**
+   * Display Organization ID
+   * @default false
+   */
+  displayId?: boolean;
+  /**
    * Whether the organization is loading
    */
   isLoading: boolean | undefined;
@@ -81,6 +86,7 @@ export type OrganizationUIProviderProps = {
   apiKey?: boolean;
   basePath?: string;
   customRoles?: Array<{ role: string; label: string }>;
+  displayId?: boolean;
   logo?: boolean | Partial<AvatarOptions>;
   pathMode?: 'default' | 'slug';
   personalPath?: string;

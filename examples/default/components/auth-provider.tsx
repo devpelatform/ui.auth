@@ -60,6 +60,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       // baseURL
       changeEmail
       deleteUser
+      displayId
       emailVerification
       // freshAge
       // gravatar

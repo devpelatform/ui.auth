@@ -307,3 +307,11 @@ export const MEMBER_STRINGS = {
   INVITATION_REJECTED: 'Invitation rejected successfully',
   INVITATION_EXPIRED: 'This invitation has expired',
 };
+
+// Display ID strings
+export const DISPLAY_ID_STRINGS = {
+  DISPLAY_USER_TITLE: 'Your User ID',
+  DISPLAY_USER_DESCRIPTION: 'This is your unique account identifier.',
+  DISPLAY_ORGANIZATION_TITLE: 'Your Organization ID',
+  DISPLAY_ORGANIZATION_DESCRIPTION: 'This is your unique organization identifier.',
+};
