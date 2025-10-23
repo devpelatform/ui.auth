@@ -1,7 +1,6 @@
 'use client';
 
 import { useState } from 'react';
-import type { Session } from 'better-auth';
 import { LaptopIcon, SmartphoneIcon } from 'lucide-react';
 import { UAParser } from 'ua-parser-js';
 
@@ -9,6 +8,7 @@ import { Button, Card, Spinner } from '@pelatform/ui/default';
 import { useAuth, useAuthHooks } from '@/hooks';
 import { useLocalization } from '@/hooks/private';
 import { cn, getLocalizedError } from '@/lib/utils';
+import type { Session } from '@/types/auth';
 import type { Refetch } from '@/types/generals';
 import type { CardComponentProps } from '@/types/ui';
 import { CardComponent } from '../../shared/components/card';

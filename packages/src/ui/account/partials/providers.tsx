@@ -1,14 +1,13 @@
 'use client';
 
 import { useState } from 'react';
-import type { SocialProvider } from 'better-auth/social-providers';
 
 import { Button, Card, Skeleton, Spinner } from '@pelatform/ui/default';
 import { useAuth, useAuthHooks } from '@/hooks';
 import { useLocalization } from '@/hooks/private';
 import { socialProviders } from '@/lib/social-providers';
 import { cn, getLocalizedError } from '@/lib/utils';
-import type { Account } from '@/types/auth';
+import type { Account, SocialProvider } from '@/types/auth';
 import type { Provider } from '@/types/components';
 import type { Refetch } from '@/types/generals';
 import type { CardComponentProps } from '@/types/ui';

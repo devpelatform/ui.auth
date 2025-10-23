@@ -9,7 +9,7 @@ import { cn, getLocalizedError } from '@/lib/utils';
 import type { Organization } from '@/types/auth';
 import type { DialogComponentProps } from '@/types/ui';
 import { DialogComponent } from '../../shared/components/dialog';
-import { OrganizationView } from '../../shared/view';
+import { OrgView } from '../../shared/view';
 
 export function LeaveOrganizationDialog({
   classNames,
@@ -78,7 +78,7 @@ export function LeaveOrganizationDialog({
       {...props}
     >
       <Card className={cn('flex-row p-4', classNames?.cell)}>
-        <OrganizationView localization={localization} organization={organization} />
+        <OrgView localization={localization} organization={organization} />
       </Card>
     </DialogComponent>
   );

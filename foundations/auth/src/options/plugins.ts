@@ -1,5 +1,3 @@
-import { checkout, polar, portal, usage, webhooks } from '@polar-sh/better-auth';
-import { Polar } from '@polar-sh/sdk';
 import type { BetterAuthOptions } from 'better-auth';
 import { nextCookies } from 'better-auth/next-js';
 import {
@@ -25,13 +23,16 @@ import { passkey } from 'better-auth/plugins/passkey';
 import { config } from '@repo/config';
 import { createEmailLog } from '@repo/db';
 import { sendEmail } from '@repo/mail';
-import { getLocaleFromRequest, isDevelopment, isProduction } from '../lib/utils';
+import { getLocaleFromRequest, isDevelopment } from '../lib/utils';
 
-const polarClient = new Polar({
-  accessToken: process.env.POLAR_ACCESS_TOKEN,
-  server: 'sandbox',
-  // server: isProduction ? 'production' : 'sandbox',
-});
+// import { checkout, polar, portal, usage, webhooks } from '@polar-sh/better-auth';
+// import { Polar } from '@polar-sh/sdk';
+
+// const polarClient = new Polar({
+//   accessToken: process.env.POLAR_ACCESS_TOKEN,
+//   server: 'sandbox',
+//   // server: isProduction ? 'production' : 'sandbox',
+// });
 
 const pluginList = {
   plugins: [
@@ -480,50 +481,50 @@ const pluginList = {
 
     // 3rd party
     nextCookies(),
-    polar({
-      client: polarClient,
-      createCustomerOnSignUp: isProduction,
-      authenticatedUsersOnly: true,
-      use: [
-        portal(),
-        usage(),
-        checkout({
-          products: [
-            {
-              productId: process.env.POLAR_HOBBY_PRODUCT_ID || '',
-              slug: 'hobby',
-            },
-            {
-              productId: process.env.POLAR_PRO_PRODUCT_ID || '',
-              slug: 'pro',
-            },
-            {
-              productId: process.env.POLAR_TEAM_PRODUCT_ID || '',
-              slug: 'team',
-            },
-          ],
-          successUrl: process.env.POLAR_SUCCESS_URL || '',
-        }),
-        webhooks({
-          secret: process.env.POLAR_WEBHOOK_SECRET || '',
-          // onCustomerCreated: async (payload) => {
-          //   await handleCustomerCreated(payload);
-          // },
-          // onSubscriptionCreated: async (payload) => {
-          //   await handleSubscriptionCreated(payload);
-          // },
-          // onSubscriptionUpdated: async (payload) => {
-          //   await handleSubscriptionUpdated(payload);
-          // },
-          // onSubscriptionCanceled: async (payload) => {
-          //   await handleSubscriptionCanceled(payload);
-          // },
-          // onSubscriptionRevoked: async (payload) => {
-          //   await handleSubscriptionRevoked(payload);
-          // },
-        }),
-      ],
-    }),
+    // polar({
+    //   client: polarClient,
+    //   createCustomerOnSignUp: isProduction,
+    //   authenticatedUsersOnly: true,
+    //   use: [
+    //     portal(),
+    //     usage(),
+    //     checkout({
+    //       products: [
+    //         {
+    //           productId: process.env.POLAR_HOBBY_PRODUCT_ID || '',
+    //           slug: 'hobby',
+    //         },
+    //         {
+    //           productId: process.env.POLAR_PRO_PRODUCT_ID || '',
+    //           slug: 'pro',
+    //         },
+    //         {
+    //           productId: process.env.POLAR_TEAM_PRODUCT_ID || '',
+    //           slug: 'team',
+    //         },
+    //       ],
+    //       successUrl: process.env.POLAR_SUCCESS_URL || '',
+    //     }),
+    //     webhooks({
+    //       secret: process.env.POLAR_WEBHOOK_SECRET || '',
+    //       // onCustomerCreated: async (payload) => {
+    //       //   await handleCustomerCreated(payload);
+    //       // },
+    //       // onSubscriptionCreated: async (payload) => {
+    //       //   await handleSubscriptionCreated(payload);
+    //       // },
+    //       // onSubscriptionUpdated: async (payload) => {
+    //       //   await handleSubscriptionUpdated(payload);
+    //       // },
+    //       // onSubscriptionCanceled: async (payload) => {
+    //       //   await handleSubscriptionCanceled(payload);
+    //       // },
+    //       // onSubscriptionRevoked: async (payload) => {
+    //       //   await handleSubscriptionRevoked(payload);
+    //       // },
+    //     }),
+    //   ],
+    // }),
   ],
 } satisfies BetterAuthOptions;
 

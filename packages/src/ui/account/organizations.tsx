@@ -1,7 +1,6 @@
 'use client';
 
 import { useCallback, useState } from 'react';
-import type { Organization } from 'better-auth/plugins/organization';
 import { EllipsisIcon, LogOutIcon, SettingsIcon } from 'lucide-react';
 
 import {
@@ -16,11 +15,12 @@ import {
 import { useAuth, useAuthHooks, useOrganization } from '@/hooks';
 import { useIsHydrated, useLocalization } from '@/hooks/private';
 import { cn, getLocalizedError } from '@/lib/utils';
+import type { Organization } from '@/types/auth';
 import { CreateOrganizationDialog } from '../organizations/dialogs/create-organization';
 import { LeaveOrganizationDialog } from '../organizations/dialogs/leave-organization';
 import { CardComponent } from '../shared/components/card';
 import { SkeletonViewComponent } from '../shared/components/skeleton';
-import { OrganizationView } from '../shared/view';
+import { OrgView } from '../shared/view';
 import type { AccountBaseProps } from './types';
 
 export function OrganizationsCard({
@@ -134,7 +134,7 @@ function OrganizationCell({
   return (
     <>
       <Card className={cn('flex-row items-center p-4', className, classNames?.cell)}>
-        <OrganizationView localization={localization} organization={organization} />
+        <OrgView localization={localization} organization={organization} />
 
         <DropdownMenu>
           <DropdownMenuTrigger asChild>

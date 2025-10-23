@@ -169,7 +169,7 @@ export function PersonalAccountView({
   );
 }
 
-export function OrganizationView({
+export function OrgView({
   className,
   classNames,
   isPending,

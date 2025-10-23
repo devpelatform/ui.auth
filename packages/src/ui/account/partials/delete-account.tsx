@@ -16,6 +16,7 @@ export function DeleteAccountCard({
   localization: localizationProp,
   accounts,
   skipHook,
+  ...props
 }: CardComponentProps & {
   accounts?: Account[] | null;
   skipHook?: boolean;
@@ -43,6 +44,7 @@ export function DeleteAccountCard({
         action={() => setShowDialog(true)}
         isDestructive={true}
         isPending={isPending}
+        {...props}
       />
 
       <DeleteAccountDialog

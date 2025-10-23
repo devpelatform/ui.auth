@@ -13,7 +13,7 @@ export function OrganizationProvider({ children }: { children: ReactNode }) {
       logo={{
         upload: async (file: File) => {
           const formData = new FormData();
-          formData.append('avatar', file);
+          formData.append('logo', file);
           const res = await fetch('/api/workspace/logo', { method: 'POST', body: formData });
           const { file: uploadedFile } = await res.json();
           return uploadedFile.url;

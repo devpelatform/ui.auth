@@ -54,16 +54,11 @@ const nextConfig: NextConfig = {
         destination: '/account/settings',
         permanent: true,
       },
-      // {
-      //   source: '/admin',
-      //   destination: '/admin/overview',
-      //   permanent: true,
-      // },
-      // {
-      //   source: '/onboarding',
-      //   destination: '/onboarding/welcome',
-      //   permanent: true,
-      // },
+      {
+        source: '/organization',
+        destination: '/organization/settings',
+        permanent: true,
+      },
     ];
   },
 };

@@ -35,8 +35,15 @@ export function CreateApiKeyDialog({
   description,
   onSuccess,
   refetch,
+  isOrganization = false,
+  organizationId,
   ...props
-}: DialogComponentProps & { onSuccess: (key: string) => void; refetch?: Refetch }) {
+}: DialogComponentProps & {
+  onSuccess: (key: string) => void;
+  refetch?: Refetch;
+  isOrganization?: boolean;
+  organizationId?: string;
+}) {
   const { authClient, apiKey, toast } = useAuth();
 
   const localization = useLocalization(localizationProp);
@@ -64,10 +71,13 @@ export function CreateApiKeyDialog({
           ? Number.parseInt(values.expiresInDays) * 60 * 60 * 24
           : undefined;
 
+      const metadata = { organizationId };
+
       const result = await authClient.apiKey.create({
         name: values.name,
         expiresIn,
         prefix: typeof apiKey === 'object' ? apiKey.prefix : undefined,
+        metadata: isOrganization ? metadata : undefined,
         fetchOptions: { throw: true },
       });
 
@@ -97,6 +107,7 @@ export function CreateApiKeyDialog({
       <Form {...form}>
         <form onSubmit={form.handleSubmit(onSubmit)}>
           <div className="flex gap-4">
+            {isOrganization && <input type="hidden" name="organizationId" value={organizationId} />}
             <FormField
               control={form.control}
               name="name"

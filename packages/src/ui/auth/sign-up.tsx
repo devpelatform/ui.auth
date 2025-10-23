@@ -2,7 +2,6 @@
 
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { zodResolver } from '@hookform/resolvers/zod';
-import type { BetterFetchOption } from 'better-auth/react';
 import { Trash2Icon, UploadCloudIcon } from 'lucide-react';
 
 import {
@@ -33,6 +32,7 @@ import {
 } from '@/hooks/private';
 import { fileToBase64, resizeAndCropImage } from '@/lib/images';
 import { cn, getLocalizedError, getPasswordSchema } from '@/lib/utils';
+import type { BetterFetchOption } from '@/types/auth';
 import { Captcha } from '../captcha/captcha';
 import { UserAvatar } from '../shared/avatar';
 import { PasswordInput } from '../shared/password-input';

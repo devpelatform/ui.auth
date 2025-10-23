@@ -1,7 +1,6 @@
 'use client';
 
 import { useMemo, useState } from 'react';
-import type { Organization } from 'better-auth/plugins/organization';
 
 import { Button, Card } from '@pelatform/ui/default';
 import { useAuthHooks } from '@/hooks';
@@ -19,14 +18,13 @@ import { ApiKeyDisplayDialog } from './display-apikey';
 export function ApiKeysCard({
   className,
   classNames,
+  isPending: organizationPending,
   localization: localizationProp,
   isOrganization = false,
-  organization,
   organizationId,
   ...props
 }: CardComponentProps & {
   isOrganization?: boolean;
-  organization?: Organization | null | undefined;
   organizationId?: string;
 }) {
   const { useListApiKeys } = useAuthHooks();
@@ -61,7 +59,7 @@ export function ApiKeysCard({
         isPending={isPending}
         {...props}
       >
-        {isPending ? (
+        {isPending || organizationPending ? (
           <div className={cn('grid gap-4', classNames?.grid)}>
             <SkeletonViewComponent classNames={classNames} />
           </div>
@@ -83,29 +81,16 @@ export function ApiKeysCard({
         )}
       </CardComponent>
 
-      {isOrganization && organization && organizationId && (
-        // <CreateApiKeyDialogOrg
-        //   classNames={classNames}
-        //   localization={localization}
-        //   open={createDialogOpen}
-        //   onOpenChange={setCreateDialogOpen}
-        //   onSuccess={handleCreateApiKey}
-        //   refetch={refetch}
-        //   organizationId={organizationId}
-        // />
-        <>Nothing to see here</>
-      )}
-
-      {!isOrganization && (
-        <CreateApiKeyDialog
-          classNames={classNames}
-          localization={localization}
-          open={createDialogOpen}
-          onOpenChange={setCreateDialogOpen}
-          onSuccess={handleCreateApiKey}
-          refetch={refetch}
-        />
-      )}
+      <CreateApiKeyDialog
+        classNames={classNames}
+        localization={localization}
+        open={createDialogOpen}
+        onOpenChange={setCreateDialogOpen}
+        onSuccess={handleCreateApiKey}
+        refetch={refetch}
+        isOrganization={isOrganization}
+        organizationId={organizationId}
+      />
 
       <ApiKeyDisplayDialog
         classNames={classNames}

@@ -1,4 +1,3 @@
-import { polarClient } from '@polar-sh/better-auth';
 import {
   adminClient,
   anonymousClient,
@@ -18,6 +17,8 @@ import {
   usernameClient,
 } from 'better-auth/client/plugins';
 import { createAuthClient } from 'better-auth/react';
+
+// import { polarClient } from '@polar-sh/better-auth';
 
 import type { auth } from './auth';
 
@@ -53,7 +54,7 @@ export const authClient = createAuthClient({
     multiSessionClient(),
 
     // 3rd party
-    polarClient(),
+    // polarClient(),
   ],
   fetchOptions: {
     onError: async (context) => {

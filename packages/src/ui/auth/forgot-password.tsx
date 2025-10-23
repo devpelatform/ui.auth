@@ -2,7 +2,6 @@
 
 import { useEffect } from 'react';
 import { zodResolver } from '@hookform/resolvers/zod';
-import type { BetterFetchOption } from 'better-auth/react';
 
 import {
   Button,
@@ -20,6 +19,7 @@ import * as z from '@pelatform/ui/re/zod';
 import { useAuth } from '@/hooks';
 import { useCaptcha, useIsHydrated, useLocalization } from '@/hooks/private';
 import { cn, getLocalizedError } from '@/lib/utils';
+import type { BetterFetchOption } from '@/types/auth';
 import { Captcha } from '../captcha/captcha';
 import type { AuthFormProps } from './types';
 

@@ -2,7 +2,6 @@
 
 import { useCallback, useEffect } from 'react';
 import { zodResolver } from '@hookform/resolvers/zod';
-import type { BetterFetchOption } from 'better-auth/react';
 
 import {
   Button,
@@ -25,6 +24,7 @@ import {
   useOnSuccessTransition,
 } from '@/hooks/private';
 import { cn, getLocalizedError } from '@/lib/utils';
+import type { BetterFetchOption } from '@/types/auth';
 import { Captcha } from '../captcha/captcha';
 import type { AuthFormProps } from './types';
 

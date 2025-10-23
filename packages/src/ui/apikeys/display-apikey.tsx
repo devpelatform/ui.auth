@@ -1,9 +1,9 @@
 'use client';
 
-import { useState } from 'react';
 import { CheckIcon, CopyIcon } from 'lucide-react';
 
 import { Button } from '@pelatform/ui/default';
+import { useCopyToClipboard } from '@pelatform/ui/hooks';
 import { useLocalization } from '@/hooks/private';
 import { cn } from '@/lib/utils';
 import type { DialogComponentProps } from '@/types/ui';
@@ -20,13 +20,7 @@ export function ApiKeyDisplayDialog({
 }: DialogComponentProps & { apiKey: string }) {
   const localization = useLocalization(localizationProp);
 
-  const [copied, setCopied] = useState(false);
-
-  const handleCopy = () => {
-    navigator.clipboard.writeText(apiKey);
-    setCopied(true);
-    setTimeout(() => setCopied(false), 2000);
-  };
+  const { copy, copied } = useCopyToClipboard();
 
   return (
     <DialogComponent
@@ -41,7 +35,7 @@ export function ApiKeyDisplayDialog({
             type="button"
             variant="outline"
             className={cn(classNames?.button, classNames?.outlineButton)}
-            onClick={handleCopy}
+            onClick={() => copy(apiKey)}
             disabled={copied}
           >
             {copied ? (

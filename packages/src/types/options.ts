@@ -1,9 +1,7 @@
 /* @private */
 
-import type { SocialProvider } from 'better-auth/social-providers';
-
 import type { AccountViewPaths } from '@/lib/view-paths';
-import type { AuthClient } from './auth';
+import type { AuthClient, SocialProvider } from './auth';
 import type { Provider } from './components';
 import type { PasswordValidation } from './generals';
 

@@ -3,20 +3,17 @@
 import { type ReactNode, useEffect, useMemo, useState } from 'react';
 
 import { Tabs, TabsList, TabsTrigger } from '@pelatform/ui/default';
-import { useAuth } from '@/hooks';
+import { useAuth, useOrganization } from '@/hooks';
 import { useLocalization } from '@/hooks/private';
 import { useAuthenticate } from '@/hooks/use-authenticate';
 import { cn } from '@/lib/utils';
-import type { AccountViewPath } from '@/lib/view-paths';
+import type { OrganizationViewPath } from '@/lib/view-paths';
 import { getViewByPath } from '@/lib/view-paths';
 import { ApiKeysCard } from '../apikeys/apikeys';
-import { OrganizationsCard } from './organizations';
-import { SecurityCards } from './security';
-import { SettingsCards } from './settings';
-import type { AccountViewProps } from './types';
-import { UserInvitationsCard } from './user-invitations';
+import { OrganizationSettingsCards } from './settings';
+import type { OrganizationViewProps } from './types';
 
-export function AccountView({
+export function OrganizationView({
   className,
   classNames,
   localization: localizationProp,
@@ -24,37 +21,42 @@ export function AccountView({
   path: pathProp,
   pathname,
   view: viewProp,
-}: AccountViewProps) {
-  const { account: accountOptions, apiKey, navigate, organization } = useAuth();
-
-  if (!accountOptions) {
-    return null;
-  }
+}: OrganizationViewProps) {
+  const { navigate, organization: organizationFeature } = useAuth();
+  const {
+    apiKey,
+    basePath,
+    currentPath,
+    data: organization,
+    isPending: organizationPending,
+    viewPaths,
+  } = useOrganization();
 
   useAuthenticate();
 
   const localization = useLocalization(localizationProp);
 
   const path = pathProp ?? pathname?.split('/').pop();
-  const view = viewProp || getViewByPath(accountOptions.viewPaths, path!) || 'SETTINGS';
+
+  const view = viewProp || getViewByPath(viewPaths!, path) || 'SETTINGS';
 
   useEffect(() => {
-    if (!apiKey && view === 'API_KEYS') {
-      navigate(`${accountOptions?.basePath}/${accountOptions?.viewPaths?.SETTINGS}`);
+    if (!organizationFeature) {
+      navigate('/');
     }
 
-    if (!organization && view === 'ORGANIZATIONS') {
-      navigate(`${accountOptions?.basePath}/${accountOptions?.viewPaths?.SETTINGS}`);
+    if (!apiKey && view === 'API_KEYS') {
+      navigate(`${basePath}${currentPath}/${viewPaths?.SETTINGS}`);
     }
-  }, [apiKey, organization, view, accountOptions?.basePath, accountOptions?.viewPaths, navigate]);
+  }, [organizationFeature, apiKey, view, basePath, currentPath, viewPaths.SETTINGS, navigate]);
 
   const navItems = useMemo(() => {
     const items: {
-      view: AccountViewPath;
+      view: OrganizationViewPath;
       label: string;
     }[] = [
-      { view: 'SETTINGS', label: localization.ACCOUNT },
-      { view: 'SECURITY', label: localization.SECURITY },
+      { view: 'SETTINGS', label: localization.SETTINGS },
+      { view: 'MEMBERS', label: localization.MEMBERS },
     ];
 
     if (apiKey) {
@@ -64,22 +66,8 @@ export function AccountView({
       });
     }
 
-    if (organization) {
-      items.push({
-        view: 'ORGANIZATIONS',
-        label: localization.ORGANIZATIONS,
-      });
-    }
-
     return items;
-  }, [
-    apiKey,
-    organization,
-    localization.ACCOUNT,
-    localization.SECURITY,
-    localization.API_KEYS,
-    localization.ORGANIZATIONS,
-  ]);
+  }, [apiKey, localization.SETTINGS, localization.MEMBERS, localization.API_KEYS]);
 
   // Local state to instantly update the active tab on click
   const [activeTab, setActiveTab] = useState<string>('');
@@ -95,10 +83,10 @@ export function AccountView({
   }, [navItems, path, view]);
 
   // Handle tab click: update local state immediately and trigger navigation
-  const handleTabClick = (key: string, view: AccountViewPath) => {
+  const handleTabClick = (key: string, view: OrganizationViewPath) => {
     setActiveTab(key);
     // Navigate after a short delay (or immediately) so that the UI updates first
-    navigate(`${accountOptions?.basePath}/${accountOptions?.viewPaths[view]}`);
+    navigate(`${basePath}${currentPath}/${viewPaths[view]}`);
   };
 
   const navigations = (children: ReactNode) => (
@@ -128,30 +116,43 @@ export function AccountView({
   const contents = (
     <>
       {view === 'SETTINGS' && (
-        <SettingsCards
+        <OrganizationSettingsCards
           className={classNames?.baseCards}
           classNames={classNames?.card}
           localization={localization}
         />
       )}
 
-      {view === 'SECURITY' && (
-        <SecurityCards
-          className={classNames?.baseCards}
-          classNames={classNames?.card}
-          localization={localization}
-        />
-      )}
+      {/* {view === 'MEMBERS' && (
+        <div
+          className={cn(
+            'flex w-full flex-col gap-4 md:gap-6',
+            className,
+            classNames?.cards,
+          )}
+        >
+          <OrganizationMembersCard
+            classNames={classNames?.card}
+            localization={localization}
+            slug={slug}
+          />
+
+          <OrganizationInvitationsCard
+            classNames={classNames?.card}
+            localization={localization}
+            slug={slug}
+          />
+        </div>
+      )} */}
 
       {apiKey && view === 'API_KEYS' && (
-        <ApiKeysCard classNames={classNames?.card} localization={localization} />
-      )}
-
-      {organization && view === 'ORGANIZATIONS' && (
-        <div className="grid w-full gap-6 md:gap-8">
-          <OrganizationsCard classNames={classNames?.card} localization={localization} />
-          <UserInvitationsCard classNames={classNames?.card} localization={localization} />
-        </div>
+        <ApiKeysCard
+          classNames={classNames?.card}
+          localization={localization}
+          isPending={organizationPending}
+          isOrganization={true}
+          organizationId={organization?.id}
+        />
       )}
     </>
   );

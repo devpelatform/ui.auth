@@ -17,7 +17,7 @@ import { useAuth, useAuthHooks, useOrganization } from '@/hooks';
 import { useLocalization, useOnSuccessTransition } from '@/hooks/private';
 import { cn, getLocalizedError, getSearchParam } from '@/lib/utils';
 import type { BaseProps, CardClassNames } from '@/types/ui';
-import { OrganizationView } from '../shared/view';
+import { OrgView } from '../shared/view';
 
 interface AcceptInvitationProps extends BaseProps {
   classNames?: CardClassNames;
@@ -199,7 +199,7 @@ function AcceptInvitationContent({
 
       <CardContent className={cn('flex flex-col gap-6 truncate', classNames?.content)}>
         <Card className={cn('flex-row items-center p-4')}>
-          <OrganizationView
+          <OrgView
             localization={localization}
             organization={{
               id: invitation.organizationId,
@@ -252,7 +252,7 @@ function AcceptInvitationSkeleton({ className, classNames, localization }: Accep
 
       <CardContent className={cn('flex flex-col gap-6 truncate', classNames?.content)}>
         <Card className={cn('flex-row items-center p-4')}>
-          <OrganizationView localization={localization} isPending />
+          <OrgView localization={localization} isPending />
           <Skeleton className="mt-0.5 ml-auto h-4 w-full max-w-14 shrink-2" />
         </Card>
         <div className="grid grid-cols-2 gap-3">
