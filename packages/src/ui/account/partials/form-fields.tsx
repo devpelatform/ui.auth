@@ -17,11 +17,11 @@ import {
 } from '@pelatform/ui/default';
 import { useForm } from '@pelatform/ui/re/react-hook-form';
 import * as z from '@pelatform/ui/re/zod';
-import { useAuth, useAuthHooks } from '@/hooks';
-import { useLocalization } from '@/hooks/private';
-import { cn, getLocalizedError } from '@/lib/utils';
-import type { FieldType } from '@/types/components';
-import type { CardComponentProps } from '@/types/ui';
+import { useAuth, useAuthHooks } from '../../../hooks/index';
+import { useLocalization } from '../../../hooks/private';
+import { cn, getLocalizedError } from '../../../lib/utils';
+import type { FieldType } from '../../../types/components';
+import type { CardComponentProps } from '../../../types/ui';
 import { CardComponent } from '../../shared/components/card';
 
 export function FormFieldsCard({

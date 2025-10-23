@@ -3,7 +3,7 @@
 import { sha256 } from '@noble/hashes/sha2.js';
 import { bytesToHex } from '@noble/hashes/utils.js';
 
-import type { GravatarOptions } from '@/types/options';
+import type { GravatarOptions } from '../types/options';
 
 export async function resizeAndCropImage(
   file: File,

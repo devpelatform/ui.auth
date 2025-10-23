@@ -4,9 +4,9 @@ import { CheckIcon, CopyIcon } from 'lucide-react';
 
 import { Button } from '@pelatform/ui/default';
 import { useCopyToClipboard } from '@pelatform/ui/hooks';
-import { useLocalization } from '@/hooks/private';
-import { cn } from '@/lib/utils';
-import type { DialogComponentProps } from '@/types/ui';
+import { useLocalization } from '../../../hooks/private';
+import { cn } from '../../../lib/utils';
+import type { DialogComponentProps } from '../../../types/ui';
 import { DialogComponent } from '../../shared/components/dialog';
 
 export function BackupCodesDialog({

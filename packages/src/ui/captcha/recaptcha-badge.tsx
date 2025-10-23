@@ -1,7 +1,7 @@
-import { useAuth } from '@/hooks';
-import { useIsHydrated } from '@/hooks/private';
-import type { AuthLocalization } from '@/lib/localization';
-import { cn } from '@/lib/utils';
+import { useAuth } from '../../hooks/index';
+import { useIsHydrated } from '../../hooks/private';
+import type { AuthLocalization } from '../../lib/localization/index';
+import { cn } from '../../lib/utils';
 
 interface RecaptchaBadgeProps {
   className?: string;

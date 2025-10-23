@@ -2,10 +2,10 @@
 
 import { createContext, useContext } from 'react';
 
-import type { createAuthHooks } from '@/lib/create-auth-hooks';
-import type { AuthUIOptions } from '@/types/main';
-import type { OrganizationContextOptions } from '@/types/organization';
-import { type AuthQueryOptions, defaultAuthQueryOptions } from '@/types/query';
+import type { createAuthHooks } from '../lib/create-auth-hooks';
+import type { AuthUIOptions } from '../types/main';
+import type { OrganizationContextOptions } from '../types/organization';
+import { type AuthQueryOptions, defaultAuthQueryOptions } from '../types/query';
 
 export const AuthUIContext = createContext<AuthUIOptions>({} as unknown as AuthUIOptions);
 

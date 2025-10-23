@@ -1,8 +1,8 @@
 'use client';
 
 import { Card, Skeleton } from '@pelatform/ui/default';
-import { cn } from '@/lib/utils';
-import type { CardClassNames } from '@/types/ui';
+import { cn } from '../../../lib/utils';
+import type { CardClassNames } from '../../../types/ui';
 
 export function SkeletonViewComponent({ classNames }: { classNames?: CardClassNames }) {
   return (

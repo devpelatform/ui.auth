@@ -1,9 +1,9 @@
 'use client';
 
-import { useAuthHooks } from '@/hooks';
-import { useLocalization } from '@/hooks/private';
-import type { User } from '@/types/auth';
-import type { CardComponentProps } from '@/types/ui';
+import { useAuthHooks } from '../../../hooks/index';
+import { useLocalization } from '../../../hooks/private';
+import type { User } from '../../../types/auth';
+import type { CardComponentProps } from '../../../types/ui';
 import { FormFieldsCard } from './form-fields';
 
 export function FormUsernameCard({
@@ -12,8 +12,7 @@ export function FormUsernameCard({
   localization: localizationProp,
   ...props
 }: CardComponentProps) {
-  const { useSession } = useAuthHooks();
-  const { data: sessionData } = useSession();
+  const { data: sessionData } = useAuthHooks().useSession();
 
   const localization = useLocalization(localizationProp);
 

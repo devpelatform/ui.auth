@@ -18,14 +18,14 @@ import {
 } from '@pelatform/ui/default';
 import { useForm } from '@pelatform/ui/re/react-hook-form';
 import * as z from '@pelatform/ui/re/zod';
-import { useAuth } from '@/hooks';
+import { useAuth } from '../../hooks/index';
 import {
   useCaptcha,
   useIsHydrated,
   useLocalization,
   useOnSuccessTransition,
-} from '@/hooks/private';
-import { cn, getLocalizedError } from '@/lib/utils';
+} from '../../hooks/private';
+import { cn, getLocalizedError } from '../../lib/utils';
 import { Captcha } from '../captcha/captcha';
 import { OTPInputGroup } from './partials/otp-input-group';
 import type { AuthFormProps } from './types';

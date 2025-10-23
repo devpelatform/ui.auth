@@ -13,11 +13,11 @@ import {
 } from '@pelatform/ui/default';
 import { useForm } from '@pelatform/ui/re/react-hook-form';
 import * as z from '@pelatform/ui/re/zod';
-import { useAuth, useAuthHooks, useOrganization } from '@/hooks';
-import { useLocalization } from '@/hooks/private';
-import { cn, getLocalizedError } from '@/lib/utils';
-import type { Organization } from '@/types/auth';
-import type { CardComponentProps } from '@/types/ui';
+import { useAuth, useAuthHooks, useOrganization } from '../../../hooks/index';
+import { useLocalization } from '../../../hooks/private';
+import { cn, getLocalizedError } from '../../../lib/utils';
+import type { Organization } from '../../../types/auth';
+import type { CardComponentProps } from '../../../types/ui';
 import { CardComponent } from '../../shared/components/card';
 
 export function OrganizationSlugCard({
@@ -27,7 +27,6 @@ export function OrganizationSlugCard({
   ...props
 }: CardComponentProps) {
   const { toast, replace } = useAuth();
-  const { useHasPermission, useUpdateOrganization } = useAuthHooks();
   const {
     basePath,
     data: organization,
@@ -37,8 +36,9 @@ export function OrganizationSlugCard({
     setLastVisited,
     viewPaths,
   } = useOrganization();
+  const { useUpdateOrganization, useHasPermission } = useAuthHooks();
   const { mutate: updateOrganization } = useUpdateOrganization();
-  const { data: hasPermission, isPending } = useHasPermission({
+  const { data: hasPermission, isPending: permissionPending } = useHasPermission({
     organizationId: organization?.id,
     permissions: {
       organization: ['update'],
@@ -46,6 +46,8 @@ export function OrganizationSlugCard({
   });
 
   const localization = useLocalization(localizationProp);
+
+  const isPending = organizationPending || permissionPending || !organization;
 
   const formSchema = z.object({
     slug: z
@@ -99,23 +101,6 @@ export function OrganizationSlugCard({
       });
     }
   };
-
-  if (organizationPending || !organization) {
-    return (
-      <CardComponent
-        className={className}
-        classNames={classNames}
-        title={localization.ORGANIZATION_SLUG}
-        description={localization.ORGANIZATION_SLUG_DESCRIPTION}
-        instructions={localization.ORGANIZATION_SLUG_INSTRUCTIONS}
-        actionLabel={localization.SAVE}
-        isPending={true}
-        {...props}
-      >
-        <Skeleton className={cn('h-9 w-full', classNames?.skeleton)} />
-      </CardComponent>
-    );
-  }
 
   return (
     <Form {...form}>

@@ -3,13 +3,14 @@
 import { type ReactNode, useEffect, useMemo, useState } from 'react';
 
 import { Tabs, TabsList, TabsTrigger } from '@pelatform/ui/default';
-import { useAuth, useOrganization } from '@/hooks';
-import { useLocalization } from '@/hooks/private';
-import { useAuthenticate } from '@/hooks/use-authenticate';
-import { cn } from '@/lib/utils';
-import type { OrganizationViewPath } from '@/lib/view-paths';
-import { getViewByPath } from '@/lib/view-paths';
+import { useAuth, useOrganization } from '../../hooks/index';
+import { useLocalization } from '../../hooks/private';
+import { useAuthenticate } from '../../hooks/use-authenticate';
+import { cn } from '../../lib/utils';
+import type { OrganizationViewPath } from '../../lib/view-paths';
+import { getViewByPath } from '../../lib/view-paths';
 import { ApiKeysCard } from '../apikeys/apikeys';
+import { OrganizationMembersCards } from './members';
 import { OrganizationSettingsCards } from './settings';
 import type { OrganizationViewProps } from './types';
 
@@ -123,33 +124,19 @@ export function OrganizationView({
         />
       )}
 
-      {/* {view === 'MEMBERS' && (
-        <div
-          className={cn(
-            'flex w-full flex-col gap-4 md:gap-6',
-            className,
-            classNames?.cards,
-          )}
-        >
-          <OrganizationMembersCard
-            classNames={classNames?.card}
-            localization={localization}
-            slug={slug}
-          />
-
-          <OrganizationInvitationsCard
-            classNames={classNames?.card}
-            localization={localization}
-            slug={slug}
-          />
-        </div>
-      )} */}
+      {view === 'MEMBERS' && (
+        <OrganizationMembersCards
+          className={classNames?.baseCards}
+          classNames={classNames?.card}
+          localization={localization}
+        />
+      )}
 
       {apiKey && view === 'API_KEYS' && (
         <ApiKeysCard
           classNames={classNames?.card}
           localization={localization}
-          isPending={organizationPending}
+          isPending={organizationPending || !organization}
           isOrganization={true}
           organizationId={organization?.id}
         />

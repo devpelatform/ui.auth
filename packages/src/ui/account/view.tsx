@@ -3,12 +3,12 @@
 import { type ReactNode, useEffect, useMemo, useState } from 'react';
 
 import { Tabs, TabsList, TabsTrigger } from '@pelatform/ui/default';
-import { useAuth } from '@/hooks';
-import { useLocalization } from '@/hooks/private';
-import { useAuthenticate } from '@/hooks/use-authenticate';
-import { cn } from '@/lib/utils';
-import type { AccountViewPath } from '@/lib/view-paths';
-import { getViewByPath } from '@/lib/view-paths';
+import { useAuth } from '../../hooks/index';
+import { useLocalization } from '../../hooks/private';
+import { useAuthenticate } from '../../hooks/use-authenticate';
+import { cn } from '../../lib/utils';
+import type { AccountViewPath } from '../../lib/view-paths';
+import { getViewByPath } from '../../lib/view-paths';
 import { ApiKeysCard } from '../apikeys/apikeys';
 import { OrganizationsCard } from './organizations';
 import { SecurityCards } from './security';

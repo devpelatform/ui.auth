@@ -1,8 +1,8 @@
 import { type ReactNode, useEffect } from 'react';
 import { GoogleReCaptchaProvider, useGoogleReCaptcha } from '@wojtekmaj/react-recaptcha-v3';
 
-import { useAuth } from '@/hooks';
-import { useIsHydrated, useLang, useTheme } from '@/hooks/private';
+import { useAuth } from '../../hooks/index';
+import { useIsHydrated, useLang, useTheme } from '../../hooks/private';
 
 export function RecaptchaV3({ children }: { children: ReactNode }) {
   const { captcha } = useAuth();

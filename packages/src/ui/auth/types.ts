@@ -1,8 +1,8 @@
 import type { ReactNode } from 'react';
 
-import type { AuthViewPath, AuthViewPaths } from '@/lib/view-paths';
-import type { PasswordValidation } from '@/types/generals';
-import type { BaseProps } from '@/types/ui';
+import type { AuthViewPath, AuthViewPaths } from '../../lib/view-paths';
+import type { PasswordValidation } from '../../types/generals';
+import type { BaseProps } from '../../types/ui';
 
 export type AuthViewClassNames = {
   base?: string;

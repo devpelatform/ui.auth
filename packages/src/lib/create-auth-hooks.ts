@@ -2,7 +2,7 @@ import { useContext } from 'react';
 
 import type { AnyUseQueryOptions, QueryKey } from '@pelatform/ui/re/tanstack-query';
 import { useQueryClient } from '@pelatform/ui/re/tanstack-query';
-import { AuthQueryContext } from '@/hooks';
+import { AuthQueryContext } from '../hooks/index';
 import {
   type BetterFetchRequest,
   useAccountInfo,
@@ -33,9 +33,9 @@ import {
   useUnlinkAccount,
   useUpdateOrganization,
   useUpdateUser,
-} from '@/hooks/main';
-import type { AnyAuthClient, AuthClient } from '@/types/auth';
-import type { AuthQueryOptions } from '@/types/query';
+} from '../hooks/main';
+import type { AnyAuthClient, AuthClient } from '../types/auth';
+import type { AuthQueryOptions } from '../types/query';
 import { prefetchSession } from './prefetch-session';
 
 export function createAuthHooks<TAuthClient extends AnyAuthClient>(authClient: TAuthClient) {

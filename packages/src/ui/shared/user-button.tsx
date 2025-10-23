@@ -25,11 +25,11 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from '@pelatform/ui/default';
-import { useAuth, useAuthHooks } from '@/hooks';
-import { useIsHydrated, useLocalization } from '@/hooks/private';
-import { cn, getLocalizedError } from '@/lib/utils';
-import type { AnyAuthClient, User } from '@/types/auth';
-import type { AvatarClassNames, BaseProps, ViewClassNames } from '@/types/ui';
+import { useAuth, useAuthHooks } from '../../hooks/index';
+import { useIsHydrated, useLocalization } from '../../hooks/private';
+import { cn, getLocalizedError } from '../../lib/utils';
+import type { AnyAuthClient, User } from '../../types/auth';
+import type { AvatarClassNames, BaseProps, ViewClassNames } from '../../types/ui';
 import { UserAvatar } from './avatar';
 import { UserView } from './view';
 

@@ -1,5 +1,5 @@
-import type { AccountViewPath } from '@/lib/view-paths';
-import type { BaseProps, CardClassNames } from '@/types/ui';
+import type { AccountViewPath } from '../../lib/view-paths';
+import type { BaseProps, CardClassNames } from '../../types/ui';
 
 export interface AccountViewProps extends BaseProps {
   classNames?: {

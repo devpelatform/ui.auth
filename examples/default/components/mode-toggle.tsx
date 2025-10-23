@@ -12,7 +12,9 @@ import {
 import { useTheme } from '@pelatform/ui/re/next-themes';
 
 export function ModeToggle() {
-  const { setTheme } = useTheme();
+  const { setTheme, theme } = useTheme();
+
+  const isActive = (val: 'light' | 'dark' | 'system') => theme === val;
 
   return (
     <DropdownMenu>
@@ -24,15 +26,24 @@ export function ModeToggle() {
         </Button>
       </DropdownMenuTrigger>
       <DropdownMenuContent align="end" onCloseAutoFocus={(e) => e.preventDefault()}>
-        <DropdownMenuItem onClick={() => setTheme('light')}>
+        <DropdownMenuItem
+          onClick={() => setTheme('light')}
+          className={isActive('light') ? 'bg-accent' : ''}
+        >
           <SunIcon />
           Light
         </DropdownMenuItem>
-        <DropdownMenuItem onClick={() => setTheme('dark')}>
+        <DropdownMenuItem
+          onClick={() => setTheme('dark')}
+          className={isActive('dark') ? 'bg-accent' : ''}
+        >
           <MoonIcon />
           Dark
         </DropdownMenuItem>
-        <DropdownMenuItem onClick={() => setTheme('system')}>
+        <DropdownMenuItem
+          onClick={() => setTheme('system')}
+          className={isActive('system') ? 'bg-accent' : ''}
+        >
           <MonitorIcon />
           System
         </DropdownMenuItem>

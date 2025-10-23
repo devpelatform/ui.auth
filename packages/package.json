@@ -9,8 +9,15 @@
   "module": "./dist/index.js",
   "types": "./dist/index.d.ts",
   "exports": {
-    "./css": "./dist/style.css",
+    "./css": {
+      "development": "./src/style.css",
+      "default": "./dist/style.css"
+    },
     ".": {
+      "development": {
+        "types": "./src/index.dev.ts",
+        "default": "./src/index.dev.ts"
+      },
       "import": {
         "types": "./dist/index.d.ts",
         "default": "./dist/index.js"
@@ -21,6 +28,10 @@
       }
     },
     "./server": {
+      "development": {
+        "types": "./src/server.ts",
+        "default": "./src/server.ts"
+      },
       "import": {
         "types": "./dist/server.d.ts",
         "default": "./dist/server.js"

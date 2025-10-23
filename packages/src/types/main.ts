@@ -1,7 +1,7 @@
 import type { ReactNode } from 'react';
 
-import type { AuthLocalization, authLocalization } from '@/lib/localization';
-import type { AuthViewPaths } from '@/lib/view-paths';
+import type { AuthLocalization, authLocalization } from '../lib/localization/index';
+import type { AuthViewPaths } from '../lib/view-paths';
 import type { AnyAuthClient, AuthClient } from './auth';
 import type { AdditionalFields, Link, RenderToast } from './components';
 import type {

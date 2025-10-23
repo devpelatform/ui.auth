@@ -3,9 +3,9 @@
 import { useContext } from 'react';
 
 import type { AnyUseQueryOptions, QueryKey } from '@pelatform/ui/re/tanstack-query';
-import { AuthHooksContext } from '@/hooks';
-import type { BetterFetchRequest } from '@/hooks/main';
-import type { AnyAuthClient } from '@/types/auth';
+import type { AnyAuthClient } from '../../types/auth';
+import { AuthHooksContext } from '../index';
+import type { BetterFetchRequest } from '../main';
 
 /**
  * Hook to get the current authentication token.

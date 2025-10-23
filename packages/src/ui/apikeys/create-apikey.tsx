@@ -20,11 +20,11 @@ import {
 } from '@pelatform/ui/default';
 import { useForm } from '@pelatform/ui/re/react-hook-form';
 import * as z from '@pelatform/ui/re/zod';
-import { useAuth } from '@/hooks';
-import { useLang, useLocalization } from '@/hooks/private';
-import { cn, getLocalizedError } from '@/lib/utils';
-import type { Refetch } from '@/types/generals';
-import type { DialogComponentProps } from '@/types/ui';
+import { useAuth } from '../../hooks/index';
+import { useLang, useLocalization } from '../../hooks/private';
+import { cn, getLocalizedError } from '../../lib/utils';
+import type { Refetch } from '../../types/generals';
+import type { DialogComponentProps } from '../../types/ui';
 import { DialogComponent, DialogFooterComponent } from '../shared/components/dialog';
 
 export function CreateApiKeyDialog({

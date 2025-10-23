@@ -2,9 +2,9 @@
 
 import { useEffect, useRef } from 'react';
 
-import { useAuth } from '@/hooks';
-import { useLocalization, useOnSuccessTransition } from '@/hooks/private';
-import { getLocalizedError } from '@/lib/utils';
+import { useAuth } from '../../../hooks/index';
+import { useLocalization, useOnSuccessTransition } from '../../../hooks/private';
+import { getLocalizedError } from '../../../lib/utils';
 import type { AuthButtonProps } from '../types';
 
 export function OneTap({

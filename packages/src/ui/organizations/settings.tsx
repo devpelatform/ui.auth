@@ -1,8 +1,8 @@
 'use client';
 
-import { useOrganization } from '@/hooks';
-import { useLocalization } from '@/hooks/private';
-import { cn } from '@/lib/utils';
+import { useOrganization } from '../../hooks/index';
+import { useLocalization } from '../../hooks/private';
+import { cn } from '../../lib/utils';
 import { DisplayIdCard } from '../shared/display-id';
 import { DeleteOrganizationCard } from './partials/delete-organization';
 import { OrganizationLogoCard } from './partials/form-logo';
@@ -31,7 +31,7 @@ export function OrganizationSettingsCards({
         <DisplayIdCard
           classNames={classNames}
           localization={localization}
-          isPending={isPending}
+          isPending={!data || isPending}
           id={data?.id}
           title={localization.DISPLAY_ORGANIZATION_TITLE}
           description={localization.DISPLAY_ORGANIZATION_DESCRIPTION}

@@ -76,7 +76,7 @@ export function LanguageSwitcher({
           <DropdownMenuItem
             key={lang.code}
             onClick={() => handleLanguageChange(lang.code)}
-            className={cn('cursor-pointer gap-2', currentLocale === lang.code && 'bg-accent')}
+            className={cn('gap-2', currentLocale === lang.code && 'bg-accent')}
           >
             {showFlags && lang.flag ? (
               // biome-ignore lint/performance/noImgElement: disable

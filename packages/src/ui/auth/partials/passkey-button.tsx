@@ -3,9 +3,9 @@
 import { FingerprintIcon } from 'lucide-react';
 
 import { Button } from '@pelatform/ui/default';
-import { useAuth } from '@/hooks';
-import { useLocalization, useOnSuccessTransition } from '@/hooks/private';
-import { cn, getLocalizedError } from '@/lib/utils';
+import { useAuth } from '../../../hooks/index';
+import { useLocalization, useOnSuccessTransition } from '../../../hooks/private';
+import { cn, getLocalizedError } from '../../../lib/utils';
 import type { AuthButtonProps } from '../types';
 
 export function PasskeyButton({

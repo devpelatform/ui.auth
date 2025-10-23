@@ -3,9 +3,9 @@
 import { useContext } from 'react';
 
 import type { AnyUseQueryOptions } from '@pelatform/ui/re/tanstack-query';
-import { AuthHooksContext } from '@/hooks';
-import type { AuthClient } from '@/types/auth';
-import type { AuthQueryOptions } from '@/types/query';
+import type { AuthClient } from '../../types/auth';
+import type { AuthQueryOptions } from '../../types/query';
+import { AuthHooksContext } from '../index';
 
 /**
  * Hook to get the currently active organization.

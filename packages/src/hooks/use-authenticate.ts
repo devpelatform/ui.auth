@@ -2,9 +2,9 @@
 
 import { useContext, useEffect } from 'react';
 
-import type { AuthViewPath } from '@/lib/view-paths';
-import type { AnyAuthClient } from '@/types/auth';
-import { AuthUIContext } from '.';
+import type { AuthViewPath } from '../lib/view-paths';
+import type { AnyAuthClient } from '../types/auth';
+import { AuthUIContext } from './index';
 import { useSession } from './main';
 
 interface AuthenticateOptions<TAuthClient extends AnyAuthClient> {

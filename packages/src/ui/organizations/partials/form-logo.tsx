@@ -10,11 +10,11 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from '@pelatform/ui/default';
-import { useAuth, useAuthHooks, useOrganization } from '@/hooks';
-import { useLocalization } from '@/hooks/private';
-import { fileToBase64, resizeAndCropImage } from '@/lib/images';
-import { getLocalizedError } from '@/lib/utils';
-import type { CardComponentProps } from '@/types/ui';
+import { useAuth, useAuthHooks, useOrganization } from '../../../hooks/index';
+import { useLocalization } from '../../../hooks/private';
+import { fileToBase64, resizeAndCropImage } from '../../../lib/images';
+import { getLocalizedError } from '../../../lib/utils';
+import type { CardComponentProps } from '../../../types/ui';
 import { OrganizationLogo } from '../../shared/avatar';
 import { CardComponent } from '../../shared/components/card';
 
@@ -31,9 +31,9 @@ export function OrganizationLogoCard({
     logo,
     refetch: refetchOrganization,
   } = useOrganization();
-  const { useHasPermission, useUpdateOrganization } = useAuthHooks();
+  const { useUpdateOrganization, useHasPermission } = useAuthHooks();
   const { mutateAsync: updateOrganization } = useUpdateOrganization();
-  const { data: hasPermission, isPending } = useHasPermission({
+  const { data: hasPermission, isPending: permissionPending } = useHasPermission({
     organizationId: organization?.id,
     permissions: {
       organization: ['update'],
@@ -41,6 +41,8 @@ export function OrganizationLogoCard({
   });
 
   const localization = useLocalization(localizationProp);
+
+  const isPending = organizationPending || permissionPending || !organization;
 
   const fileInputRef = useRef<HTMLInputElement | null>(null);
   const [loading, setLoading] = useState(false);
@@ -115,42 +117,6 @@ export function OrganizationLogoCard({
     fileInputRef.current?.click();
   };
 
-  if (organizationPending || !organization) {
-    return (
-      <CardComponent
-        className={className}
-        classNames={{
-          content: 'flex items-center justify-between',
-          header: 'w-full',
-          ...classNames,
-        }}
-        title={localization.LOGO}
-        description={localization.LOGO_DESCRIPTION}
-        instructions={localization.LOGO_INSTRUCTIONS}
-        isPending={true}
-        {...props}
-      >
-        <Button
-          type="button"
-          variant="ghost"
-          size="icon"
-          className="size-fit rounded-full"
-          disabled
-        >
-          <OrganizationLogo
-            className="size-16 lg:size-20"
-            classNames={{
-              fallback: 'text-xl lg:text-2xl',
-              ...classNames?.avatar,
-            }}
-            localization={localization}
-            isPending={true}
-          />
-        </Button>
-      </CardComponent>
-    );
-  }
-
   return (
     <CardComponent
       className={className}
@@ -167,15 +133,15 @@ export function OrganizationLogoCard({
     >
       <input
         ref={fileInputRef}
-        accept="image/*"
-        disabled={loading || !hasPermission?.success}
-        hidden
         type="file"
+        hidden
+        accept="image/*"
         onChange={(e) => {
           const file = e.target.files?.item(0);
           if (file) handleLogoChange(file);
           e.target.value = '';
         }}
+        disabled={loading || !hasPermission?.success}
       />
       <DropdownMenu>
         <DropdownMenuTrigger asChild>

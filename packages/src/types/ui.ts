@@ -1,7 +1,7 @@
 import type { ComponentProps, ReactNode } from 'react';
 
 import type { Avatar, Card, Dialog } from '@pelatform/ui/default';
-import type { AuthLocalization } from '@/lib/localization';
+import type { AuthLocalization } from '../lib/localization/index';
 import type { Organization } from './auth';
 import type { ButtonSize } from './components';
 import type { Profile } from './generals';

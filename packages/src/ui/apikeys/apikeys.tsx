@@ -3,11 +3,11 @@
 import { useMemo, useState } from 'react';
 
 import { Button, Card } from '@pelatform/ui/default';
-import { useAuthHooks } from '@/hooks';
-import { useLocalization } from '@/hooks/private';
-import { cn } from '@/lib/utils';
-import type { ApiKey, Refetch } from '@/types/generals';
-import type { CardComponentProps } from '@/types/ui';
+import { useAuthHooks } from '../../hooks/index';
+import { useLocalization } from '../../hooks/private';
+import { cn } from '../../lib/utils';
+import type { ApiKey, Refetch } from '../../types/generals';
+import type { CardComponentProps } from '../../types/ui';
 import { CardComponent } from '../shared/components/card';
 import { SkeletonViewComponent } from '../shared/components/skeleton';
 import { ApiKeyView } from '../shared/view';
@@ -27,10 +27,11 @@ export function ApiKeysCard({
   isOrganization?: boolean;
   organizationId?: string;
 }) {
-  const { useListApiKeys } = useAuthHooks();
-  const { data: apiKeys, isPending, refetch } = useListApiKeys();
+  const { data: apiKeys, isPending: apiKeyPending, refetch } = useAuthHooks().useListApiKeys();
 
   const localization = useLocalization(localizationProp);
+
+  const isPending = apiKeyPending || (isOrganization && organizationPending);
 
   // Filter API keys by organizationId
   const filteredApiKeys = useMemo(() => {
@@ -59,7 +60,7 @@ export function ApiKeysCard({
         isPending={isPending}
         {...props}
       >
-        {isPending || organizationPending ? (
+        {isPending ? (
           <div className={cn('grid gap-4', classNames?.grid)}>
             <SkeletonViewComponent classNames={classNames} />
           </div>

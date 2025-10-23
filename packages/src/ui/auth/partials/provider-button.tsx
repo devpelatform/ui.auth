@@ -3,11 +3,11 @@
 import { useCallback } from 'react';
 
 import { Button } from '@pelatform/ui/default';
-import { useAuth } from '@/hooks';
-import { useLocalization, useOnSuccessTransition } from '@/hooks/private';
-import { cn, getLocalizedError } from '@/lib/utils';
-import type { SocialProvider } from '@/types/auth';
-import type { Provider } from '@/types/components';
+import { useAuth } from '../../../hooks/index';
+import { useLocalization, useOnSuccessTransition } from '../../../hooks/private';
+import { cn, getLocalizedError } from '../../../lib/utils';
+import type { SocialProvider } from '../../../types/auth';
+import type { Provider } from '../../../types/components';
 import type { AuthButtonProps } from '../types';
 
 export function ProviderButton({

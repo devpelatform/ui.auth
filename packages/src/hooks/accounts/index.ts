@@ -3,8 +3,8 @@
 import { useContext } from 'react';
 
 import type { AnyUseQueryOptions } from '@pelatform/ui/re/tanstack-query';
-import { AuthHooksContext } from '@/hooks';
-import type { AnyAuthClient, AuthClient } from '@/types/auth';
+import type { AnyAuthClient, AuthClient } from '../../types/auth';
+import { AuthHooksContext } from '../index';
 
 /**
  * Hook to fetch detailed account information.

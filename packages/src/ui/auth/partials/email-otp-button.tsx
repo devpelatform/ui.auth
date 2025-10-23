@@ -3,9 +3,9 @@
 import { LockIcon, MailIcon } from 'lucide-react';
 
 import { Button } from '@pelatform/ui/default';
-import { useAuth } from '@/hooks';
-import { useLocalization } from '@/hooks/private';
-import { cn } from '@/lib/utils';
+import { useAuth } from '../../../hooks/index';
+import { useLocalization } from '../../../hooks/private';
+import { cn } from '../../../lib/utils';
 import type { AuthButtonProps } from '../types';
 
 export function EmailOTPButton({

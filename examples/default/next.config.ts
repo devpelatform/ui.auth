@@ -10,7 +10,7 @@ const nextConfig: NextConfig = {
     turbopackFileSystemCacheForDev: true,
   },
 
-  transpilePackages: ['@repo/api'],
+  transpilePackages: ['@pelatform/ui.auth', '@repo/api'],
   // allowedDevOrigins: [ENV_APP_DOMAIN, `*.${ENV_APP_DOMAIN}`],
   reactStrictMode: true,
   // serverExternalPackages: ['@aws-sdk/client-s3', '@aws-sdk/s3-request-presigner', 'prettier'],

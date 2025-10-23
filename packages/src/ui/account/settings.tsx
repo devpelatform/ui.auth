@@ -1,8 +1,8 @@
 'use client';
 
-import { useAuth, useAuthHooks } from '@/hooks';
-import { useLocalization } from '@/hooks/private';
-import { cn } from '@/lib/utils';
+import { useAuth, useAuthHooks } from '../../hooks/index';
+import { useLocalization } from '../../hooks/private';
+import { cn } from '../../lib/utils';
 import { DisplayIdCard } from '../shared/display-id';
 import { FormAvatarCard } from './partials/form-avatar';
 import { FormEmailCard } from './partials/form-email';
@@ -26,8 +26,7 @@ export function SettingsCards({
     displayId,
     multiSession,
   } = useAuth();
-  const { useSession } = useAuthHooks();
-  const { data: sessionData, isPending } = useSession();
+  const { data: sessionData, isPending } = useAuthHooks().useSession();
 
   const localization = useLocalization(localizationProp);
 
@@ -90,7 +89,7 @@ export function SettingsCards({
         <DisplayIdCard
           classNames={classNames}
           localization={localization}
-          isPending={isPending}
+          isPending={!sessionData?.user || isPending}
           id={sessionData?.user?.id}
           title={localization.DISPLAY_USER_TITLE}
           description={localization.DISPLAY_USER_DESCRIPTION}

@@ -2,12 +2,12 @@
 
 import { useCallback, useContext, useEffect, useMemo, useRef } from 'react';
 
-import { AuthUIContext, OrganizationContext } from '@/hooks';
-import { useActiveOrganization, useListOrganizations, useSession } from '@/hooks/main';
-import { organizationViewPaths } from '@/lib/view-paths';
-import type { Organization } from '@/types/auth';
-import type { AvatarOptions } from '@/types/options';
-import type { OrganizationUIProviderProps } from '@/types/organization';
+import { AuthUIContext, OrganizationContext } from '../../hooks/index';
+import { useActiveOrganization, useListOrganizations, useSession } from '../../hooks/main';
+import { organizationViewPaths } from '../../lib/view-paths';
+import type { Organization } from '../../types/auth';
+import type { AvatarOptions } from '../../types/options';
+import type { OrganizationUIProviderProps } from '../../types/organization';
 
 export const LAST_VISITED_ORG = 'last-visited-org';
 

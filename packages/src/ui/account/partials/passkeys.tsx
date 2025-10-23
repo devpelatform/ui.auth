@@ -5,10 +5,10 @@ import { FingerprintIcon } from 'lucide-react';
 
 import { Button, Card, Form, Spinner } from '@pelatform/ui/default';
 import { useForm } from '@pelatform/ui/re/react-hook-form';
-import { useAuth, useAuthHooks } from '@/hooks';
-import { useLocalization } from '@/hooks/private';
-import { cn, getLocalizedError } from '@/lib/utils';
-import type { CardComponentProps } from '@/types/ui';
+import { useAuth, useAuthHooks } from '../../../hooks/index';
+import { useLocalization } from '../../../hooks/private';
+import { cn, getLocalizedError } from '../../../lib/utils';
+import type { CardComponentProps } from '../../../types/ui';
 import { CardComponent } from '../../shared/components/card';
 import { SkeletonViewComponent } from '../../shared/components/skeleton';
 import { SessionFreshnessDialog } from '../dialogs/session-freshness';
@@ -20,11 +20,13 @@ export function PasskeysCard({
   ...props
 }: CardComponentProps) {
   const { authClient, freshAge, toast } = useAuth();
-  const { useListPasskeys, useSession } = useAuthHooks();
-  const { data: passkeys, isPending, refetch } = useListPasskeys();
-  const { data: sessionData } = useSession();
+  const { useSession, useListPasskeys } = useAuthHooks();
+  const { data: sessionData, isPending: sessionPending } = useSession();
+  const { data: passkeys, isPending: passkeysPending, refetch } = useListPasskeys();
 
   const localization = useLocalization(localizationProp);
+
+  const isPending = sessionPending || passkeysPending;
 
   const session = sessionData?.session;
   const isFresh = session
@@ -111,7 +113,7 @@ function PasskeyCell({
 }) {
   const { freshAge, toast } = useAuth();
   const { useSession, useListPasskeys, useDeletePasskey } = useAuthHooks();
-  const { refetch } = useListPasskeys();
+  const { refetch: refetchPasskeys } = useListPasskeys();
   const { data: sessionData } = useSession();
   const { mutate: deletePasskey } = useDeletePasskey();
 
@@ -134,7 +136,7 @@ function PasskeyCell({
 
     try {
       await deletePasskey({ id: passkey.id });
-      refetch?.();
+      refetchPasskeys?.();
     } catch (error) {
       setIsLoading(false);
 

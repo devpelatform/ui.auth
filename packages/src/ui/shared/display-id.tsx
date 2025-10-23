@@ -13,9 +13,9 @@ import {
   TooltipTrigger,
 } from '@pelatform/ui/default';
 import { useCopyToClipboard } from '@pelatform/ui/hooks';
-import { useLocalization } from '@/hooks/private';
-import { cn } from '@/lib/utils';
-import type { CardComponentProps } from '@/types/ui';
+import { useLocalization } from '../../hooks/private';
+import { cn } from '../../lib/utils';
+import type { CardComponentProps } from '../../types/ui';
 import { CardComponent } from './components/card';
 
 export function DisplayIdCard({
@@ -52,36 +52,34 @@ export function DisplayIdCard({
       isPending={isPending}
       {...props}
     >
-      <div
-        className={cn(
-          'flex w-full max-w-md items-center justify-between rounded-md border p-2',
-          classNames?.grid,
-        )}
-      >
-        {isPending ? (
-          <Skeleton className={cn('h-9 w-full', classNames?.skeleton)} />
-        ) : (
-          <>
-            <Input value={id} ref={inputRef} disabled className="border-none! bg-transparent!" />
-            <TooltipProvider delayDuration={0}>
-              <Tooltip>
-                <TooltipTrigger asChild>
-                  <Button variant="dim" onClick={handleCopy} disabled={copied}>
-                    {copied ? (
-                      <CheckIcon className={cn('stroke-green-600', classNames?.icon)} />
-                    ) : (
-                      <CopyIcon className={classNames?.icon} />
-                    )}
-                  </Button>
-                </TooltipTrigger>
-                <TooltipContent className="px-2 py-1 text-xs">
-                  {localization.COPY_TO_CLIPBOARD}
-                </TooltipContent>
-              </Tooltip>
-            </TooltipProvider>
-          </>
-        )}
-      </div>
+      {isPending ? (
+        <Skeleton className={cn('h-11.5 w-full max-w-md', classNames?.skeleton)} />
+      ) : (
+        <div
+          className={cn(
+            'flex w-full max-w-md items-center justify-between rounded-md border p-2',
+            classNames?.grid,
+          )}
+        >
+          <Input value={id} ref={inputRef} disabled className="border-none! bg-transparent!" />
+          <TooltipProvider delayDuration={0}>
+            <Tooltip>
+              <TooltipTrigger asChild>
+                <Button variant="dim" onClick={handleCopy} disabled={copied}>
+                  {copied ? (
+                    <CheckIcon className={cn('stroke-green-600', classNames?.icon)} />
+                  ) : (
+                    <CopyIcon className={classNames?.icon} />
+                  )}
+                </Button>
+              </TooltipTrigger>
+              <TooltipContent className="px-2 py-1 text-xs">
+                {localization.COPY_TO_CLIPBOARD}
+              </TooltipContent>
+            </Tooltip>
+          </TooltipProvider>
+        </div>
+      )}
     </CardComponent>
   );
 }

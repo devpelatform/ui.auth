@@ -4,8 +4,8 @@ import type { ComponentProps } from 'react';
 
 import { Button, Card, CardContent, CardFooter, Skeleton, Spinner } from '@pelatform/ui/default';
 import { useFormState } from '@pelatform/ui/re/react-hook-form';
-import { cn } from '@/lib/utils';
-import type { CardComponentProps } from '@/types/ui';
+import { cn } from '../../../lib/utils';
+import type { CardComponentProps } from '../../../types/ui';
 
 export function CardComponent({
   children,

@@ -16,15 +16,15 @@ import {
 } from '@pelatform/ui/default';
 import { useForm } from '@pelatform/ui/re/react-hook-form';
 import * as z from '@pelatform/ui/re/zod';
-import { useAuth } from '@/hooks';
+import { useAuth } from '../../hooks/index';
 import {
   useCaptcha,
   useIsHydrated,
   useLocalization,
   useOnSuccessTransition,
-} from '@/hooks/private';
-import { cn, getLocalizedError } from '@/lib/utils';
-import type { BetterFetchOption } from '@/types/auth';
+} from '../../hooks/private';
+import { cn, getLocalizedError } from '../../lib/utils';
+import type { BetterFetchOption } from '../../types/auth';
 import { Captcha } from '../captcha/captcha';
 import type { AuthFormProps } from './types';
 

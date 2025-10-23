@@ -14,10 +14,10 @@ import {
 } from '@pelatform/ui/default';
 import { useForm } from '@pelatform/ui/re/react-hook-form';
 import * as z from '@pelatform/ui/re/zod';
-import { useAuth, useAuthHooks } from '@/hooks';
-import { useLocalization } from '@/hooks/private';
-import { cn, getLocalizedError } from '@/lib/utils';
-import type { CardComponentProps } from '@/types/ui';
+import { useAuth, useAuthHooks } from '../../../hooks/index';
+import { useLocalization } from '../../../hooks/private';
+import { cn, getLocalizedError } from '../../../lib/utils';
+import type { CardComponentProps } from '../../../types/ui';
 import { CardComponent } from '../../shared/components/card';
 
 export function FormEmailCard({
@@ -27,8 +27,7 @@ export function FormEmailCard({
   ...props
 }: CardComponentProps) {
   const { authClient, emailVerification, toast } = useAuth();
-  const { useSession } = useAuthHooks();
-  const { data: sessionData, isPending, refetch } = useSession();
+  const { data: sessionData, isPending, refetch: refetchSession } = useAuthHooks().useSession();
 
   const localization = useLocalization(localizationProp);
 
@@ -72,7 +71,7 @@ export function FormEmailCard({
           icon: 'success',
         });
       } else {
-        await refetch?.();
+        await refetchSession?.();
         toast({
           message: `${localization.EMAIL} ${localization.UPDATED_SUCCESSFULLY}`,
           icon: 'success',

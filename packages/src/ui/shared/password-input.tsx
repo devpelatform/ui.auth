@@ -4,7 +4,7 @@ import { type ComponentProps, useState } from 'react';
 import { EyeIcon, EyeOffIcon } from 'lucide-react';
 
 import { Button, Input } from '@pelatform/ui/default';
-import { cn } from '@/lib/utils';
+import { cn } from '../../lib/utils';
 
 export function PasswordInput({
   className,

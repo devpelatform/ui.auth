@@ -1,10 +1,10 @@
 'use client';
 
 import { Button } from '@pelatform/ui/default';
-import { useAuth } from '@/hooks';
-import { useLocalization } from '@/hooks/private';
-import { cn } from '@/lib/utils';
-import type { DialogComponentProps } from '@/types/ui';
+import { useAuth } from '../../../hooks/index';
+import { useLocalization } from '../../../hooks/private';
+import { cn } from '../../../lib/utils';
+import type { DialogComponentProps } from '../../../types/ui';
 import { DialogComponent } from '../../shared/components/dialog';
 
 export function SessionFreshnessDialog({

@@ -3,11 +3,11 @@
 import { BuildingIcon, UserRoundIcon } from 'lucide-react';
 
 import { Avatar, AvatarFallback, AvatarImage, Skeleton } from '@pelatform/ui/default';
-import { useAuth } from '@/hooks';
-import { useLocalization } from '@/hooks/private';
-import { getGravatarUrl } from '@/lib/images';
-import { cn } from '@/lib/utils';
-import type { AvatarProps } from '@/types/ui';
+import { useAuth } from '../../hooks/index';
+import { useLocalization } from '../../hooks/private';
+import { getGravatarUrl } from '../../lib/images';
+import { cn } from '../../lib/utils';
+import type { AvatarProps } from '../../types/ui';
 
 const firstTwoCharacters = (name?: string | null) => name?.slice(0, 2);
 

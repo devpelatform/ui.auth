@@ -3,10 +3,10 @@
 import { KeyRoundIcon } from 'lucide-react';
 
 import { Skeleton } from '@pelatform/ui/default';
-import { useLang, useLocalization } from '@/hooks/private';
-import { cn } from '@/lib/utils';
-import type { ApiKey, Profile } from '@/types/generals';
-import type { ViewProps } from '@/types/ui';
+import { useLang, useLocalization } from '../../hooks/private';
+import { cn } from '../../lib/utils';
+import type { ApiKey, Profile } from '../../types/generals';
+import type { ViewProps } from '../../types/ui';
 import { OrganizationLogo, UserAvatar } from './avatar';
 
 function getName(user: Profile | null | undefined) {

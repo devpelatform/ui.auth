@@ -13,11 +13,11 @@ import {
 } from '@pelatform/ui/default';
 import { useForm } from '@pelatform/ui/re/react-hook-form';
 import * as z from '@pelatform/ui/re/zod';
-import { useAuth, useAuthHooks } from '@/hooks';
-import { useLocalization } from '@/hooks/private';
-import { cn, getLocalizedError, getPasswordSchema } from '@/lib/utils';
-import type { PasswordValidation } from '@/types/generals';
-import type { CardComponentProps } from '@/types/ui';
+import { useAuth, useAuthHooks } from '../../../hooks/index';
+import { useLocalization } from '../../../hooks/private';
+import { cn, getLocalizedError, getPasswordSchema } from '../../../lib/utils';
+import type { PasswordValidation } from '../../../types/generals';
+import type { CardComponentProps } from '../../../types/ui';
 import { CardComponent } from '../../shared/components/card';
 import { SkeletonInputComponent } from '../../shared/components/skeleton';
 import { PasswordInput } from '../../shared/password-input';

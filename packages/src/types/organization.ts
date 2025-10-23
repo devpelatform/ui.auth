@@ -1,6 +1,6 @@
 import type { ReactNode } from 'react';
 
-import type { OrganizationViewPaths } from '@/lib/view-paths';
+import type { OrganizationViewPaths } from '../lib/view-paths';
 import type { Organization } from './auth';
 import type { AvatarOptions } from './options';
 

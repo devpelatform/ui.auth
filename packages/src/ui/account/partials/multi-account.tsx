@@ -13,11 +13,11 @@ import {
   DropdownMenuTrigger,
   Spinner,
 } from '@pelatform/ui/default';
-import { useAuth, useAuthHooks } from '@/hooks';
-import { useLocalization } from '@/hooks/private';
-import { cn, getLocalizedError } from '@/lib/utils';
-import type { Refetch } from '@/types/generals';
-import type { CardComponentProps } from '@/types/ui';
+import { useAuth, useAuthHooks } from '../../../hooks/index';
+import { useLocalization } from '../../../hooks/private';
+import { cn, getLocalizedError } from '../../../lib/utils';
+import type { Refetch } from '../../../types/generals';
+import type { CardComponentProps } from '../../../types/ui';
 import { CardComponent } from '../../shared/components/card';
 import { SkeletonViewComponent } from '../../shared/components/skeleton';
 import { UserView } from '../../shared/view';
@@ -29,11 +29,17 @@ export function MultiAccountCard({
   ...props
 }: CardComponentProps) {
   const { basePath, navigate, viewPaths } = useAuth();
-  const { useListDeviceSessions, useSession } = useAuthHooks();
-  const { data: deviceSessions, isPending, refetch } = useListDeviceSessions();
-  const { data: sessionData } = useSession();
+  const { useSession, useListDeviceSessions } = useAuthHooks();
+  const { data: sessionData, isPending: sessionPending } = useSession();
+  const {
+    data: deviceSessions,
+    isPending: deviceSessionPending,
+    refetch: refetchDeviceSessions,
+  } = useListDeviceSessions();
 
   const localization = useLocalization(localizationProp);
+
+  const isPending = sessionPending || deviceSessionPending;
 
   const otherDeviceSessions = (deviceSessions || []).filter(
     (ds) => ds.session.id !== sessionData?.session.id,
@@ -64,7 +70,7 @@ export function MultiAccountCard({
                 classNames={classNames}
                 localization={localization}
                 deviceSession={sessionData}
-                refetch={refetch}
+                refetch={refetchDeviceSessions}
               />
             )}
 
@@ -74,7 +80,7 @@ export function MultiAccountCard({
                 classNames={classNames}
                 localization={localization}
                 deviceSession={deviceSession}
-                refetch={refetch}
+                refetch={refetchDeviceSessions}
               />
             ))}
           </div>
@@ -89,7 +95,7 @@ function MultiAccountCell({
   classNames,
   localization,
   deviceSession,
-  refetch,
+  refetch: refetchDeviceSessions,
 }: CardComponentProps & {
   deviceSession: { user: User; session: Session };
   refetch?: Refetch;
@@ -110,7 +116,7 @@ function MultiAccountCell({
         sessionToken: deviceSession.session.token,
       });
 
-      refetch?.();
+      refetchDeviceSessions?.();
     } catch (error) {
       setIsLoading(false);
 
@@ -126,7 +132,7 @@ function MultiAccountCell({
         sessionToken: deviceSession.session.token,
       });
 
-      refetch?.();
+      refetchDeviceSessions?.();
     } catch (error) {
       toast({ message: getLocalizedError({ error, localization }) });
     }

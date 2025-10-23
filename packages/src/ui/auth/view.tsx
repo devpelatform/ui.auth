@@ -14,12 +14,12 @@ import {
   CardTitle,
   Separator,
 } from '@pelatform/ui/default';
-import { useAuth } from '@/hooks';
-import { useIsHydrated, useLocalization } from '@/hooks/private';
-import { socialProviders } from '@/lib/social-providers';
-import { cn } from '@/lib/utils';
-import type { AuthViewPath } from '@/lib/view-paths';
-import { getViewByPath } from '@/lib/view-paths';
+import { useAuth } from '../../hooks/index';
+import { useIsHydrated, useLocalization } from '../../hooks/private';
+import { socialProviders } from '../../lib/social-providers';
+import { cn } from '../../lib/utils';
+import type { AuthViewPath } from '../../lib/view-paths';
+import { getViewByPath } from '../../lib/view-paths';
 import { AcceptInvitation } from './accept-invitation';
 import { AuthCallback } from './callback';
 import { EmailOTPForm } from './email-otp';

@@ -1,8 +1,8 @@
 /* @private */
 
 import * as z from '@pelatform/ui/re/zod';
-import type { PasswordValidation } from '@/types/generals';
-import type { AuthLocalization } from './localization';
+import type { PasswordValidation } from '../types/generals';
+import type { AuthLocalization } from './localization/index';
 
 export { cn } from '@pelatform/ui';
 

@@ -4,6 +4,7 @@
     "strict": true,
     // Modules
     "baseUrl": ".",
+    "customConditions": ["development"],
     "module": "ESNext",
     "moduleResolution": "bundler",
     "resolveJsonModule": true,
@@ -25,11 +26,11 @@
     "incremental": false,
     // Output Formatting
     // Completeness
-    "skipLibCheck": true,
-    "paths": {
-      "@/*": ["src/*"]
-    }
+    "skipLibCheck": true
+    // "paths": {
+    //   "@/*": ["src/*"]
+    // }
   },
-  "include": ["src"],
+  "include": ["src", ".source/index.ts"],
   "exclude": ["node_modules", "dist"]
 }

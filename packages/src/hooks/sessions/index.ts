@@ -3,9 +3,9 @@
 import { useContext } from 'react';
 
 import type { AnyUseQueryOptions } from '@pelatform/ui/re/tanstack-query';
-import { AuthHooksContext } from '@/hooks';
-import type { AnyAuthClient } from '@/types/auth';
-import type { AuthQueryOptions } from '@/types/query';
+import type { AnyAuthClient } from '../../types/auth';
+import type { AuthQueryOptions } from '../../types/query';
+import { AuthHooksContext } from '../index';
 
 /**
  * Hook to fetch a list of user sessions.

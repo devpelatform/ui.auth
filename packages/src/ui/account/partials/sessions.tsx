@@ -5,12 +5,12 @@ import { LaptopIcon, SmartphoneIcon } from 'lucide-react';
 import { UAParser } from 'ua-parser-js';
 
 import { Button, Card, Spinner } from '@pelatform/ui/default';
-import { useAuth, useAuthHooks } from '@/hooks';
-import { useLocalization } from '@/hooks/private';
-import { cn, getLocalizedError } from '@/lib/utils';
-import type { Session } from '@/types/auth';
-import type { Refetch } from '@/types/generals';
-import type { CardComponentProps } from '@/types/ui';
+import { useAuth, useAuthHooks } from '../../../hooks/index';
+import { useLocalization } from '../../../hooks/private';
+import { cn, getLocalizedError } from '../../../lib/utils';
+import type { Session } from '../../../types/auth';
+import type { Refetch } from '../../../types/generals';
+import type { CardComponentProps } from '../../../types/ui';
 import { CardComponent } from '../../shared/components/card';
 import { SkeletonViewComponent } from '../../shared/components/skeleton';
 
@@ -20,8 +20,7 @@ export function SessionsCard({
   localization: localizationProp,
   ...props
 }: CardComponentProps) {
-  const { useListSessions } = useAuthHooks();
-  const { data: sessions, isPending, refetch } = useListSessions();
+  const { data: sessions, isPending, refetch } = useAuthHooks().useListSessions();
 
   const localization = useLocalization(localizationProp);
 

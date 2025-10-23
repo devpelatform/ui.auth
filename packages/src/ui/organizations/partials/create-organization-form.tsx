@@ -22,11 +22,11 @@ import {
 } from '@pelatform/ui/default';
 import { useForm } from '@pelatform/ui/re/react-hook-form';
 import * as z from '@pelatform/ui/re/zod';
-import { useAuth, useAuthHooks, useOrganization } from '@/hooks';
-import { useLocalization } from '@/hooks/private';
-import { fileToBase64, resizeAndCropImage } from '@/lib/images';
-import { cn, getLocalizedError } from '@/lib/utils';
-import type { CardComponentProps } from '@/types/ui';
+import { useAuth, useAuthHooks, useOrganization } from '../../../hooks/index';
+import { useLocalization } from '../../../hooks/private';
+import { fileToBase64, resizeAndCropImage } from '../../../lib/images';
+import { cn, getLocalizedError } from '../../../lib/utils';
+import type { CardComponentProps } from '../../../types/ui';
 import { OrganizationLogo } from '../../shared/avatar';
 import { DialogFooterComponent } from '../../shared/components/dialog';
 
@@ -40,9 +40,8 @@ export function CreateOrganizationForm({
   onOpenChange?: ((open: boolean) => void) | undefined;
 }) {
   const { authClient, navigate, toast } = useAuth();
-  const { useListOrganizations } = useAuthHooks();
-  const { refetch: refetchOrganizations } = useListOrganizations();
   const { basePath, logo: organizationLogo, pathMode, setLastVisited } = useOrganization();
+  const { refetch: refetchOrganizations } = useAuthHooks().useListOrganizations();
 
   const localization = useLocalization(localizationProp);
 
@@ -81,18 +80,6 @@ export function CreateOrganizationForm({
 
   const isSubmitting = form.formState.isSubmitting;
   const disableSubmit = isSubmitting || !form.formState.isValid || !watchedName || !watchedSlug;
-
-  // // Auto-generate slug based on name
-  // useEffect(() => {
-  //   if (watchedName) {
-  //     const generatedSlug = slugify(watchedName, {
-  //       lower: true,
-  //       strict: true,
-  //       remove: /[*+~.()'"!:@]/g,
-  //     });
-  //     form.setValue('slug', generatedSlug);
-  //   }
-  // }, [watchedName, form]);
 
   const handleLogoChange = async (file: File) => {
     if (!organizationLogo) return;
@@ -191,15 +178,15 @@ export function CreateOrganizationForm({
               <FormItem>
                 <input
                   ref={fileInputRef}
-                  accept="image/*"
-                  disabled={logoPending}
-                  hidden
                   type="file"
+                  hidden
+                  accept="image/*"
                   onChange={(e) => {
                     const file = e.target.files?.item(0);
                     if (file) handleLogoChange(file);
                     e.target.value = '';
                   }}
+                  disabled={logoPending}
                 />
 
                 <FormLabel>{localization.LOGO}</FormLabel>

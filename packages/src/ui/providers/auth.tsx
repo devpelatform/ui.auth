@@ -4,13 +4,13 @@ import { useCallback, useMemo } from 'react';
 
 import { AlertToast } from '@pelatform/ui/components';
 import { useQueryClient } from '@pelatform/ui/re/tanstack-query';
-import { AuthHooksContext, AuthQueryContext, AuthUIContext } from '@/hooks';
-import { createAuthHooks } from '@/lib/create-auth-hooks';
-import { authLocalization } from '@/lib/localization';
-import { accountViewPaths, authViewPaths } from '@/lib/view-paths';
-import type { AuthClient } from '@/types/auth';
-import type { Link, RenderToast } from '@/types/components';
-import type { AuthUIProviderProps } from '@/types/main';
+import { AuthHooksContext, AuthQueryContext, AuthUIContext } from '../../hooks/index';
+import { createAuthHooks } from '../../lib/create-auth-hooks';
+import { authLocalization } from '../../lib/localization/index';
+import { accountViewPaths, authViewPaths } from '../../lib/view-paths';
+import type { AuthClient } from '../../types/auth';
+import type { Link, RenderToast } from '../../types/components';
+import type { AuthUIProviderProps } from '../../types/main';
 import type {
   AccountOptions,
   AvatarOptions,
@@ -19,8 +19,8 @@ import type {
   GenericOAuthOptions,
   SignUpOptions,
   SocialOptions,
-} from '@/types/options';
-import { defaultAuthQueryOptions } from '@/types/query';
+} from '../../types/options';
+import { defaultAuthQueryOptions } from '../../types/query';
 import { RecaptchaV3 } from '../captcha/recaptcha-v3';
 
 const DefaultLink: Link = ({ href, className, children }) => (

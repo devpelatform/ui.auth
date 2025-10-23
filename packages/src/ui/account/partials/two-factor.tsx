@@ -2,10 +2,10 @@
 
 import { useState } from 'react';
 
-import { useAuthHooks } from '@/hooks';
-import { useLocalization } from '@/hooks/private';
-import type { User } from '@/types/auth';
-import type { CardComponentProps } from '@/types/ui';
+import { useAuthHooks } from '../../../hooks/index';
+import { useLocalization } from '../../../hooks/private';
+import type { User } from '../../../types/auth';
+import type { CardComponentProps } from '../../../types/ui';
 import { CardComponent } from '../../shared/components/card';
 import { TwoFactorPasswordDialog } from '../dialogs/two-factor-password';
 
@@ -15,8 +15,7 @@ export function TwoFactorCard({
   localization: localizationProp,
   ...props
 }: CardComponentProps) {
-  const { useSession } = useAuthHooks();
-  const { data: sessionData, isPending } = useSession();
+  const { data: sessionData, isPending } = useAuthHooks().useSession();
 
   const localization = useLocalization(localizationProp);
 

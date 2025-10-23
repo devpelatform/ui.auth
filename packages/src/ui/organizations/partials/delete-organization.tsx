@@ -2,9 +2,9 @@
 
 import { useState } from 'react';
 
-import { useAuthHooks, useOrganization } from '@/hooks';
-import { useLocalization } from '@/hooks/private';
-import type { CardComponentProps } from '@/types/ui';
+import { useAuthHooks, useOrganization } from '../../../hooks/index';
+import { useLocalization } from '../../../hooks/private';
+import type { CardComponentProps } from '../../../types/ui';
 import { CardComponent } from '../../shared/components/card';
 import { DeleteOrganizationDialog } from '../dialogs/delete-organization';
 
@@ -14,9 +14,8 @@ export function DeleteOrganizationCard({
   localization: localizationProp,
   ...props
 }: CardComponentProps) {
-  const { useHasPermission } = useAuthHooks();
   const { data: organization, isPending: organizationPending } = useOrganization();
-  const { data: hasPermission, isPending } = useHasPermission({
+  const { data: hasPermission, isPending: permissionPending } = useAuthHooks().useHasPermission({
     organizationId: organization?.id,
     permissions: {
       organization: ['delete'],
@@ -25,9 +24,11 @@ export function DeleteOrganizationCard({
 
   const localization = useLocalization(localizationProp);
 
+  const isPending = organizationPending || permissionPending || !organization;
+
   const [showDialog, setShowDialog] = useState(false);
 
-  if (organizationPending || !organization) {
+  if (isPending) {
     return (
       <CardComponent
         className={className}

@@ -1,5 +1,5 @@
-import type { OrganizationViewPath } from '@/lib/view-paths';
-import type { BaseProps, CardClassNames } from '@/types/ui';
+import type { OrganizationViewPath } from '../../lib/view-paths';
+import type { BaseProps, CardClassNames } from '../../types/ui';
 
 export interface OrganizationViewProps extends BaseProps {
   classNames?: {

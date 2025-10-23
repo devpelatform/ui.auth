@@ -3,14 +3,14 @@
 import { useState } from 'react';
 
 import { Button, Card, Skeleton, Spinner } from '@pelatform/ui/default';
-import { useAuth, useAuthHooks } from '@/hooks';
-import { useLocalization } from '@/hooks/private';
-import { socialProviders } from '@/lib/social-providers';
-import { cn, getLocalizedError } from '@/lib/utils';
-import type { Account, SocialProvider } from '@/types/auth';
-import type { Provider } from '@/types/components';
-import type { Refetch } from '@/types/generals';
-import type { CardComponentProps } from '@/types/ui';
+import { useAuth, useAuthHooks } from '../../../hooks/index';
+import { useLocalization } from '../../../hooks/private';
+import { socialProviders } from '../../../lib/social-providers';
+import { cn, getLocalizedError } from '../../../lib/utils';
+import type { Account, SocialProvider } from '../../../types/auth';
+import type { Provider } from '../../../types/components';
+import type { Refetch } from '../../../types/generals';
+import type { CardComponentProps } from '../../../types/ui';
 import { CardComponent } from '../../shared/components/card';
 import { SkeletonViewComponent } from '../../shared/components/skeleton';
 
@@ -29,12 +29,11 @@ export function ProvidersCard({
   skipHook?: boolean;
 }) {
   const { genericOAuth, social } = useAuth();
-  const { useListAccounts } = useAuthHooks();
 
   const localization = useLocalization(localizationProp);
 
   if (!skipHook) {
-    const result = useListAccounts();
+    const result = useAuthHooks().useListAccounts();
     accounts = result.data as unknown as Account[];
     isPending = result.isPending;
     refetch = result.refetch;
@@ -108,8 +107,7 @@ function ProviderCell({
   refetch?: Refetch;
 }) {
   const { authClient, basePath, baseURL, viewPaths, toast } = useAuth();
-  const { useUnlinkAccount } = useAuthHooks();
-  const { mutate: unlinkAccount } = useUnlinkAccount();
+  const { mutate: unlinkAccount } = useAuthHooks().useUnlinkAccount();
 
   const [isLoading, setIsLoading] = useState(false);
 

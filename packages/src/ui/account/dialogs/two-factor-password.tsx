@@ -15,10 +15,10 @@ import {
 } from '@pelatform/ui/default';
 import { useForm } from '@pelatform/ui/re/react-hook-form';
 import * as z from '@pelatform/ui/re/zod';
-import { useAuth } from '@/hooks';
-import { useLocalization } from '@/hooks/private';
-import { cn, getLocalizedError } from '@/lib/utils';
-import type { DialogComponentProps } from '@/types/ui';
+import { useAuth } from '../../../hooks/index';
+import { useLocalization } from '../../../hooks/private';
+import { cn, getLocalizedError } from '../../../lib/utils';
+import type { DialogComponentProps } from '../../../types/ui';
 import { DialogComponent, DialogFooterComponent } from '../../shared/components/dialog';
 import { PasswordInput } from '../../shared/password-input';
 import { BackupCodesDialog } from './backup-codes';

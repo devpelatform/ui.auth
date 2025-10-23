@@ -3,22 +3,23 @@
 /************************************
  **** HOOKS
  *************************************/
-export * from './hooks';
-export * from './hooks/accounts';
-export * from './hooks/apikeys';
-export * from './hooks/device-sessions';
-export * from './hooks/organizations';
-export * from './hooks/other';
-export * from './hooks/passkeys';
-export * from './hooks/sessions';
+export * from './hooks/accounts/index';
+export * from './hooks/apikeys/index';
+export * from './hooks/device-sessions/index';
+export * from './hooks/organizations/index';
+export * from './hooks/other/index';
+export * from './hooks/passkeys/index';
+export * from './hooks/sessions/index';
+
+export * from './hooks/index';
 export * from './hooks/use-authenticate';
 
 /************************************
  **** LIB
  *************************************/
+export * from './lib/localization/index';
 export * from './lib/create-auth-hooks';
 export * from './lib/create-auth-prefetches';
-export * from './lib/localization';
 export * from './lib/prefetch-session';
 export * from './lib/social-providers';
 export * from './lib/view-paths';
@@ -103,7 +104,9 @@ export * from './ui/organizations/partials/delete-organization';
 export * from './ui/organizations/partials/form-logo';
 export * from './ui/organizations/partials/form-name';
 export * from './ui/organizations/partials/form-slug';
+export * from './ui/organizations/partials/invitations';
 
+export * from './ui/organizations/members';
 export * from './ui/organizations/settings';
 export * from './ui/organizations/types';
 export * from './ui/organizations/view';

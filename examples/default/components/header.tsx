@@ -25,7 +25,7 @@ export function Header() {
 
         <ModeToggle />
         <LanguageSwitcher />
-        <UserButton size="icon" />
+        <UserButton size="icon" align="end" />
       </div>
     </header>
   );

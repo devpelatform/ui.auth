@@ -13,10 +13,10 @@ import {
   Skeleton,
   Spinner,
 } from '@pelatform/ui/default';
-import { useAuth, useAuthHooks, useOrganization } from '@/hooks';
-import { useLocalization, useOnSuccessTransition } from '@/hooks/private';
-import { cn, getLocalizedError, getSearchParam } from '@/lib/utils';
-import type { BaseProps, CardClassNames } from '@/types/ui';
+import { useAuth, useAuthHooks, useOrganization } from '../../hooks/index';
+import { useLocalization, useOnSuccessTransition } from '../../hooks/private';
+import { cn, getLocalizedError, getSearchParam } from '../../lib/utils';
+import type { BaseProps, CardClassNames } from '../../types/ui';
 import { OrgView } from '../shared/view';
 
 interface AcceptInvitationProps extends BaseProps {
@@ -82,13 +82,13 @@ function AcceptInvitationContent({
   redirectTo,
 }: AcceptInvitationProps & { invitationId: string; redirectTo: string }) {
   const { authClient, replace, toast } = useAuth();
+  const { customRoles } = useOrganization();
   const { useInvitation } = useAuthHooks();
   const { data: invitation, isPending } = useInvitation({
     query: {
       id: invitationId,
     },
   });
-  const { customRoles } = useOrganization();
 
   const [isRejecting, setIsRejecting] = useState(false);
   const [isAccepting, setIsAccepting] = useState(false);

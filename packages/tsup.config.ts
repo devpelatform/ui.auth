@@ -3,6 +3,7 @@ import { defineConfig } from 'tsup';
 
 export default defineConfig(() => {
   return {
+    external: ['react', 'react-dom'],
     entry: {
       index: './src/index.ts',
       server: './src/server.ts',

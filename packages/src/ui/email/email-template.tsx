@@ -15,7 +15,7 @@ import {
   Text,
 } from '@react-email/components';
 
-import { cn } from '@/lib/utils';
+import { cn } from '../../lib/utils';
 
 export interface EmailTemplateClassNames {
   body?: string;

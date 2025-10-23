@@ -12,9 +12,9 @@ import {
   DropdownMenuTrigger,
   Spinner,
 } from '@pelatform/ui/default';
-import { useAuth, useAuthHooks, useOrganization } from '@/hooks';
-import { useLocalization } from '@/hooks/private';
-import { cn, getLocalizedError } from '@/lib/utils';
+import { useAuth, useAuthHooks, useOrganization } from '../../hooks/index';
+import { useLocalization } from '../../hooks/private';
+import { cn, getLocalizedError } from '../../lib/utils';
 import { UserAvatar } from '../shared/avatar';
 import { CardComponent } from '../shared/components/card';
 import type { AccountBaseProps } from './types';
@@ -189,7 +189,7 @@ function UserInvitationCell({
               {localization?.ACCEPT}
             </DropdownMenuItem>
 
-            <DropdownMenuItem onClick={handleReject} disabled={isLoading} variant="destructive">
+            <DropdownMenuItem variant="destructive" onClick={handleReject} disabled={isLoading}>
               <XIcon className={classNames?.icon} />
               {localization?.REJECT}
             </DropdownMenuItem>

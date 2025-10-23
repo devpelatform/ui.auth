@@ -21,10 +21,10 @@ import {
 } from '@pelatform/ui/default';
 import { useForm } from '@pelatform/ui/re/react-hook-form';
 import * as z from '@pelatform/ui/re/zod';
-import { useAuth, useAuthHooks } from '@/hooks';
-import { useIsHydrated, useLocalization, useOnSuccessTransition } from '@/hooks/private';
-import { cn, getLocalizedError, getSearchParam } from '@/lib/utils';
-import type { User } from '@/types/auth';
+import { useAuth, useAuthHooks } from '../../hooks/index';
+import { useIsHydrated, useLocalization, useOnSuccessTransition } from '../../hooks/private';
+import { cn, getLocalizedError, getSearchParam } from '../../lib/utils';
+import type { User } from '../../types/auth';
 import { OTPInputGroup } from './partials/otp-input-group';
 import type { AuthFormProps } from './types';
 

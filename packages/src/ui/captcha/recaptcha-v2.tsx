@@ -1,9 +1,9 @@
 import { type RefObject, useEffect } from 'react';
 import ReCAPTCHA from 'react-google-recaptcha';
 
-import { useAuth } from '@/hooks';
-import { useLang, useTheme } from '@/hooks/private';
-import { cn } from '@/lib/utils';
+import { useAuth } from '../../hooks/index';
+import { useLang, useTheme } from '../../hooks/private';
+import { cn } from '../../lib/utils';
 
 export function RecaptchaV2({ ref }: { ref: RefObject<ReCAPTCHA | null> }) {
   const { captcha } = useAuth();

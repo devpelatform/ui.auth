@@ -1,6 +1,6 @@
 import type { AnyUseQueryOptions, QueryClient } from '@pelatform/ui/re/tanstack-query';
-import type { AnyAuthClient, AuthClient } from '@/types/auth';
-import type { AuthQueryOptions } from '@/types/query';
+import type { AnyAuthClient, AuthClient } from '../types/auth';
+import type { AuthQueryOptions } from '../types/query';
 
 export async function prefetchSession<TAuthClient extends AnyAuthClient>(
   authClient: TAuthClient,

@@ -1,7 +1,7 @@
 'use client';
 
-import { useLocalization } from '@/hooks/private';
-import type { DialogComponentProps } from '@/types/ui';
+import { useLocalization } from '../../../hooks/private';
+import type { DialogComponentProps } from '../../../types/ui';
 import { DialogComponent } from '../../shared/components/dialog';
 import { CreateOrganizationForm } from '../partials/create-organization-form';
 

@@ -12,10 +12,10 @@ import {
   DropdownMenuTrigger,
   Spinner,
 } from '@pelatform/ui/default';
-import { useAuth, useAuthHooks, useOrganization } from '@/hooks';
-import { useIsHydrated, useLocalization } from '@/hooks/private';
-import { cn, getLocalizedError } from '@/lib/utils';
-import type { Organization } from '@/types/auth';
+import { useAuth, useAuthHooks, useOrganization } from '../../hooks/index';
+import { useIsHydrated, useLocalization } from '../../hooks/private';
+import { cn, getLocalizedError } from '../../lib/utils';
+import type { Organization } from '../../types/auth';
 import { CreateOrganizationDialog } from '../organizations/dialogs/create-organization';
 import { LeaveOrganizationDialog } from '../organizations/dialogs/leave-organization';
 import { CardComponent } from '../shared/components/card';
@@ -29,12 +29,12 @@ export function OrganizationsCard({
   localization: localizationProp,
   ...props
 }: AccountBaseProps) {
-  const { useListOrganizations } = useAuthHooks();
-  const { data: organizations, isPending: organizationsPending } = useListOrganizations();
+  const { data: organizations, isPending: organizationsPending } =
+    useAuthHooks().useListOrganizations();
 
   const localization = useLocalization(localizationProp);
   const isHydrated = useIsHydrated();
-  const isPending = !isHydrated || organizationsPending;
+  const isPending = !isHydrated || organizationsPending || !organizations;
 
   const [createDialogOpen, setCreateDialogOpen] = useState(false);
 

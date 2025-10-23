@@ -2,8 +2,8 @@
 
 import type { ReactNode } from 'react';
 
-import { useAuthHooks } from '@/hooks';
-import { useAuthenticate } from '@/hooks/use-authenticate';
+import { useAuthHooks } from '../../hooks/index';
+import { useAuthenticate } from '../../hooks/use-authenticate';
 
 /**
  * Conditionally renders content during authentication loading state

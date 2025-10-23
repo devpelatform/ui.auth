@@ -3,8 +3,8 @@
 import { useContext } from 'react';
 
 import type { AnyUseQueryOptions } from '@pelatform/ui/re/tanstack-query';
-import { AuthHooksContext } from '@/hooks';
-import type { AuthQueryOptions } from '@/types/query';
+import type { AuthQueryOptions } from '../../types/query';
+import { AuthHooksContext } from '../index';
 
 /**
  * Hook to delete a passkey.

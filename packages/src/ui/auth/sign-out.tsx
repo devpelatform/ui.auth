@@ -3,8 +3,8 @@
 import { useEffect, useRef } from 'react';
 
 import { Spinner } from '@pelatform/ui/default';
-import { useAuth } from '@/hooks';
-import { useOnSuccessTransition } from '@/hooks/private';
+import { useAuth } from '../../hooks/index';
+import { useOnSuccessTransition } from '../../hooks/private';
 import type { AuthFormProps } from './types';
 
 export function SignOut({ redirectTo: redirectToProp }: AuthFormProps) {

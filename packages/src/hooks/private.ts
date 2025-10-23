@@ -18,9 +18,9 @@ import type { TurnstileInstance } from '@marsidev/react-turnstile';
 import { useGoogleReCaptcha } from '@wojtekmaj/react-recaptcha-v3';
 import type ReCAPTCHA from 'react-google-recaptcha';
 
-import type { AuthLocalization } from '@/lib/localization';
-import { getSearchParam } from '@/lib/utils';
-import { AuthUIContext } from '.';
+import type { AuthLocalization } from '../lib/localization/index';
+import { getSearchParam } from '../lib/utils';
+import { AuthUIContext } from './index';
 import { useSession } from './main';
 
 // Default captcha endpoints

@@ -12,10 +12,10 @@ import {
   useQuery,
   useQueryClient,
 } from '@pelatform/ui/re/tanstack-query';
-import type { AnyAuthClient, AuthClient } from '@/types/auth';
-import type { NonThrowableResult, ThrowableResult } from '@/types/generals';
-import type { AuthQueryOptions } from '@/types/query';
-import { AuthQueryContext } from '.';
+import type { AnyAuthClient, AuthClient } from '../types/auth';
+import type { NonThrowableResult, ThrowableResult } from '../types/generals';
+import type { AuthQueryOptions } from '../types/query';
+import { AuthQueryContext } from './index';
 
 /** =========================
  *  ACCOUNTS

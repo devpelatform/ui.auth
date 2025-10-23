@@ -9,9 +9,9 @@ import {
   DialogHeader,
   DialogTitle,
 } from '@pelatform/ui/default';
-import { useLocalization } from '@/hooks/private';
-import { cn } from '@/lib/utils';
-import type { DialogComponentProps } from '@/types/ui';
+import { useLocalization } from '../../../hooks/private';
+import { cn } from '../../../lib/utils';
+import type { DialogComponentProps } from '../../../types/ui';
 
 export function DialogComponent({
   children,

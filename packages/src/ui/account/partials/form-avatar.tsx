@@ -10,11 +10,11 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from '@pelatform/ui/default';
-import { useAuth, useAuthHooks } from '@/hooks';
-import { useLocalization } from '@/hooks/private';
-import { fileToBase64, resizeAndCropImage } from '@/lib/images';
-import { getLocalizedError } from '@/lib/utils';
-import type { CardComponentProps } from '@/types/ui';
+import { useAuth, useAuthHooks } from '../../../hooks/index';
+import { useLocalization } from '../../../hooks/private';
+import { fileToBase64, resizeAndCropImage } from '../../../lib/images';
+import { getLocalizedError } from '../../../lib/utils';
+import type { CardComponentProps } from '../../../types/ui';
 import { UserAvatar } from '../../shared/avatar';
 import { CardComponent } from '../../shared/components/card';
 
@@ -26,7 +26,7 @@ export function FormAvatarCard({
 }: CardComponentProps) {
   const { avatar, toast } = useAuth();
   const { useSession, useUpdateUser } = useAuthHooks();
-  const { data: sessionData, isPending, refetch } = useSession();
+  const { data: sessionData, isPending, refetch: refetchSession } = useSession();
   const { mutate: updateUser } = useUpdateUser();
 
   const localization = useLocalization(localizationProp);
@@ -62,7 +62,7 @@ export function FormAvatarCard({
 
     try {
       await updateUser({ image });
-      await refetch?.();
+      await refetchSession?.();
     } catch (error) {
       toast({ message: getLocalizedError({ error, localization }) });
     }
@@ -82,7 +82,7 @@ export function FormAvatarCard({
       }
 
       await updateUser({ image: null });
-      await refetch?.();
+      await refetchSession?.();
     } catch (error) {
       toast({ message: getLocalizedError({ error, localization }) });
     }
@@ -107,16 +107,16 @@ export function FormAvatarCard({
       {...props}
     >
       <input
+        ref={fileInputRef}
         type="file"
         hidden
-        ref={fileInputRef}
         accept="image/*"
-        disabled={loading}
         onChange={(e) => {
           const file = e.target.files?.item(0);
           if (file) handleAvatarChange(file);
           e.target.value = '';
         }}
+        disabled={loading}
       />
       <DropdownMenu>
         <DropdownMenuTrigger asChild>
