@@ -4,7 +4,8 @@ import { useCallback, useMemo } from 'react';
 
 import { AlertToast } from '@pelatform/ui/components';
 import { useQueryClient } from '@pelatform/ui/re/tanstack-query';
-import { AuthHooksContext, AuthQueryContext, AuthUIContext } from '../../hooks/index';
+import { AuthQueryContext, AuthUIContext } from '../../hooks/main';
+import { AuthHooksContext } from '../../hooks/private';
 import { createAuthHooks } from '../../lib/create-auth-hooks';
 import { authLocalization } from '../../lib/localization/index';
 import { accountViewPaths, authViewPaths } from '../../lib/view-paths';

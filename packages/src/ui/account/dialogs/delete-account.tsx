@@ -15,8 +15,9 @@ import {
 } from '@pelatform/ui/default';
 import { useForm } from '@pelatform/ui/re/react-hook-form';
 import * as z from '@pelatform/ui/re/zod';
-import { useAuth, useAuthHooks } from '../../../hooks/index';
+import { useAuth } from '../../../hooks/main';
 import { useLocalization } from '../../../hooks/private';
+import { useSession } from '../../../hooks/use-session';
 import { cn, getLocalizedError } from '../../../lib/utils';
 import type { Account } from '../../../types/auth';
 import type { DialogComponentProps } from '../../../types/ui';
@@ -35,7 +36,7 @@ export function DeleteAccountDialog({
 }: DialogComponentProps & { accounts?: Account[] | null }) {
   const { authClient, basePath, baseURL, deleteUser, freshAge, navigate, toast, viewPaths } =
     useAuth();
-  const { data: sessionData } = useAuthHooks().useSession();
+  const { data: sessionData } = useSession();
 
   const session = sessionData?.session;
   const user = sessionData?.user;

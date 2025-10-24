@@ -1,7 +1,7 @@
 import { type RefObject, useEffect } from 'react';
 import ReCAPTCHA from 'react-google-recaptcha';
 
-import { useAuth } from '../../hooks/index';
+import { useAuth } from '../../hooks/main';
 import { useLang, useTheme } from '../../hooks/private';
 import { cn } from '../../lib/utils';
 

@@ -2,8 +2,8 @@
 
 import { useState } from 'react';
 
-import { useAuthHooks } from '../../../hooks/index';
 import { useLocalization } from '../../../hooks/private';
+import { useListAccounts } from '../../../hooks/use-list-accounts';
 import type { Account } from '../../../types/auth';
 import type { CardComponentProps } from '../../../types/ui';
 import { CardComponent } from '../../shared/components/card';
@@ -26,7 +26,7 @@ export function DeleteAccountCard({
   const [showDialog, setShowDialog] = useState(false);
 
   if (!skipHook) {
-    const result = useAuthHooks().useListAccounts();
+    const result = useListAccounts();
     accounts = result.data as unknown as Account[];
     isPending = result.isPending;
   }

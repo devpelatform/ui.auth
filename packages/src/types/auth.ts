@@ -18,7 +18,7 @@ import {
   usernameClient,
 } from 'better-auth/client/plugins';
 import type { Member, Organization } from 'better-auth/plugins/organization';
-import type { BetterFetchOption } from 'better-auth/react';
+import type { BetterFetchOption, BetterFetchResponse } from 'better-auth/react';
 import { createAuthClient } from 'better-auth/react';
 import type { SocialProvider } from 'better-auth/social-providers';
 
@@ -56,3 +56,9 @@ export type Session = AuthClient['$Infer']['Session']['session'];
 export type User = AuthClient['$Infer']['Session']['user'];
 
 export type { Account, BetterFetchOption, Organization, SocialProvider, Member };
+
+export type BetterFetchRequest<TData> = ({
+  fetchOptions,
+}: {
+  fetchOptions: BetterFetchOption;
+}) => Promise<BetterFetchResponse<TData>>;

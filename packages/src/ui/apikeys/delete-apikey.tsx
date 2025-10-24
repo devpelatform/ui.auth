@@ -3,8 +3,9 @@
 import { useState } from 'react';
 
 import { Button, Card, Spinner } from '@pelatform/ui/default';
-import { useAuth, useAuthHooks } from '../../hooks/index';
+import { useAuth } from '../../hooks/main';
 import { useLocalization } from '../../hooks/private';
+import { useDeleteApiKey } from '../../hooks/use-delete-api-key';
 import { cn, getLocalizedError } from '../../lib/utils';
 import type { ApiKey, Refetch } from '../../types/generals';
 import type { DialogComponentProps } from '../../types/ui';
@@ -22,7 +23,7 @@ export function ApiKeyDeleteDialog({
   ...props
 }: DialogComponentProps & { apiKey: ApiKey; refetch?: Refetch }) {
   const { toast } = useAuth();
-  const { mutate: deleteApiKey } = useAuthHooks().useDeleteApiKey();
+  const { mutate: deleteApiKey } = useDeleteApiKey();
 
   const localization = useLocalization(localizationProp);
 

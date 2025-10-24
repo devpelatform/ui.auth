@@ -2,7 +2,7 @@ import type { RefObject } from 'react';
 import HCaptcha from '@hcaptcha/react-hcaptcha';
 import { Turnstile } from '@marsidev/react-turnstile';
 
-import { useAuth } from '../../hooks/index';
+import { useAuth } from '../../hooks/main';
 import { useTheme } from '../../hooks/private';
 import type { AuthLocalization } from '../../lib/localization/index';
 import { RecaptchaBadge } from './recaptcha-badge';

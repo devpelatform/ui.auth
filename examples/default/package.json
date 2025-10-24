@@ -11,7 +11,7 @@
     "types:check": "tsc --noEmit"
   },
   "dependencies": {
-    "@pelatform/ui": "^1.5.1",
+    "@pelatform/ui": "^1.5.2",
     "@pelatform/ui.auth": "workspace:*",
     "@pelatform/utils": "^1.0.0",
     "@repo/api": "workspace:*",
@@ -19,8 +19,8 @@
     "@repo/config": "workspace:*",
     "@repo/db": "workspace:*",
     "@repo/i18n": "workspace:*",
-    "hono": "^4.10.2",
-    "lucide-react": "^0.547.0",
+    "hono": "^4.10.3",
+    "lucide-react": "^0.548.0",
     "next": "16.0.0",
     "next-intl": "^4.4.0",
     "react": "^19.2.0",

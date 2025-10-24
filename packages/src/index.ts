@@ -3,24 +3,57 @@
 /************************************
  **** HOOKS
  *************************************/
-export * from './hooks/accounts/index';
-export * from './hooks/apikeys/index';
-export * from './hooks/device-sessions/index';
-export * from './hooks/organizations/index';
-export * from './hooks/other/index';
-export * from './hooks/passkeys/index';
-export * from './hooks/sessions/index';
-
-export * from './hooks/index';
+// Main Hooks
+export * from './hooks/main';
 export * from './hooks/use-authenticate';
+
+// Accounts Hooks
+export * from './hooks/use-account-info';
+export * from './hooks/use-list-accounts';
+export * from './hooks/use-unlink-account';
+
+// API Keys Hooks
+export * from './hooks/use-create-api-key';
+export * from './hooks/use-delete-api-key';
+export * from './hooks/use-list-api-keys';
+
+// Device Sessions Hooks
+export * from './hooks/use-list-device-sessions';
+export * from './hooks/use-revoke-device-session';
+export * from './hooks/use-set-active-session';
+
+// Organizations Hooks
+export * from './hooks/use-active-organization';
+export * from './hooks/use-list-organizations';
+export * from './hooks/use-update-organization';
+export * from './hooks/use-has-permission';
+export * from './hooks/use-invitation';
+export * from './hooks/use-list-invitations';
+export * from './hooks/use-list-user-invitations';
+export * from './hooks/use-list-members';
+
+// Passkeys Hooks
+export * from './hooks/use-delete-passkey';
+export * from './hooks/use-list-passkeys';
+
+// Sessions Hooks
+export * from './hooks/use-list-sessions';
+export * from './hooks/use-revoke-other-sessions';
+export * from './hooks/use-revoke-session';
+export * from './hooks/use-revoke-sessions';
+export * from './hooks/use-session';
+export * from './hooks/use-update-user';
+export * from './hooks/use-prefetch-session';
+
+// Other Hooks
+export * from './hooks/use-token';
+export * from './hooks/use-auth-mutation';
+export * from './hooks/use-auth-query';
 
 /************************************
  **** LIB
  *************************************/
 export * from './lib/localization/index';
-export * from './lib/create-auth-hooks';
-export * from './lib/create-auth-prefetches';
-export * from './lib/prefetch-session';
 export * from './lib/social-providers';
 export * from './lib/view-paths';
 

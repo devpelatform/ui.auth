@@ -1,7 +1,7 @@
 'use client';
 
 import { Button } from '@pelatform/ui/default';
-import { useAuth } from '../../../hooks/index';
+import { useAuth } from '../../../hooks/main';
 import { useLocalization } from '../../../hooks/private';
 import { cn } from '../../../lib/utils';
 import type { DialogComponentProps } from '../../../types/ui';

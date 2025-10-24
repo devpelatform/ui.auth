@@ -3,7 +3,7 @@
 import { type ReactNode, useEffect, useMemo, useState } from 'react';
 
 import { Tabs, TabsList, TabsTrigger } from '@pelatform/ui/default';
-import { useAuth, useOrganization } from '../../hooks/index';
+import { useAuth, useOrganization } from '../../hooks/main';
 import { useLocalization } from '../../hooks/private';
 import { useAuthenticate } from '../../hooks/use-authenticate';
 import { cn } from '../../lib/utils';

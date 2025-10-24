@@ -5,8 +5,11 @@ import { FingerprintIcon } from 'lucide-react';
 
 import { Button, Card, Form, Spinner } from '@pelatform/ui/default';
 import { useForm } from '@pelatform/ui/re/react-hook-form';
-import { useAuth, useAuthHooks } from '../../../hooks/index';
+import { useAuth } from '../../../hooks/main';
 import { useLocalization } from '../../../hooks/private';
+import { useDeletePasskey } from '../../../hooks/use-delete-passkey';
+import { useListPasskeys } from '../../../hooks/use-list-passkeys';
+import { useSession } from '../../../hooks/use-session';
 import { cn, getLocalizedError } from '../../../lib/utils';
 import type { CardComponentProps } from '../../../types/ui';
 import { CardComponent } from '../../shared/components/card';
@@ -20,7 +23,6 @@ export function PasskeysCard({
   ...props
 }: CardComponentProps) {
   const { authClient, freshAge, toast } = useAuth();
-  const { useSession, useListPasskeys } = useAuthHooks();
   const { data: sessionData, isPending: sessionPending } = useSession();
   const { data: passkeys, isPending: passkeysPending, refetch } = useListPasskeys();
 
@@ -112,7 +114,6 @@ function PasskeyCell({
   passkey: { id: string; createdAt: Date };
 }) {
   const { freshAge, toast } = useAuth();
-  const { useSession, useListPasskeys, useDeletePasskey } = useAuthHooks();
   const { refetch: refetchPasskeys } = useListPasskeys();
   const { data: sessionData } = useSession();
   const { mutate: deletePasskey } = useDeletePasskey();

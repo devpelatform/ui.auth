@@ -13,8 +13,12 @@ import {
   DropdownMenuTrigger,
   Spinner,
 } from '@pelatform/ui/default';
-import { useAuth, useAuthHooks } from '../../../hooks/index';
+import { useAuth } from '../../../hooks/main';
 import { useLocalization } from '../../../hooks/private';
+import { useListDeviceSessions } from '../../../hooks/use-list-device-sessions';
+import { useRevokeDeviceSession } from '../../../hooks/use-revoke-device-session';
+import { useSession } from '../../../hooks/use-session';
+import { useSetActiveSession } from '../../../hooks/use-set-active-session';
 import { cn, getLocalizedError } from '../../../lib/utils';
 import type { Refetch } from '../../../types/generals';
 import type { CardComponentProps } from '../../../types/ui';
@@ -29,7 +33,6 @@ export function MultiAccountCard({
   ...props
 }: CardComponentProps) {
   const { basePath, navigate, viewPaths } = useAuth();
-  const { useSession, useListDeviceSessions } = useAuthHooks();
   const { data: sessionData, isPending: sessionPending } = useSession();
   const {
     data: deviceSessions,
@@ -101,7 +104,6 @@ function MultiAccountCell({
   refetch?: Refetch;
 }) {
   const { basePath, navigate, viewPaths, toast } = useAuth();
-  const { useSession, useRevokeDeviceSession, useSetActiveSession } = useAuthHooks();
   const { data: sessionData } = useSession();
   const { mutate: revokeDeviceSession } = useRevokeDeviceSession();
   const { mutate: setActiveSession } = useSetActiveSession();

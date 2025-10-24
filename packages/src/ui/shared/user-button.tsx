@@ -25,8 +25,11 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from '@pelatform/ui/default';
-import { useAuth, useAuthHooks } from '../../hooks/index';
+import { useAuth } from '../../hooks/main';
 import { useIsHydrated, useLocalization } from '../../hooks/private';
+import { useListDeviceSessions } from '../../hooks/use-list-device-sessions';
+import { useSession } from '../../hooks/use-session';
+import { useSetActiveSession } from '../../hooks/use-set-active-session';
 import { cn, getLocalizedError } from '../../lib/utils';
 import type { AnyAuthClient, User } from '../../types/auth';
 import type { AvatarClassNames, BaseProps, ViewClassNames } from '../../types/ui';
@@ -89,7 +92,6 @@ export function UserButton({
     toast,
     viewPaths,
   } = useAuth();
-  const { useSession, useListDeviceSessions, useSetActiveSession } = useAuthHooks();
   const { mutate: setActiveSession } = useSetActiveSession();
   const { data: sessionData, isPending: sessionPending } = useSession();
   const user = sessionData?.user;

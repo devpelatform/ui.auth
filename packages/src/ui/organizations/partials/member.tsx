@@ -11,8 +11,12 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from '@pelatform/ui/default';
-import { useAuthHooks, useOrganization } from '../../../hooks/index';
+import { useOrganization } from '../../../hooks/main';
 import { useLocalization } from '../../../hooks/private';
+import { useHasPermission } from '../../../hooks/use-has-permission';
+import { useListMembers } from '../../../hooks/use-list-members';
+import { useListOrganizations } from '../../../hooks/use-list-organizations';
+import { useSession } from '../../../hooks/use-session';
 import { cn } from '../../../lib/utils';
 import type { Member, Organization, User } from '../../../types/auth';
 import type { CardComponentProps } from '../../../types/ui';
@@ -31,7 +35,6 @@ export function OrganizationMemberCard({
   ...props
 }: CardComponentProps) {
   const { data: organization, isPending: organizationPending } = useOrganization();
-  const { useListMembers, useHasPermission } = useAuthHooks();
   const { data: listMembers, isPending: membersPending } = useListMembers({
     query: { organizationId: organization?.id },
   });
@@ -117,7 +120,6 @@ export function OrganizationMemberCell({
   hideActions?: boolean;
 }) {
   const { roles } = useOrganization();
-  const { useSession, useListMembers, useListOrganizations, useHasPermission } = useAuthHooks();
   const { data: sessionData } = useSession();
   const { data: listMembers } = useListMembers({
     query: { organizationId: member.organizationId },

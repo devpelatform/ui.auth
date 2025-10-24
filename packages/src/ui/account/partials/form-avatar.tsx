@@ -10,8 +10,10 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from '@pelatform/ui/default';
-import { useAuth, useAuthHooks } from '../../../hooks/index';
+import { useAuth } from '../../../hooks/main';
 import { useLocalization } from '../../../hooks/private';
+import { useSession } from '../../../hooks/use-session';
+import { useUpdateUser } from '../../../hooks/use-update-user';
 import { fileToBase64, resizeAndCropImage } from '../../../lib/images';
 import { getLocalizedError } from '../../../lib/utils';
 import type { CardComponentProps } from '../../../types/ui';
@@ -25,7 +27,6 @@ export function FormAvatarCard({
   ...props
 }: CardComponentProps) {
   const { avatar, toast } = useAuth();
-  const { useSession, useUpdateUser } = useAuthHooks();
   const { data: sessionData, isPending, refetch: refetchSession } = useSession();
   const { mutate: updateUser } = useUpdateUser();
 

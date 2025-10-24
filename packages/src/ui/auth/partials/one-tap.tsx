@@ -2,7 +2,7 @@
 
 import { useEffect, useRef } from 'react';
 
-import { useAuth } from '../../../hooks/index';
+import { useAuth } from '../../../hooks/main';
 import { useLocalization, useOnSuccessTransition } from '../../../hooks/private';
 import { getLocalizedError } from '../../../lib/utils';
 import type { AuthButtonProps } from '../types';

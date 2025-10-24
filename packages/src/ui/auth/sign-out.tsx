@@ -3,7 +3,7 @@
 import { useEffect, useRef } from 'react';
 
 import { Spinner } from '@pelatform/ui/default';
-import { useAuth } from '../../hooks/index';
+import { useAuth } from '../../hooks/main';
 import { useOnSuccessTransition } from '../../hooks/private';
 import type { AuthFormProps } from './types';
 

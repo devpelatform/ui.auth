@@ -3,6 +3,7 @@
 'use client';
 
 import {
+  createContext,
   type RefObject,
   useCallback,
   useContext,
@@ -18,10 +19,14 @@ import type { TurnstileInstance } from '@marsidev/react-turnstile';
 import { useGoogleReCaptcha } from '@wojtekmaj/react-recaptcha-v3';
 import type ReCAPTCHA from 'react-google-recaptcha';
 
+import type { createAuthHooks } from '../lib/create-auth-hooks';
 import type { AuthLocalization } from '../lib/localization/index';
 import { getSearchParam } from '../lib/utils';
-import { AuthUIContext } from './index';
-import { useSession } from './main';
+import { useSession } from './default';
+import { AuthUIContext } from './main';
+
+type AuthHooks = ReturnType<typeof createAuthHooks>;
+export const AuthHooksContext = createContext<AuthHooks | null>(null);
 
 // Default captcha endpoints
 const DEFAULT_CAPTCHA_ENDPOINTS = ['/sign-up/email', '/sign-in/email', '/forget-password'];

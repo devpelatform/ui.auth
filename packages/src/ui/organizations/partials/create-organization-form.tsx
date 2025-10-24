@@ -22,7 +22,7 @@ import {
 } from '@pelatform/ui/default';
 import { useForm } from '@pelatform/ui/re/react-hook-form';
 import * as z from '@pelatform/ui/re/zod';
-import { useAuth, useOrganization } from '../../../hooks/index';
+import { useAuth, useOrganization } from '../../../hooks/main';
 import { useLocalization } from '../../../hooks/private';
 import { fileToBase64, resizeAndCropImage } from '../../../lib/images';
 import { cn, getLocalizedError } from '../../../lib/utils';
@@ -128,6 +128,10 @@ export function CreateOrganizationForm({
 
   async function onSubmit({ name, slug, logo }: z.infer<typeof formSchema>) {
     try {
+      if (!logo && organizationLogo?.defaultDicebear) {
+        logo = `https://api.dicebear.com/9.x/glass/svg?seed=${slug}`;
+      }
+
       const organization = await authClient.organization.create({
         name,
         slug,

@@ -2,8 +2,8 @@
 
 import type { ReactNode } from 'react';
 
-import { useAuthHooks } from '../../hooks/index';
 import { useAuthenticate } from '../../hooks/use-authenticate';
+import { useSession } from '../../hooks/use-session';
 
 /**
  * Conditionally renders content during authentication loading state
@@ -14,7 +14,7 @@ import { useAuthenticate } from '../../hooks/use-authenticate';
  * content while waiting for the authentication check to complete.
  */
 export function AuthLoading({ children }: { children: ReactNode }) {
-  const { isPending } = useAuthHooks().useSession();
+  const { isPending } = useSession();
 
   return isPending ? children : null;
 }
@@ -51,7 +51,7 @@ export function RedirectToSignUp(): ReactNode {
  * content or UI elements that should only be visible to signed-in users.
  */
 export function SignedIn({ children }: { children: ReactNode }) {
-  const { data } = useAuthHooks().useSession();
+  const { data } = useSession();
 
   return data ? children : null;
 }
@@ -64,7 +64,7 @@ export function SignedIn({ children }: { children: ReactNode }) {
  * Useful for displaying sign-in prompts or content exclusive to guests.
  */
 export function SignedOut({ children }: { children: ReactNode }) {
-  const { isPending, data } = useAuthHooks().useSession();
+  const { isPending, data } = useSession();
 
   return !data && !isPending ? children : null;
 }

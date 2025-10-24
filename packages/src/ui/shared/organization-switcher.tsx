@@ -11,8 +11,10 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from '@pelatform/ui/default';
-import { useAuth, useAuthHooks, useOrganization } from '../../hooks/index';
+import { useAuth, useOrganization } from '../../hooks/main';
 import { useLocalization } from '../../hooks/private';
+import { useListOrganizations } from '../../hooks/use-list-organizations';
+import { useSession } from '../../hooks/use-session';
 import { cn, getLocalizedError } from '../../lib/utils';
 import type { Organization, User } from '../../types/auth';
 import type { AvatarClassNames, BaseProps, ViewClassNames } from '../../types/ui';
@@ -80,7 +82,6 @@ export function OrganizationSwitcher({
     setLastVisited,
     viewPaths,
   } = useOrganization();
-  const { useSession, useListOrganizations } = useAuthHooks();
   const { data: sessionData, isPending: sessionPending } = useSession();
   const { data: organizations, isPending: organizationsPending } = useListOrganizations();
 

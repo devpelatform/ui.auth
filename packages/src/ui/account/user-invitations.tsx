@@ -12,8 +12,10 @@ import {
   DropdownMenuTrigger,
   Spinner,
 } from '@pelatform/ui/default';
-import { useAuth, useAuthHooks, useOrganization } from '../../hooks/index';
+import { useAuth, useOrganization } from '../../hooks/main';
 import { useLocalization } from '../../hooks/private';
+import { useListOrganizations } from '../../hooks/use-list-organizations';
+import { useListUserInvitations } from '../../hooks/use-list-user-invitations';
 import { cn, getLocalizedError } from '../../lib/utils';
 import { UserAvatar } from '../shared/avatar';
 import { CardComponent } from '../shared/components/card';
@@ -25,7 +27,6 @@ export function UserInvitationsCard({
   localization: localizationProp,
   ...props
 }: AccountBaseProps) {
-  const { useListUserInvitations, useListOrganizations } = useAuthHooks();
   const { data: invitations, refetch: refetchInvitations } = useListUserInvitations();
   const { refetch: refetchOrganizations } = useListOrganizations();
 

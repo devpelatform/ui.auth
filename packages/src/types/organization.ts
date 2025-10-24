@@ -4,6 +4,10 @@ import type { OrganizationViewPaths } from '../lib/view-paths';
 import type { Organization } from './auth';
 import type { AvatarOptions } from './options';
 
+export interface OrganizationLogoOptions extends AvatarOptions {
+  defaultDicebear?: boolean;
+}
+
 export type OrganizationContextOptions = {
   /**
    * Enable or disable API key support for organizations
@@ -52,7 +56,7 @@ export type OrganizationContextOptions = {
    * Logo configuration
    * @default undefined
    */
-  logo?: AvatarOptions;
+  logo?: OrganizationLogoOptions;
   // /**
   //  * List of organizations
   //  * @default undefined
@@ -101,7 +105,7 @@ export type OrganizationUIProviderProps = {
   basePath?: string;
   customRoles?: Array<{ role: string; label: string }>;
   displayId?: boolean;
-  logo?: boolean | Partial<AvatarOptions>;
+  logo?: boolean | Partial<OrganizationLogoOptions>;
   pathMode?: 'default' | 'slug';
   // personalPath?: string;
   // slug?: string;

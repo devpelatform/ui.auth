@@ -20,8 +20,11 @@ import {
 } from '@pelatform/ui/default';
 import { useForm } from '@pelatform/ui/re/react-hook-form';
 import * as z from '@pelatform/ui/re/zod';
-import { useAuth, useAuthHooks, useOrganization } from '../../../hooks/index';
+import { useAuth, useOrganization } from '../../../hooks/main';
 import { useLocalization } from '../../../hooks/private';
+import { useListInvitations } from '../../../hooks/use-list-invitations';
+import { useListMembers } from '../../../hooks/use-list-members';
+import { useSession } from '../../../hooks/use-session';
 import { cn, getLocalizedError } from '../../../lib/utils';
 import type { Organization } from '../../../types/auth';
 import type { DialogComponentProps } from '../../../types/ui';
@@ -38,7 +41,6 @@ export function InviteMemberDialog({
 }: DialogComponentProps & { organization: Organization | null | undefined }) {
   const { authClient, toast } = useAuth();
   const { roles } = useOrganization();
-  const { useSession, useListMembers, useListInvitations } = useAuthHooks();
   const { data: sessionData } = useSession();
   const { data: listMembersData } = useListMembers({
     query: { organizationId: organization?.id },

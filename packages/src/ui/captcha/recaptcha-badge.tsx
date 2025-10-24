@@ -1,4 +1,4 @@
-import { useAuth } from '../../hooks/index';
+import { useAuth } from '../../hooks/main';
 import { useIsHydrated } from '../../hooks/private';
 import type { AuthLocalization } from '../../lib/localization/index';
 import { cn } from '../../lib/utils';

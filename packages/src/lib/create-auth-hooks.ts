@@ -1,10 +1,11 @@
+/* @private */
+
 import { useContext } from 'react';
 
 import type { AnyUseQueryOptions, QueryKey } from '@pelatform/ui/re/tanstack-query';
 import { useQueryClient } from '@pelatform/ui/re/tanstack-query';
-import { AuthQueryContext } from '../hooks/index';
 import {
-  type BetterFetchRequest,
+  prefetchSession,
   useAccountInfo,
   useActiveOrganization,
   useAuthMutation,
@@ -33,10 +34,10 @@ import {
   useUnlinkAccount,
   useUpdateOrganization,
   useUpdateUser,
-} from '../hooks/main';
-import type { AnyAuthClient, AuthClient } from '../types/auth';
+} from '../hooks/default';
+import { AuthQueryContext } from '../hooks/main';
+import type { AnyAuthClient, AuthClient, BetterFetchRequest } from '../types/auth';
 import type { AuthQueryOptions } from '../types/query';
-import { prefetchSession } from './prefetch-session';
 
 export function createAuthHooks<TAuthClient extends AnyAuthClient>(authClient: TAuthClient) {
   return {
@@ -46,7 +47,8 @@ export function createAuthHooks<TAuthClient extends AnyAuthClient>(authClient: T
     ) => useAccountInfo(authClient as T, params, options),
     useListAccounts: <T extends TAuthClient>(options?: Partial<AnyUseQueryOptions>) =>
       useListAccounts(authClient as T, options),
-    useUnlinkAccount: <T extends TAuthClient>() => useUnlinkAccount(authClient as T),
+    useUnlinkAccount: <T extends TAuthClient>(options?: Partial<AuthQueryOptions>) =>
+      useUnlinkAccount(authClient as T, options),
 
     useCreateApiKey: (options?: Partial<AuthQueryOptions>) =>
       useCreateApiKey(authClient as AuthClient, options),
@@ -104,10 +106,16 @@ export function createAuthHooks<TAuthClient extends AnyAuthClient>(authClient: T
       useSession(authClient as T, options),
     useUpdateUser: <T extends TAuthClient>(options?: Partial<AuthQueryOptions>) =>
       useUpdateUser(authClient as T, options),
+    usePrefetchSession: <T extends TAuthClient>(options?: Partial<AnyUseQueryOptions>) => {
+      const queryClient = useQueryClient();
+      const queryOptions = useContext(AuthQueryContext);
+      return {
+        prefetch: () => prefetchSession(authClient as T, queryClient, queryOptions, options),
+      };
+    },
 
     useToken: <T extends TAuthClient>(options?: Partial<AnyUseQueryOptions>) =>
       useToken(authClient as T, options),
-
     useAuthMutation: useAuthMutation,
     useAuthQuery: <TData>({
       queryKey,
@@ -118,14 +126,5 @@ export function createAuthHooks<TAuthClient extends AnyAuthClient>(authClient: T
       queryFn: BetterFetchRequest<TData>;
       options?: Partial<AnyUseQueryOptions>;
     }) => useAuthQuery({ authClient, queryKey, queryFn, options }),
-
-    usePrefetchSession: <T extends TAuthClient>(options?: Partial<AnyUseQueryOptions>) => {
-      const queryClient = useQueryClient();
-      const queryOptions = useContext(AuthQueryContext);
-
-      return {
-        prefetch: () => prefetchSession(authClient as T, queryClient, queryOptions, options),
-      };
-    },
   };
 }

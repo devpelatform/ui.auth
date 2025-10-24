@@ -1,6 +1,6 @@
 'use client';
 
-import { useOrganization } from '../../hooks/index';
+import { useOrganization } from '../../hooks/main';
 import { useLocalization } from '../../hooks/private';
 import { cn } from '../../lib/utils';
 import { DisplayIdCard } from '../shared/display-id';

@@ -3,8 +3,8 @@
 import { useMemo, useState } from 'react';
 
 import { Button, Card } from '@pelatform/ui/default';
-import { useAuthHooks } from '../../hooks/index';
 import { useLocalization } from '../../hooks/private';
+import { useListApiKeys } from '../../hooks/use-list-api-keys';
 import { cn } from '../../lib/utils';
 import type { ApiKey, Refetch } from '../../types/generals';
 import type { CardComponentProps } from '../../types/ui';
@@ -27,7 +27,7 @@ export function ApiKeysCard({
   isOrganization?: boolean;
   organizationId?: string;
 }) {
-  const { data: apiKeys, isPending: apiKeyPending, refetch } = useAuthHooks().useListApiKeys();
+  const { data: apiKeys, isPending: apiKeyPending, refetch } = useListApiKeys();
 
   const localization = useLocalization(localizationProp);
 

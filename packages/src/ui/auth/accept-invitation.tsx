@@ -4,8 +4,10 @@ import { useEffect, useState } from 'react';
 import { CheckIcon, XIcon } from 'lucide-react';
 
 import { Button, Card, CardContent, CardHeader, Skeleton, Spinner } from '@pelatform/ui/default';
-import { useAuth, useAuthHooks, useOrganization } from '../../hooks/index';
+import { useAuth, useOrganization } from '../../hooks/main';
 import { useLocalization, useOnSuccessTransition } from '../../hooks/private';
+import { useInvitation } from '../../hooks/use-invitation';
+import { useSession } from '../../hooks/use-session';
 import { cn, getLocalizedError, getSearchParam } from '../../lib/utils';
 import type { BaseProps, CardClassNames } from '../../types/ui';
 import { CardHeaderComponent } from '../shared/components/card';
@@ -22,7 +24,7 @@ export function AcceptInvitation({
   redirectTo: redirectToProp,
 }: AcceptInvitationProps & { redirectTo?: string }) {
   const { replace, toast } = useAuth();
-  const { data: sessionData } = useAuthHooks().useSession();
+  const { data: sessionData } = useSession();
 
   const localization = useLocalization(localizationProp);
   const { redirectTo } = useOnSuccessTransition(redirectToProp);
@@ -74,7 +76,6 @@ function AcceptInvitationContent({
 }: AcceptInvitationProps & { invitationId: string; redirectTo: string }) {
   const { authClient, replace, toast } = useAuth();
   const { roles } = useOrganization();
-  const { useInvitation } = useAuthHooks();
   const { data: invitation, isPending } = useInvitation({
     query: {
       id: invitationId,

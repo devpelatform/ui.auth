@@ -14,8 +14,9 @@ import {
 } from '@pelatform/ui/default';
 import { useForm } from '@pelatform/ui/re/react-hook-form';
 import * as z from '@pelatform/ui/re/zod';
-import { useAuth, useAuthHooks } from '../../../hooks/index';
+import { useAuth } from '../../../hooks/main';
 import { useLocalization } from '../../../hooks/private';
+import { useSession } from '../../../hooks/use-session';
 import { cn, getLocalizedError } from '../../../lib/utils';
 import type { CardComponentProps } from '../../../types/ui';
 import { CardComponent } from '../../shared/components/card';
@@ -27,7 +28,7 @@ export function FormEmailCard({
   ...props
 }: CardComponentProps) {
   const { authClient, emailVerification, toast } = useAuth();
-  const { data: sessionData, isPending, refetch: refetchSession } = useAuthHooks().useSession();
+  const { data: sessionData, isPending, refetch: refetchSession } = useSession();
 
   const localization = useLocalization(localizationProp);
 

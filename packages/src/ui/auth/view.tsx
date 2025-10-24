@@ -14,7 +14,7 @@ import {
   CardTitle,
   Separator,
 } from '@pelatform/ui/default';
-import { useAuth } from '../../hooks/index';
+import { useAuth } from '../../hooks/main';
 import { useIsHydrated, useLocalization } from '../../hooks/private';
 import { socialProviders } from '../../lib/social-providers';
 import { cn } from '../../lib/utils';

@@ -3,7 +3,7 @@
 import { FingerprintIcon } from 'lucide-react';
 
 import { Button } from '@pelatform/ui/default';
-import { useAuth } from '../../../hooks/index';
+import { useAuth } from '../../../hooks/main';
 import { useLocalization, useOnSuccessTransition } from '../../../hooks/private';
 import { cn, getLocalizedError } from '../../../lib/utils';
 import type { AuthButtonProps } from '../types';

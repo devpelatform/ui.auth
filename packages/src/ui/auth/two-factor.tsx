@@ -21,8 +21,9 @@ import {
 } from '@pelatform/ui/default';
 import { useForm } from '@pelatform/ui/re/react-hook-form';
 import * as z from '@pelatform/ui/re/zod';
-import { useAuth, useAuthHooks } from '../../hooks/index';
+import { useAuth } from '../../hooks/main';
 import { useIsHydrated, useLocalization, useOnSuccessTransition } from '../../hooks/private';
+import { useSession } from '../../hooks/use-session';
 import { cn, getLocalizedError, getSearchParam } from '../../lib/utils';
 import type { User } from '../../types/auth';
 import { OTPInputGroup } from './partials/otp-input-group';
@@ -38,7 +39,7 @@ export function TwoFactorForm({
   setIsSubmitting,
 }: AuthFormProps) {
   const { authClient, basePath, twoFactor, viewPaths, toast, Link } = useAuth();
-  const { data: sessionData } = useAuthHooks().useSession();
+  const { data: sessionData } = useSession();
   const isTwoFactorEnabled = (sessionData?.user as User)?.twoFactorEnabled;
 
   const localization = useLocalization(localizationProp);

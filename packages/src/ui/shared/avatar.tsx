@@ -2,14 +2,13 @@
 
 import { BuildingIcon, UserRoundIcon } from 'lucide-react';
 
+import { getInitials } from '@pelatform/ui/components';
 import { Avatar, AvatarFallback, AvatarImage, Skeleton } from '@pelatform/ui/default';
-import { useAuth } from '../../hooks/index';
+import { useAuth } from '../../hooks/main';
 import { useLocalization } from '../../hooks/private';
 import { getGravatarUrl } from '../../lib/images';
 import { cn } from '../../lib/utils';
 import type { AvatarProps } from '../../types/ui';
-
-const firstTwoCharacters = (name?: string | null) => name?.slice(0, 2);
 
 function getSize(size: string | null | undefined) {
   return size === 'sm' ? 'size-6' : size === 'lg' ? 'size-10' : 'size-8';
@@ -75,7 +74,7 @@ export function UserAvatar({
         className={cn('text-foreground uppercase', classNames?.fallback)}
         delayMs={src ? 600 : undefined}
       >
-        {firstTwoCharacters(name) || (
+        {getInitials(name, 2) || (
           <UserRoundIcon className={cn('size-[50%]', classNames?.fallbackIcon)} />
         )}
       </AvatarFallback>

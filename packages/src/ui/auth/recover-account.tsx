@@ -16,7 +16,7 @@ import {
 } from '@pelatform/ui/default';
 import { useForm } from '@pelatform/ui/re/react-hook-form';
 import * as z from '@pelatform/ui/re/zod';
-import { useAuth } from '../../hooks/index';
+import { useAuth } from '../../hooks/main';
 import { useLocalization, useOnSuccessTransition } from '../../hooks/private';
 import { cn, getLocalizedError } from '../../lib/utils';
 import type { AuthFormProps } from './types';

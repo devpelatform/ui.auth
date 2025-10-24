@@ -17,8 +17,10 @@ import {
 } from '@pelatform/ui/default';
 import { useForm } from '@pelatform/ui/re/react-hook-form';
 import * as z from '@pelatform/ui/re/zod';
-import { useAuth, useAuthHooks } from '../../../hooks/index';
+import { useAuth } from '../../../hooks/main';
 import { useLocalization } from '../../../hooks/private';
+import { useSession } from '../../../hooks/use-session';
+import { useUpdateUser } from '../../../hooks/use-update-user';
 import { cn, getLocalizedError } from '../../../lib/utils';
 import type { FieldType } from '../../../types/components';
 import type { CardComponentProps } from '../../../types/ui';
@@ -50,7 +52,6 @@ export function FormFieldsCard({
   validate?: (value: string) => boolean | Promise<boolean>;
 }) {
   const { toast } = useAuth();
-  const { useSession, useUpdateUser } = useAuthHooks();
   const { isPending } = useSession();
   const { mutate: updateUser } = useUpdateUser();
 

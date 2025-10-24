@@ -12,8 +12,9 @@ import {
   DropdownMenuTrigger,
   Spinner,
 } from '@pelatform/ui/default';
-import { useAuth, useAuthHooks, useOrganization } from '../../hooks/index';
+import { useAuth, useOrganization } from '../../hooks/main';
 import { useIsHydrated, useLocalization } from '../../hooks/private';
+import { useListOrganizations } from '../../hooks/use-list-organizations';
 import { cn, getLocalizedError } from '../../lib/utils';
 import type { Organization } from '../../types/auth';
 import { CreateOrganizationDialog } from '../organizations/dialogs/create-organization';
@@ -29,8 +30,7 @@ export function OrganizationsCard({
   localization: localizationProp,
   ...props
 }: AccountBaseProps) {
-  const { data: organizations, isPending: organizationsPending } =
-    useAuthHooks().useListOrganizations();
+  const { data: organizations, isPending: organizationsPending } = useListOrganizations();
 
   const localization = useLocalization(localizationProp);
   const isHydrated = useIsHydrated();

@@ -2,8 +2,8 @@
 
 import { useState } from 'react';
 
-import { useAuthHooks } from '../../../hooks/index';
 import { useLocalization } from '../../../hooks/private';
+import { useSession } from '../../../hooks/use-session';
 import type { User } from '../../../types/auth';
 import type { CardComponentProps } from '../../../types/ui';
 import { CardComponent } from '../../shared/components/card';
@@ -15,7 +15,7 @@ export function TwoFactorCard({
   localization: localizationProp,
   ...props
 }: CardComponentProps) {
-  const { data: sessionData, isPending } = useAuthHooks().useSession();
+  const { data: sessionData, isPending } = useSession();
 
   const localization = useLocalization(localizationProp);
 

@@ -1,10 +1,11 @@
 /* @private */
 
+import { cn } from '@pelatform/ui';
 import * as z from '@pelatform/ui/re/zod';
 import type { PasswordValidation } from '../types/generals';
 import type { AuthLocalization } from './localization/index';
 
-export { cn } from '@pelatform/ui';
+export { cn };
 
 export function isValidEmail(email: string) {
   const emailRegex: RegExp = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;

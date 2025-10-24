@@ -12,8 +12,9 @@ import {
   DropdownMenuTrigger,
   Spinner,
 } from '@pelatform/ui/default';
-import { useAuth, useAuthHooks, useOrganization } from '../../../hooks/index';
+import { useAuth, useOrganization } from '../../../hooks/main';
 import { useLocalization } from '../../../hooks/private';
+import { useListInvitations } from '../../../hooks/use-list-invitations';
 import { cn, getLocalizedError } from '../../../lib/utils';
 import type { Organization } from '../../../types/auth';
 import type { Invitation } from '../../../types/generals';
@@ -29,7 +30,7 @@ export function OrganizationInvitationsCard({
   ...props
 }: CardComponentProps) {
   const { data: organization, isPending: organizationPending } = useOrganization();
-  const { data: invitations, isPending: invitationsPending } = useAuthHooks().useListInvitations({
+  const { data: invitations, isPending: invitationsPending } = useListInvitations({
     query: { organizationId: organization?.id },
   });
 
@@ -84,7 +85,7 @@ function OrganizationInvitationsCell({
 }) {
   const { authClient, toast } = useAuth();
   const { roles } = useOrganization();
-  const { refetch: refetchInvitations } = useAuthHooks().useListInvitations({
+  const { refetch: refetchInvitations } = useListInvitations({
     query: { organizationId: organization?.id },
   });
 

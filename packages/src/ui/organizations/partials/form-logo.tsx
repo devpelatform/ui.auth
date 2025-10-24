@@ -10,8 +10,10 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from '@pelatform/ui/default';
-import { useAuth, useAuthHooks, useOrganization } from '../../../hooks/index';
+import { useAuth, useOrganization } from '../../../hooks/main';
 import { useLocalization } from '../../../hooks/private';
+import { useHasPermission } from '../../../hooks/use-has-permission';
+import { useUpdateOrganization } from '../../../hooks/use-update-organization';
 import { fileToBase64, resizeAndCropImage } from '../../../lib/images';
 import { getLocalizedError } from '../../../lib/utils';
 import type { CardComponentProps } from '../../../types/ui';
@@ -31,7 +33,6 @@ export function OrganizationLogoCard({
     logo,
     refetch: refetchOrganization,
   } = useOrganization();
-  const { useUpdateOrganization, useHasPermission } = useAuthHooks();
   const { mutateAsync: updateOrganization } = useUpdateOrganization();
   const { data: hasPermission, isPending: permissionPending } = useHasPermission({
     organizationId: organization?.id,
@@ -98,9 +99,11 @@ export function OrganizationLogoCard({
         await logo?.delete?.(organization?.logo);
       }
 
+      const defaultLogo = `https://api.dicebear.com/9.x/glass/svg?seed=${organization?.slug}`;
+
       await updateOrganization({
         organizationId: organization?.id,
-        data: { logo: '' },
+        data: { logo: logo?.defaultDicebear ? defaultLogo : '' },
       });
 
       await refetchOrganization?.();
@@ -170,16 +173,17 @@ export function OrganizationLogoCard({
             <UploadCloudIcon />
             {localization.UPLOAD_LOGO}
           </DropdownMenuItem>
-          {organization?.logo && (
-            <DropdownMenuItem
-              variant="destructive"
-              onClick={handleDeleteLogo}
-              disabled={loading || !hasPermission?.success}
-            >
-              <Trash2Icon />
-              {localization.DELETE_LOGO}
-            </DropdownMenuItem>
-          )}
+          {organization?.logo &&
+            !(logo?.defaultDicebear && organization?.logo.includes('api.dicebear.com')) && (
+              <DropdownMenuItem
+                variant="destructive"
+                onClick={handleDeleteLogo}
+                disabled={loading || !hasPermission?.success}
+              >
+                <Trash2Icon />
+                {localization.DELETE_LOGO}
+              </DropdownMenuItem>
+            )}
         </DropdownMenuContent>
       </DropdownMenu>
     </CardComponent>

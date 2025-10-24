@@ -3,8 +3,9 @@
 import { useState } from 'react';
 
 import { Button, Card, Spinner } from '@pelatform/ui/default';
-import { useAuth, useAuthHooks } from '../../../hooks/index';
+import { useAuth } from '../../../hooks/main';
 import { useLocalization } from '../../../hooks/private';
+import { useListOrganizations } from '../../../hooks/use-list-organizations';
 import { cn, getLocalizedError } from '../../../lib/utils';
 import type { Organization } from '../../../types/auth';
 import type { DialogComponentProps } from '../../../types/ui';
@@ -21,7 +22,7 @@ export function LeaveOrganizationDialog({
   ...props
 }: DialogComponentProps & { organization: Organization | null | undefined }) {
   const { authClient, toast } = useAuth();
-  const { refetch: refetchOrganizations } = useAuthHooks().useListOrganizations();
+  const { refetch: refetchOrganizations } = useListOrganizations();
 
   const localization = useLocalization(localizationProp);
 

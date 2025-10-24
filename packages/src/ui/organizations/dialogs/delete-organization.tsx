@@ -16,8 +16,9 @@ import {
 } from '@pelatform/ui/default';
 import { useForm } from '@pelatform/ui/re/react-hook-form';
 import * as z from '@pelatform/ui/re/zod';
-import { useAuth, useAuthHooks } from '../../../hooks/index';
+import { useAuth } from '../../../hooks/main';
 import { useLocalization } from '../../../hooks/private';
+import { useListOrganizations } from '../../../hooks/use-list-organizations';
 import { cn, getLocalizedError } from '../../../lib/utils';
 import type { Organization } from '../../../types/auth';
 import type { DialogComponentProps } from '../../../types/ui';
@@ -34,7 +35,7 @@ export function DeleteOrganizationDialog({
   ...props
 }: DialogComponentProps & { organization: Organization | null | undefined }) {
   const { account: accountOptions, authClient, navigate, toast } = useAuth();
-  const { refetch: refetchOrganizations } = useAuthHooks().useListOrganizations();
+  const { refetch: refetchOrganizations } = useListOrganizations();
 
   const localization = useLocalization(localizationProp);
 

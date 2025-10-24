@@ -5,8 +5,11 @@ import { LaptopIcon, SmartphoneIcon } from 'lucide-react';
 import { UAParser } from 'ua-parser-js';
 
 import { Button, Card, Spinner } from '@pelatform/ui/default';
-import { useAuth, useAuthHooks } from '../../../hooks/index';
+import { useAuth } from '../../../hooks/main';
 import { useLocalization } from '../../../hooks/private';
+import { useListSessions } from '../../../hooks/use-list-sessions';
+import { useRevokeSession } from '../../../hooks/use-revoke-session';
+import { useSession } from '../../../hooks/use-session';
 import { cn, getLocalizedError } from '../../../lib/utils';
 import type { Session } from '../../../types/auth';
 import type { Refetch } from '../../../types/generals';
@@ -20,7 +23,7 @@ export function SessionsCard({
   localization: localizationProp,
   ...props
 }: CardComponentProps) {
-  const { data: sessions, isPending, refetch } = useAuthHooks().useListSessions();
+  const { data: sessions, isPending, refetch } = useListSessions();
 
   const localization = useLocalization(localizationProp);
 
@@ -63,7 +66,7 @@ function SessionCell({
   session: Session;
 }) {
   const { basePath, navigate, toast, viewPaths } = useAuth();
-  const { useSession, useRevokeSession } = useAuthHooks();
+
   const { data: sessionData } = useSession();
   const { mutate: revokeSession } = useRevokeSession();
 

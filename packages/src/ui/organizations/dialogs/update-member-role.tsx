@@ -11,8 +11,10 @@ import {
   SelectValue,
   Spinner,
 } from '@pelatform/ui/default';
-import { useAuth, useAuthHooks, useOrganization } from '../../../hooks/index';
+import { useAuth, useOrganization } from '../../../hooks/main';
 import { useLocalization } from '../../../hooks/private';
+import { useListMembers } from '../../../hooks/use-list-members';
+import { useSession } from '../../../hooks/use-session';
 import { cn, getLocalizedError } from '../../../lib/utils';
 import type { Member, User } from '../../../types/auth';
 import type { DialogComponentProps } from '../../../types/ui';
@@ -30,7 +32,6 @@ export function UpdateMemberRoleDialog({
 }: DialogComponentProps & { member: Member & { user?: Partial<User> | null } }) {
   const { authClient, toast } = useAuth();
   const { roles } = useOrganization();
-  const { useSession, useListMembers } = useAuthHooks();
   const { data: sessionData } = useSession();
   const { data: listMembers, refetch: refetchListMembers } = useListMembers({
     query: { organizationId: member.organizationId },

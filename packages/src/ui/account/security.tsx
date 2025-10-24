@@ -1,7 +1,8 @@
 'use client';
 
-import { useAuth, useAuthHooks } from '../../hooks/index';
+import { useAuth } from '../../hooks/main';
 import { useLocalization } from '../../hooks/private';
+import { useListAccounts } from '../../hooks/use-list-accounts';
 import { cn } from '../../lib/utils';
 import type { Account } from '../../types/auth';
 import { DeleteAccountCard } from './partials/delete-account';
@@ -18,11 +19,7 @@ export function SecurityCards({
   localization: localizationProp,
 }: AccountBaseProps) {
   const { credentials, deleteUser, genericOAuth, passkey, social, twoFactor } = useAuth();
-  const {
-    data,
-    isPending: accountsPending,
-    refetch: refetchAccounts,
-  } = useAuthHooks().useListAccounts();
+  const { data, isPending: accountsPending, refetch: refetchAccounts } = useListAccounts();
 
   const localization = useLocalization(localizationProp);
 

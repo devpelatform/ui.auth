@@ -3,8 +3,9 @@
 import { useState } from 'react';
 
 import { Button, Spinner } from '@pelatform/ui/default';
-import { useAuth, useAuthHooks } from '../../../hooks/index';
+import { useAuth } from '../../../hooks/main';
 import { useLocalization } from '../../../hooks/private';
+import { useListMembers } from '../../../hooks/use-list-members';
 import { cn, getLocalizedError } from '../../../lib/utils';
 import type { Member, User } from '../../../types/auth';
 import type { DialogComponentProps } from '../../../types/ui';
@@ -21,7 +22,7 @@ export function RemoveMemberDialog({
   ...props
 }: DialogComponentProps & { member: Member & { user?: Partial<User> | null } }) {
   const { authClient, toast } = useAuth();
-  const { refetch: refetchListMembers } = useAuthHooks().useListMembers({
+  const { refetch: refetchListMembers } = useListMembers({
     query: { organizationId: member.organizationId },
   });
 

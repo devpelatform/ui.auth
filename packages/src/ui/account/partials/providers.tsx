@@ -3,8 +3,11 @@
 import { useState } from 'react';
 
 import { Button, Card, Skeleton, Spinner } from '@pelatform/ui/default';
-import { useAuth, useAuthHooks } from '../../../hooks/index';
+import { useAuth } from '../../../hooks/main';
 import { useLocalization } from '../../../hooks/private';
+import { useAccountInfo } from '../../../hooks/use-account-info';
+import { useListAccounts } from '../../../hooks/use-list-accounts';
+import { useUnlinkAccount } from '../../../hooks/use-unlink-account';
 import { socialProviders } from '../../../lib/social-providers';
 import { cn, getLocalizedError } from '../../../lib/utils';
 import type { Account, SocialProvider } from '../../../types/auth';
@@ -33,7 +36,7 @@ export function ProvidersCard({
   const localization = useLocalization(localizationProp);
 
   if (!skipHook) {
-    const result = useAuthHooks().useListAccounts();
+    const result = useListAccounts();
     accounts = result.data as unknown as Account[];
     isPending = result.isPending;
     refetch = result.refetch;
@@ -107,7 +110,7 @@ function ProviderCell({
   refetch?: Refetch;
 }) {
   const { authClient, basePath, baseURL, viewPaths, toast } = useAuth();
-  const { mutate: unlinkAccount } = useAuthHooks().useUnlinkAccount();
+  const { mutate: unlinkAccount } = useUnlinkAccount();
 
   const [isLoading, setIsLoading] = useState(false);
 
@@ -184,7 +187,6 @@ function ProviderCell({
 }
 
 function AccountInfo({ account }: { account: { accountId: string } }) {
-  const { useAccountInfo } = useAuthHooks();
   const { data: accountInfo, isPending } = useAccountInfo({
     accountId: account.accountId,
   });

@@ -13,8 +13,10 @@ import {
 } from '@pelatform/ui/default';
 import { useForm } from '@pelatform/ui/re/react-hook-form';
 import * as z from '@pelatform/ui/re/zod';
-import { useAuth, useAuthHooks, useOrganization } from '../../../hooks/index';
+import { useAuth, useOrganization } from '../../../hooks/main';
 import { useLocalization } from '../../../hooks/private';
+import { useHasPermission } from '../../../hooks/use-has-permission';
+import { useUpdateOrganization } from '../../../hooks/use-update-organization';
 import { cn, getLocalizedError } from '../../../lib/utils';
 import type { Organization } from '../../../types/auth';
 import type { CardComponentProps } from '../../../types/ui';
@@ -28,7 +30,6 @@ export function OrganizationSlugCard({
 }: CardComponentProps) {
   const { toast } = useAuth();
   const { data: organization, isPending: organizationPending, setLastVisited } = useOrganization();
-  const { useUpdateOrganization, useHasPermission } = useAuthHooks();
   const { mutate: updateOrganization } = useUpdateOrganization();
   const { data: hasPermission, isPending: permissionPending } = useHasPermission({
     organizationId: organization?.id,

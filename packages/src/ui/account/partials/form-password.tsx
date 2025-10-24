@@ -13,8 +13,10 @@ import {
 } from '@pelatform/ui/default';
 import { useForm } from '@pelatform/ui/re/react-hook-form';
 import * as z from '@pelatform/ui/re/zod';
-import { useAuth, useAuthHooks } from '../../../hooks/index';
+import { useAuth } from '../../../hooks/main';
 import { useLocalization } from '../../../hooks/private';
+import { useListAccounts } from '../../../hooks/use-list-accounts';
+import { useSession } from '../../../hooks/use-session';
 import { cn, getLocalizedError, getPasswordSchema } from '../../../lib/utils';
 import type { PasswordValidation } from '../../../types/generals';
 import type { CardComponentProps } from '../../../types/ui';
@@ -37,7 +39,6 @@ export function FormPasswordCard({
   skipHook?: boolean;
 }) {
   const { authClient, basePath, baseURL, credentials, toast, viewPaths } = useAuth();
-  const { useSession, useListAccounts } = useAuthHooks();
   const { data: sessionData } = useSession();
 
   const localization = useLocalization(localizationProp);
