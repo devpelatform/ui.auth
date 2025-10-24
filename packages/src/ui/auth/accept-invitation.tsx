@@ -3,20 +3,12 @@
 import { useEffect, useState } from 'react';
 import { CheckIcon, XIcon } from 'lucide-react';
 
-import {
-  Button,
-  Card,
-  CardContent,
-  CardDescription,
-  CardHeader,
-  CardTitle,
-  Skeleton,
-  Spinner,
-} from '@pelatform/ui/default';
+import { Button, Card, CardContent, CardHeader, Skeleton, Spinner } from '@pelatform/ui/default';
 import { useAuth, useAuthHooks, useOrganization } from '../../hooks/index';
 import { useLocalization, useOnSuccessTransition } from '../../hooks/private';
 import { cn, getLocalizedError, getSearchParam } from '../../lib/utils';
 import type { BaseProps, CardClassNames } from '../../types/ui';
+import { CardHeaderComponent } from '../shared/components/card';
 import { OrgView } from '../shared/view';
 
 interface AcceptInvitationProps extends BaseProps {
@@ -30,8 +22,7 @@ export function AcceptInvitation({
   redirectTo: redirectToProp,
 }: AcceptInvitationProps & { redirectTo?: string }) {
   const { replace, toast } = useAuth();
-  const { useSession } = useAuthHooks();
-  const { data: sessionData } = useSession();
+  const { data: sessionData } = useAuthHooks().useSession();
 
   const localization = useLocalization(localizationProp);
   const { redirectTo } = useOnSuccessTransition(redirectToProp);
@@ -82,13 +73,15 @@ function AcceptInvitationContent({
   redirectTo,
 }: AcceptInvitationProps & { invitationId: string; redirectTo: string }) {
   const { authClient, replace, toast } = useAuth();
-  const { customRoles } = useOrganization();
+  const { roles } = useOrganization();
   const { useInvitation } = useAuthHooks();
   const { data: invitation, isPending } = useInvitation({
     query: {
       id: invitationId,
     },
   });
+
+  const roleLabel = roles.find((r) => r.role === invitation?.role)?.label || invitation?.role;
 
   const [isRejecting, setIsRejecting] = useState(false);
   const [isAccepting, setIsAccepting] = useState(false);
@@ -166,15 +159,6 @@ function AcceptInvitationContent({
     }
   };
 
-  const builtInRoles = [
-    { role: 'owner', label: localization?.OWNER },
-    { role: 'admin', label: localization?.ADMIN },
-    { role: 'member', label: localization?.MEMBER },
-  ];
-
-  const roles = [...builtInRoles, ...(customRoles || [])];
-  const roleLabel = roles.find((r) => r.role === invitation?.role)?.label || invitation?.role;
-
   if (!invitation) {
     return (
       <AcceptInvitationSkeleton
@@ -186,15 +170,12 @@ function AcceptInvitationContent({
   }
 
   return (
-    <Card className={cn('w-full max-w-sm', className, classNames?.base)}>
-      <CardHeader className={cn('justify-items-center text-center', classNames?.header)}>
-        <CardTitle className={cn('text-lg md:text-xl', classNames?.title)}>
-          {localization?.ACCEPT_INVITATION}
-        </CardTitle>
-
-        <CardDescription className={cn('text-xs md:text-sm', classNames?.description)}>
-          {localization?.ACCEPT_INVITATION_DESCRIPTION}
-        </CardDescription>
+    <Card className={cn('w-full max-w-md overflow-hidden', className, classNames?.base)}>
+      <CardHeader className="py-4">
+        <CardHeaderComponent
+          title={localization?.ACCEPT_INVITATION}
+          description={localization?.ACCEPT_INVITATION_DESCRIPTION}
+        />
       </CardHeader>
 
       <CardContent className={cn('flex flex-col gap-6 truncate', classNames?.content)}>
@@ -210,13 +191,13 @@ function AcceptInvitationContent({
             }}
           />
 
-          <p className="ms-auto text-muted-foreground text-sm">{roleLabel}</p>
+          <p className="ms-auto font-semibold text-muted-foreground text-sm">{roleLabel}</p>
         </Card>
 
         <div className="grid grid-cols-2 gap-3">
           <Button
-            variant="outline"
-            className={cn(classNames?.button, classNames?.outlineButton)}
+            variant="destructive"
+            className={cn(classNames?.button, classNames?.destructiveButton)}
             onClick={rejectInvitation}
             disabled={isProcessing}
           >
@@ -240,20 +221,20 @@ function AcceptInvitationContent({
 
 function AcceptInvitationSkeleton({ className, classNames, localization }: AcceptInvitationProps) {
   return (
-    <Card className={cn('w-full max-w-sm', className, classNames?.base)}>
-      <CardHeader className={cn('justify-items-center', classNames?.header)}>
-        <Skeleton
-          className={cn('my-1 h-5 w-full max-w-32 md:h-5.5 md:w-40', classNames?.skeleton)}
-        />
-        <Skeleton
-          className={cn('my-0.5 h-3 w-full max-w-56 md:h-3.5 md:w-64', classNames?.skeleton)}
+    <Card className={cn('w-full max-w-md overflow-hidden', className, classNames?.base)}>
+      <CardHeader className="py-4">
+        <CardHeaderComponent
+          className="w-full"
+          title={localization?.ACCEPT_INVITATION}
+          description={localization?.ACCEPT_INVITATION_DESCRIPTION}
+          isPending
         />
       </CardHeader>
 
       <CardContent className={cn('flex flex-col gap-6 truncate', classNames?.content)}>
         <Card className={cn('flex-row items-center p-4')}>
           <OrgView localization={localization} isPending />
-          <Skeleton className="mt-0.5 ml-auto h-4 w-full max-w-14 shrink-2" />
+          <Skeleton className="ms-auto mt-0.5 h-4 w-full max-w-14 shrink-2" />
         </Card>
         <div className="grid grid-cols-2 gap-3">
           <Skeleton className="h-9 w-full" />

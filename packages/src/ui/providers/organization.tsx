@@ -12,8 +12,27 @@ import type { OrganizationUIProviderProps } from '../../types/organization';
 export const LAST_VISITED_ORG = 'last-visited-org';
 
 export const setLastVisitedOrganization = (slug: string, maxAge: number = 30 * 86400) => {
+  if (typeof document === 'undefined') return;
   // biome-ignore lint/suspicious/noDocumentCookie: disable
   document.cookie = `${LAST_VISITED_ORG}=${slug}; max-age=${maxAge}; path=/`;
+};
+
+export const getLastVisitedOrganization = (): string | null => {
+  if (typeof document === 'undefined') return null;
+  const prefix = `${LAST_VISITED_ORG}=`;
+  const cookies = document.cookie ? document.cookie.split('; ') : [];
+  for (const cookie of cookies) {
+    if (cookie.startsWith(prefix)) {
+      return decodeURIComponent(cookie.substring(prefix.length));
+    }
+  }
+  return null;
+};
+
+export const clearLastVisitedOrganization = (): void => {
+  if (typeof document === 'undefined') return;
+  // biome-ignore lint/suspicious/noDocumentCookie: disable
+  document.cookie = `${LAST_VISITED_ORG}=; max-age=0; path=/`;
 };
 
 export const OrganizationUIProvider = (options: OrganizationUIProviderProps) => {
@@ -22,11 +41,9 @@ export const OrganizationUIProvider = (options: OrganizationUIProviderProps) => 
     apiKey,
     basePath: basePathProp = '/organization',
     customRoles = [],
-    displayId,
+    displayId = true,
     logo: logoProp,
     pathMode = 'default',
-    personalPath,
-    slug,
     viewPaths: viewPathsProp,
   } = options;
 
@@ -55,52 +72,90 @@ export const OrganizationUIProvider = (options: OrganizationUIProviderProps) => 
     return { ...organizationViewPaths, ...viewPathsProp };
   }, [viewPathsProp]);
 
-  let data: Organization | null | undefined;
-  let isLoading: boolean | undefined;
-  let isRefetching: boolean | undefined;
-  let refetch: (() => void) | undefined;
-
-  const { authClient, navigate, redirectTo } = useContext(AuthUIContext);
+  const { authClient, localization, navigate } = useContext(AuthUIContext);
 
   const {
-    data: organizations,
-    isPending: organizationsPending,
-    isRefetching: organizationsRefetching,
-    refetch: refetchListOrganizations,
-  } = useListOrganizations(authClient);
-
-  if (pathMode === 'slug') {
-    data = organizations?.find((organization) => organization.slug === slug);
-    isLoading = organizationsPending;
-    isRefetching = organizationsRefetching;
-  } else {
-    const {
-      data: activeOrganization,
-      isLoading: organizationPending,
-      isRefetching: organizationRefetching,
-      refetch: refetchOrganization,
-    } = useActiveOrganization(authClient);
-
-    data = activeOrganization;
-    isLoading = organizationPending;
-    isRefetching = organizationRefetching;
-    refetch = refetchOrganization;
-  }
+    data: activeOrganization,
+    isLoading: organizationPending,
+    isRefetching: organizationRefetching,
+    refetch: refetchOrganization,
+  } = useActiveOrganization(authClient);
+  const { refetch: refetchListOrganizations } = useListOrganizations(authClient);
 
   const setLastVisited = useCallback(
-    async (org: Partial<Organization>) => {
+    async (options: {
+      organization: Partial<Organization>;
+      refetch?: boolean;
+      refetchList?: boolean;
+      forceRedirect?: boolean;
+      personalPath?: string;
+    }) => {
+      const {
+        organization,
+        refetch = true,
+        refetchList = false,
+        forceRedirect = false,
+        personalPath,
+      } = options;
       try {
-        if (org.slug) {
-          setLastVisitedOrganization(org.slug);
+        const pathname = window.location.pathname;
+        const oldOrgSlug = getLastVisitedOrganization();
+        const baseOrgPath = pathMode === 'slug' ? `${basePath}/${organization?.slug}` : basePath;
+
+        if (personalPath) {
+          clearLastVisitedOrganization();
+        } else if (organization?.slug) {
+          setLastVisitedOrganization(organization.slug);
         }
-        if (org.id) {
-          await authClient.organization.setActive({ organizationId: org.id });
+
+        await authClient.organization.setActive({
+          organizationId: organization?.id || null,
+          fetchOptions: {
+            throw: true,
+          },
+        });
+
+        if (refetch) {
+          await refetchOrganization?.();
+        }
+
+        if (refetchList) {
+          await refetchListOrganizations?.();
+        }
+
+        if (forceRedirect) {
+          navigate(`${baseOrgPath}/${viewPaths?.SETTINGS}`);
+          return;
+        }
+
+        if (personalPath) {
+          navigate(personalPath);
+          return;
+        }
+
+        if (pathMode === 'slug') {
+          if (oldOrgSlug !== '' && pathname.includes(oldOrgSlug as string)) {
+            const marker = `/${oldOrgSlug}`;
+            const idx = pathname.indexOf(marker);
+            const after = idx !== -1 ? pathname.slice(idx + marker.length) : '';
+            navigate(`${baseOrgPath}${after}`);
+          } else {
+            navigate(`${baseOrgPath}/${viewPaths?.SETTINGS}`);
+          }
         }
       } catch (err) {
         console.error('Failed to set last visited org:', err);
       }
     },
-    [authClient],
+    [
+      authClient,
+      basePath,
+      navigate,
+      pathMode,
+      refetchOrganization,
+      refetchListOrganizations,
+      viewPaths?.SETTINGS,
+    ],
   );
 
   const { data: sessionData } = useSession(authClient);
@@ -114,37 +169,43 @@ export const OrganizationUIProvider = (options: OrganizationUIProviderProps) => 
     if (hasRefetchedForSessionRef.current === sessionUserId) return;
     hasRefetchedForSessionRef.current = sessionUserId;
 
-    refetch?.();
+    refetchOrganization?.();
     refetchListOrganizations?.();
-  }, [sessionData?.user.id, refetch, refetchListOrganizations]);
+  }, [sessionData?.user.id, refetchOrganization, refetchListOrganizations]);
 
-  useEffect(() => {
-    if (isLoading || isRefetching) return;
+  const builtInRoles = [
+    { role: 'owner', label: localization.OWNER },
+    { role: 'admin', label: localization.ADMIN },
+    { role: 'member', label: localization.MEMBER },
+  ];
 
-    if (slug && pathMode === 'slug' && !data) {
-      navigate(personalPath || redirectTo);
-    }
-  }, [data, isLoading, isRefetching, slug, pathMode, personalPath, navigate, redirectTo]);
+  const roles = [...builtInRoles, ...(customRoles || [])];
+
+  // const [currentRole, setCurrentRole] = useState<string | undefined>(undefined);
+  // useEffect(() => {
+  //   (async () => {
+  //     const { data } = await authClient.organization.getActiveMemberRole();
+  //     setCurrentRole(data?.role || undefined);
+  //   })();
+  // }, [authClient]);
 
   return (
     <OrganizationContext.Provider
       value={{
         apiKey,
         basePath: basePath === '/' ? '' : basePath,
-        currentPath: pathMode === 'slug' ? `/${slug}` : '',
+        currentPath: pathMode === 'slug' ? `/${activeOrganization?.slug}` : '',
         customRoles,
-        data,
+        data: activeOrganization,
         displayId,
-        isLoading,
-        isPending: isLoading,
-        isRefetching,
+        isLoading: organizationPending,
+        isPending: organizationPending,
+        isRefetching: organizationRefetching,
         logo,
-        organizations,
         pathMode,
-        personalPath,
-        refetch,
+        refetch: refetchOrganization,
+        roles,
         setLastVisited,
-        slug,
         viewPaths,
       }}
     >

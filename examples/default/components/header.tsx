@@ -1,10 +1,13 @@
+'use client';
+
 import Link from 'next/link';
 
 import { Logo } from '@pelatform/ui/components';
 import { Button } from '@pelatform/ui/default';
-import { GitHubIcon, UserButton } from '@pelatform/ui.auth';
+import { GitHubIcon, OrganizationSwitcher, UserButton } from '@pelatform/ui.auth';
 import { LanguageSwitcher } from './language-switcher';
 import { ModeToggle } from './mode-toggle';
+import { OrganizationProvider } from './organization-provider';
 
 export function Header() {
   return (
@@ -25,6 +28,9 @@ export function Header() {
 
         <ModeToggle />
         <LanguageSwitcher />
+        <OrganizationProvider>
+          <OrganizationSwitcher size="icon" align="end" />
+        </OrganizationProvider>
         <UserButton size="icon" align="end" />
       </div>
     </header>

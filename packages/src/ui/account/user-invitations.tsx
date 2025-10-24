@@ -88,18 +88,11 @@ function UserInvitationCell({
   onChanged?: () => unknown;
 }) {
   const { authClient, toast } = useAuth();
-  const { customRoles } = useOrganization();
+  const { roles } = useOrganization();
+
+  const role = roles.find((r) => r.role === invitation.role);
 
   const [isLoading, setIsLoading] = useState(false);
-
-  const builtInRoles = [
-    { role: 'owner', label: localization?.OWNER },
-    { role: 'admin', label: localization?.ADMIN },
-    { role: 'member', label: localization?.MEMBER },
-  ];
-
-  const roles = [...builtInRoles, ...(customRoles || [])];
-  const role = roles.find((r) => r.role === invitation.role);
 
   const handleAccept = async () => {
     setIsLoading(true);
@@ -159,7 +152,7 @@ function UserInvitationCell({
           user={{ email: invitation.email }}
         />
 
-        <div className="grid flex-1 text-left leading-tight">
+        <div className="grid flex-1 text-start leading-tight">
           <span className="truncate font-semibold text-sm">{invitation.email}</span>
           <span className="truncate text-muted-foreground text-xs">
             {localization?.EXPIRES} {invitation.expiresAt.toLocaleDateString()}
@@ -167,7 +160,7 @@ function UserInvitationCell({
         </div>
       </div>
 
-      <span className="truncate text-sm opacity-70">{role?.label}</span>
+      <span className="me-2 truncate font-semibold text-sm opacity-80">{role?.label}</span>
 
       <div className="flex items-center gap-2">
         <DropdownMenu>

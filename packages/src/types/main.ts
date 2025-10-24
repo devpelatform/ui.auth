@@ -58,7 +58,7 @@ export type AuthUIOptions = {
   deleteUser?: DeleteUserOptions;
   /**
    * Display User ID
-   * @default false
+   * @default true
    */
   displayId?: boolean;
   /**

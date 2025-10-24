@@ -97,7 +97,10 @@ export * from './ui/auth/view';
  *************************************/
 export * from './ui/organizations/dialogs/create-organization';
 export * from './ui/organizations/dialogs/delete-organization';
+export * from './ui/organizations/dialogs/invite-member';
 export * from './ui/organizations/dialogs/leave-organization';
+export * from './ui/organizations/dialogs/remove-member';
+export * from './ui/organizations/dialogs/update-member-role';
 
 export * from './ui/organizations/partials/create-organization-form';
 export * from './ui/organizations/partials/delete-organization';
@@ -105,6 +108,7 @@ export * from './ui/organizations/partials/form-logo';
 export * from './ui/organizations/partials/form-name';
 export * from './ui/organizations/partials/form-slug';
 export * from './ui/organizations/partials/invitations';
+export * from './ui/organizations/partials/member';
 
 export * from './ui/organizations/members';
 export * from './ui/organizations/settings';
@@ -127,6 +131,7 @@ export * from './ui/shared/components/skeleton';
 export * from './ui/shared/avatar';
 export * from './ui/shared/display-id';
 export * from './ui/shared/helpers';
+export * from './ui/shared/organization-switcher';
 export * from './ui/shared/password-input';
 export * from './ui/shared/provider-icons';
 export * from './ui/shared/user-button';

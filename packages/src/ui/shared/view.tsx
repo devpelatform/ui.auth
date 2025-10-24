@@ -254,10 +254,10 @@ export function ApiKeyView({
 
   // Format expiration date or show "Never expires"
   const formatExpiration = () => {
-    if (!apiKey.expiresAt) return localization?.NEVER_EXPIRES;
+    if (!apiKey.expiresAt) return localization.NEVER_EXPIRES;
 
     const expiresDate = new Date(apiKey.expiresAt);
-    return `${localization?.EXPIRES} ${expiresDate.toLocaleDateString(lang ?? 'en', {
+    return `${localization.EXPIRES} ${expiresDate.toLocaleDateString(lang ?? 'en', {
       month: 'short',
       day: 'numeric',
       year: 'numeric',

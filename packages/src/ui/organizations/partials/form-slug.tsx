@@ -26,16 +26,8 @@ export function OrganizationSlugCard({
   localization: localizationProp,
   ...props
 }: CardComponentProps) {
-  const { toast, replace } = useAuth();
-  const {
-    basePath,
-    data: organization,
-    isPending: organizationPending,
-    pathMode,
-    refetch: refetchOrganization,
-    setLastVisited,
-    viewPaths,
-  } = useOrganization();
+  const { toast } = useAuth();
+  const { data: organization, isPending: organizationPending, setLastVisited } = useOrganization();
   const { useUpdateOrganization, useHasPermission } = useAuthHooks();
   const { mutate: updateOrganization } = useUpdateOrganization();
   const { data: hasPermission, isPending: permissionPending } = useHasPermission({
@@ -83,18 +75,12 @@ export function OrganizationSlugCard({
         data: { slug },
       });
 
-      await refetchOrganization?.();
-
       toast({
         message: `${localization.ORGANIZATION_SLUG} ${localization.UPDATED_SUCCESSFULLY}`,
         icon: 'success',
       });
 
-      // If using slug-based paths, redirect to the new slug's settings route
-      if (pathMode === 'slug') {
-        setLastVisited(organization as Organization);
-        replace(`${basePath}/${slug}/${viewPaths.SETTINGS}`);
-      }
+      setLastVisited({ organization: organization as Organization });
     } catch (error) {
       toast({
         message: getLocalizedError({ error, localization }),

@@ -22,7 +22,7 @@ import {
 } from '@pelatform/ui/default';
 import { useForm } from '@pelatform/ui/re/react-hook-form';
 import * as z from '@pelatform/ui/re/zod';
-import { useAuth, useAuthHooks, useOrganization } from '../../../hooks/index';
+import { useAuth, useOrganization } from '../../../hooks/index';
 import { useLocalization } from '../../../hooks/private';
 import { fileToBase64, resizeAndCropImage } from '../../../lib/images';
 import { cn, getLocalizedError } from '../../../lib/utils';
@@ -39,9 +39,8 @@ export function CreateOrganizationForm({
   dialog?: boolean;
   onOpenChange?: ((open: boolean) => void) | undefined;
 }) {
-  const { authClient, navigate, toast } = useAuth();
-  const { basePath, logo: organizationLogo, pathMode, setLastVisited } = useOrganization();
-  const { refetch: refetchOrganizations } = useAuthHooks().useListOrganizations();
+  const { authClient, toast } = useAuth();
+  const { logo: organizationLogo, setLastVisited } = useOrganization();
 
   const localization = useLocalization(localizationProp);
 
@@ -136,17 +135,7 @@ export function CreateOrganizationForm({
         fetchOptions: { throw: true },
       });
 
-      if (pathMode === 'slug') {
-        setLastVisited(organization);
-        navigate(`${basePath}/${organization.slug}`);
-        return;
-      }
-
-      await authClient.organization.setActive({
-        organizationId: organization.id,
-      });
-
-      await refetchOrganizations?.();
+      setLastVisited({ organization, refetchList: true });
 
       onOpenChange?.(false);
       form.reset();

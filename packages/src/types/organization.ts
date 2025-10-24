@@ -17,7 +17,11 @@ export type OrganizationContextOptions = {
   /**
    * Current organization path
    */
-  currentPath?: string;
+  currentPath: string;
+  // /**
+  //  * Current organization role
+  //  */
+  // currentRole?: string | null;
   /**
    * Custom roles to add to the built-in roles (owner, admin, member)
    * @default []
@@ -29,9 +33,9 @@ export type OrganizationContextOptions = {
   data: Organization | null | undefined;
   /**
    * Display Organization ID
-   * @default false
+   * @default true
    */
-  displayId?: boolean;
+  displayId: boolean;
   /**
    * Whether the organization is loading
    */
@@ -49,32 +53,42 @@ export type OrganizationContextOptions = {
    * @default undefined
    */
   logo?: AvatarOptions;
-  /**
-   * List of organizations
-   * @default undefined
-   */
-  organizations?: Organization[] | null | undefined;
+  // /**
+  //  * List of organizations
+  //  * @default undefined
+  //  */
+  // organizations?: Organization[] | null | undefined;
   /**
    * Organization path mode
    * @default "default"
    */
-  pathMode?: 'default' | 'slug';
-  /**
-   * The path to redirect to when Personal Account is selected
-   */
-  personalPath?: string;
+  pathMode: 'default' | 'slug';
+  // /**
+  //  * The path to redirect to when Personal Account is selected
+  //  */
+  // personalPath?: string;
   /**
    * Refetch the organization
    */
   refetch: (() => void) | undefined;
   /**
+   * List of roles
+   */
+  roles: Array<{ role: string; label: string }>;
+  /**
    * Set the last visited organization
    */
-  setLastVisited: (organization: Partial<Organization>) => Promise<void> | void;
-  /**
-   * The current organization slug
-   */
-  slug?: string;
+  setLastVisited: (options: {
+    organization: Partial<Organization>;
+    refetch?: boolean;
+    refetchList?: boolean;
+    forceRedirect?: boolean;
+    personalPath?: string;
+  }) => Promise<void> | void;
+  // /**
+  //  * The current organization slug
+  //  */
+  // slug?: string;
   /**
    * Customize organization view paths
    */
@@ -89,7 +103,7 @@ export type OrganizationUIProviderProps = {
   displayId?: boolean;
   logo?: boolean | Partial<AvatarOptions>;
   pathMode?: 'default' | 'slug';
-  personalPath?: string;
-  slug?: string;
+  // personalPath?: string;
+  // slug?: string;
   viewPaths?: Partial<OrganizationViewPaths>;
 };

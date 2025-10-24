@@ -36,6 +36,55 @@ export function OrganizationsCard({
   const isHydrated = useIsHydrated();
   const isPending = !isHydrated || organizationsPending || !organizations;
 
+  // const { authClient } = useAuth();
+  // const [ownerStatusByOrg, setOwnerStatusByOrg] = useState<Record<string, 'owner' | 'non-owner'>>({});
+
+  // useEffect(() => {
+  //   let cancelled = false;
+
+  //   async function loadRoles() {
+  //     if (!organizations || organizations.length === 0) {
+  //       setOwnerStatusByOrg({});
+  //       return;
+  //     }
+
+  //     try {
+  //       const entries = await Promise.all(
+  //         organizations.map(async (org) => {
+  //           const { data } = await authClient.organization.getActiveMemberRole({
+  //             query: {
+  //               organizationId: org?.id,
+  //             },
+  //           });
+  //           const status = data?.role === 'owner' ? 'owner' : 'non-owner';
+  //           console.log('[OrgRole] id:', org.id, 'role:', data?.role, 'status:', status);
+  //           return [org.id, status] as const;
+  //         }),
+  //       );
+
+  //       if (cancelled) return;
+  //       const map: Record<string, 'owner' | 'non-owner'> = {};
+  //       for (const [id, status] of entries) {
+  //         map[id] = status;
+  //       }
+  //       console.log('[OrgRole] map:', map);
+  //       setOwnerStatusByOrg(map);
+  //     } catch (e) {
+  //       console.log('[OrgRole] error memuat role per organisasi:', e);
+  //       // ignore errors for now; map remains empty
+  //     }
+  //   }
+
+  //   loadRoles();
+  //   return () => {
+  //     cancelled = true;
+  //   };
+  // }, [authClient, organizations]);
+
+  // useEffect(() => {
+  //   console.log('[OrgRole] ownerStatusByOrg updated:', ownerStatusByOrg);
+  // }, [ownerStatusByOrg]);
+
   const [createDialogOpen, setCreateDialogOpen] = useState(false);
 
   return (
@@ -87,9 +136,9 @@ function OrganizationCell({
   classNames,
   localization,
   organization,
-}: AccountBaseProps & { organization: Organization }) {
-  const { authClient, navigate, toast } = useAuth();
-  const { basePath, pathMode, setLastVisited, viewPaths } = useOrganization();
+}: AccountBaseProps & { organization: Organization | null | undefined }) {
+  const { toast } = useAuth();
+  const { setLastVisited } = useOrganization();
 
   const [isLeaveDialogOpen, setIsLeaveDialogOpen] = useState(false);
   const [isManagingOrganization, setIsManagingOrganization] = useState(false);
@@ -97,21 +146,12 @@ function OrganizationCell({
   const handleManageOrganization = useCallback(async () => {
     setIsManagingOrganization(true);
 
-    if (pathMode === 'slug') {
-      setLastVisited(organization);
-      navigate(`${basePath}/${organization.slug}/${viewPaths.SETTINGS}`);
-      return;
-    }
-
     try {
-      await authClient.organization.setActive({
-        organizationId: organization.id,
-        fetchOptions: {
-          throw: true,
-        },
+      setLastVisited({
+        organization: organization as Organization,
+        refetch: false,
+        forceRedirect: true,
       });
-
-      navigate(`${basePath}/${viewPaths?.SETTINGS}`);
     } catch (error) {
       toast({
         message: getLocalizedError({ error, localization }),
@@ -119,17 +159,7 @@ function OrganizationCell({
 
       setIsManagingOrganization(false);
     }
-  }, [
-    authClient,
-    organization,
-    basePath,
-    viewPaths?.SETTINGS,
-    pathMode,
-    navigate,
-    toast,
-    localization,
-    setLastVisited,
-  ]);
+  }, [organization, toast, localization, setLastVisited]);
 
   return (
     <>
@@ -168,7 +198,7 @@ function OrganizationCell({
         localization={localization}
         open={isLeaveDialogOpen}
         onOpenChange={setIsLeaveDialogOpen}
-        organization={organization}
+        organization={organization as Organization}
       />
     </>
   );

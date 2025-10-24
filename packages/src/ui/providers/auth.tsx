@@ -53,7 +53,7 @@ export const AuthUIProvider = (options: AuthUIProviderProps) => {
     baseURL: baseURLProp = '',
     changeEmail = true,
     deleteUser: deleteUserProp,
-    displayId,
+    displayId = true,
     emailVerification,
     freshAge = 60 * 60 * 24,
     gravatar,

@@ -1,6 +1,6 @@
 {
   "name": "@pelatform/ui.auth",
-  "version": "0.3.0",
+  "version": "0.4.0",
   "description": "Plug & play UI components for Better Auth.",
   "author": "Pelatform Dev",
   "license": "MIT",
@@ -63,7 +63,7 @@
   ],
   "dependencies": {
     "@better-fetch/fetch": "^1.1.18",
-    "@hcaptcha/react-hcaptcha": "^1.13.1",
+    "@hcaptcha/react-hcaptcha": "^1.14.0",
     "@noble/hashes": "^2.0.1",
     "@react-email/components": "^0.5.7",
     "@wojtekmaj/react-recaptcha-v3": "^0.1.4",

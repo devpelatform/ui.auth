@@ -32,7 +32,7 @@ export function DeleteOrganizationDialog({
   description,
   organization,
   ...props
-}: DialogComponentProps & { organization: Organization }) {
+}: DialogComponentProps & { organization: Organization | null | undefined }) {
   const { account: accountOptions, authClient, navigate, toast } = useAuth();
   const { refetch: refetchOrganizations } = useAuthHooks().useListOrganizations();
 
@@ -42,7 +42,7 @@ export function DeleteOrganizationDialog({
     slug: z
       .string()
       .min(1, { error: localization.SLUG_REQUIRED! })
-      .refine((val) => val === organization.slug, {
+      .refine((val) => val === organization?.slug, {
         error: localization.SLUG_DOES_NOT_MATCH!,
       }),
   });
@@ -60,7 +60,7 @@ export function DeleteOrganizationDialog({
   const deleteOrganization = async () => {
     try {
       await authClient.organization.delete({
-        organizationId: organization.id,
+        organizationId: organization?.id as string,
         fetchOptions: { throw: true },
       });
 
@@ -86,8 +86,8 @@ export function DeleteOrganizationDialog({
       classNames={classNames}
       localization={localization}
       onOpenChange={onOpenChange}
-      title={title || localization?.DELETE_ORGANIZATION}
-      description={description || localization?.DELETE_ORGANIZATION_DESCRIPTION}
+      title={title || localization.DELETE_ORGANIZATION}
+      description={description || localization.DELETE_ORGANIZATION_DESCRIPTION}
       disableFooter={true}
       {...props}
     >
@@ -103,13 +103,13 @@ export function DeleteOrganizationDialog({
             render={({ field }) => (
               <FormItem>
                 <FormLabel className={cn('font-normal', classNames?.label)}>
-                  {localization?.DELETE_ORGANIZATION_INSTRUCTIONS}{' '}
-                  <span className="font-bold">{organization.slug}</span>
+                  {localization.DELETE_ORGANIZATION_INSTRUCTIONS}{' '}
+                  <span className="font-bold">{organization?.slug}</span>
                 </FormLabel>
 
                 <FormControl>
                   <Input
-                    placeholder={organization.slug}
+                    placeholder={organization?.slug}
                     className={classNames?.input}
                     autoComplete="off"
                     {...field}
@@ -139,7 +139,7 @@ export function DeleteOrganizationDialog({
                 disabled={disableSubmit}
               >
                 {isSubmitting && <Spinner />}
-                {localization?.DELETE_ORGANIZATION}
+                {localization.DELETE_ORGANIZATION}
               </Button>
             }
           />

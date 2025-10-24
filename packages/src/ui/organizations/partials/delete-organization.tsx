@@ -33,9 +33,9 @@ export function DeleteOrganizationCard({
       <CardComponent
         className={className}
         classNames={classNames}
-        title={localization?.DELETE_ORGANIZATION}
-        description={localization?.DELETE_ORGANIZATION_DESCRIPTION}
-        actionLabel={localization?.DELETE_ORGANIZATION}
+        title={localization.DELETE_ORGANIZATION}
+        description={localization.DELETE_ORGANIZATION_DESCRIPTION}
+        actionLabel={localization.DELETE_ORGANIZATION}
         isDestructive={true}
         isPending={true}
         {...props}
@@ -50,9 +50,9 @@ export function DeleteOrganizationCard({
       <CardComponent
         className={className}
         classNames={classNames}
-        title={localization?.DELETE_ORGANIZATION}
-        description={localization?.DELETE_ORGANIZATION_DESCRIPTION}
-        actionLabel={localization?.DELETE_ORGANIZATION}
+        title={localization.DELETE_ORGANIZATION}
+        description={localization.DELETE_ORGANIZATION_DESCRIPTION}
+        actionLabel={localization.DELETE_ORGANIZATION}
         action={() => setShowDialog(true)}
         isDestructive={true}
         isPending={isPending}

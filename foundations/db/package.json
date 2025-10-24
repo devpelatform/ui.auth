@@ -17,7 +17,7 @@
     "reset": "dotenv -e ../../.env.local -- tsx ./src/reset.ts"
   },
   "dependencies": {
-    "drizzle-orm": "^0.44.6",
+    "drizzle-orm": "^0.44.7",
     "drizzle-zod": "^0.8.3",
     "postgres": "^3.4.7",
     "zod": "^4.1.12"

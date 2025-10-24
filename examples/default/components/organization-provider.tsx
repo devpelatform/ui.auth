@@ -9,8 +9,11 @@ export function OrganizationProvider({ children }: { children: ReactNode }) {
     <OrganizationUIProvider
       apiKey={true}
       // basePath='/organization'
-      // customRoles
-      displayId
+      customRoles={[
+        { role: 'developer', label: 'Developer' },
+        { role: 'viewer', label: 'Viewer' },
+      ]}
+      // displayId
       logo={{
         upload: async (file: File) => {
           const formData = new FormData();
@@ -28,8 +31,6 @@ export function OrganizationProvider({ children }: { children: ReactNode }) {
         },
       }}
       pathMode="default"
-      // personalPath
-      // slug='test'
       // viewPaths
     >
       {children}

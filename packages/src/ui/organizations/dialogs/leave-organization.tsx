@@ -19,7 +19,7 @@ export function LeaveOrganizationDialog({
   description,
   organization,
   ...props
-}: DialogComponentProps & { organization: Organization }) {
+}: DialogComponentProps & { organization: Organization | null | undefined }) {
   const { authClient, toast } = useAuth();
   const { refetch: refetchOrganizations } = useAuthHooks().useListOrganizations();
 
@@ -32,7 +32,7 @@ export function LeaveOrganizationDialog({
 
     try {
       await authClient.organization.leave({
-        organizationId: organization.id,
+        organizationId: organization?.id as string,
         fetchOptions: { throw: true },
       });
 

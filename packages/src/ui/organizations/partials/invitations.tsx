@@ -83,21 +83,14 @@ function OrganizationInvitationsCell({
   organization: Organization | null | undefined;
 }) {
   const { authClient, toast } = useAuth();
-  const { customRoles } = useOrganization();
+  const { roles } = useOrganization();
   const { refetch: refetchInvitations } = useAuthHooks().useListInvitations({
     query: { organizationId: organization?.id },
   });
 
-  const [isLoading, setIsLoading] = useState(false);
-
-  const builtInRoles = [
-    { role: 'owner', label: localization?.OWNER },
-    { role: 'admin', label: localization?.ADMIN },
-    { role: 'member', label: localization?.MEMBER },
-  ];
-
-  const roles = [...builtInRoles, ...(customRoles || [])];
   const role = roles.find((r) => r.role === invitation.role);
+
+  const [isLoading, setIsLoading] = useState(false);
 
   const handleCancelInvitation = async () => {
     setIsLoading(true);
@@ -137,7 +130,7 @@ function OrganizationInvitationsCell({
         </div>
       </div>
 
-      <span className="truncate text-sm opacity-70">{role?.label}</span>
+      <span className="me-2 font-semibold text-xs opacity-80">{role?.label}</span>
 
       <DropdownMenu>
         <DropdownMenuTrigger asChild>

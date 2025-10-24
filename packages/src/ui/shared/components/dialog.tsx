@@ -59,6 +59,7 @@ export function DialogComponent({
 }
 
 export function DialogFooterComponent({
+  className,
   classNames,
   localization: localizationProp,
   onOpenChange,
@@ -69,7 +70,7 @@ export function DialogFooterComponent({
   const localization = useLocalization(localizationProp);
 
   return (
-    <DialogFooter className={classNames?.dialog?.footer}>
+    <DialogFooter className={cn(className, classNames?.dialog?.footer)}>
       {cancelButton && (
         <Button
           type="button"

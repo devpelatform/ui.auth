@@ -138,13 +138,16 @@ export function UserButton({
 
   return (
     <DropdownMenu>
-      <DropdownMenuTrigger
-        asChild
-        className={cn(size === 'icon' && 'rounded-full', classNames?.trigger?.base)}
-      >
+      <DropdownMenuTrigger asChild>
         {trigger ||
           (size === 'icon' ? (
-            <Button variant="ghost" size="icon" className="size-fit rounded-full">
+            <Button
+              type="button"
+              variant="ghost"
+              size="icon"
+              className={cn('size-fit rounded-full', classNames?.trigger?.base)}
+              {...props}
+            >
               <UserAvatar
                 key={user?.image}
                 className={cn(className, classNames?.base)}
