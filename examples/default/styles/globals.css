@@ -1,9 +1,9 @@
-@import "tailwindcss";
+@import 'tailwindcss';
 
-@import "@pelatform/ui/css";
-@import "@pelatform/ui.auth/css";
+@import '@pelatform/ui/css';
+@import '@pelatform/ui.auth/css';
 
-@import "tailwindcss-safe-area";
+@import 'tailwindcss-safe-area';
 
 :root {
   --primary: oklch(0.782 0.106 167.126);
