@@ -28,6 +28,7 @@ import {
 import { cn, getLocalizedError, getPasswordSchema, isValidEmail } from '../../lib/utils';
 import { Captcha } from '../captcha/captcha';
 import { PasswordInput } from '../shared/password-input';
+import { LastUsedButton } from './partials/last-used-button';
 import type { AuthFormProps } from './types';
 
 export function SignInForm({
@@ -228,9 +229,15 @@ export function SignInForm({
 
         <Button
           type="submit"
-          className={cn('w-full', classNames?.button, classNames?.primaryButton)}
+          className={cn('relative w-full', classNames?.button, classNames?.primaryButton)}
           disabled={isSubmitting}
         >
+          <LastUsedButton
+            className={classNames?.lastLoginMethod}
+            localization={localization}
+            lastUsedName="email"
+            variant="secondary"
+          />
           {isSubmitting ? <Spinner /> : localization.SIGN_IN_ACTION}
         </Button>
       </form>

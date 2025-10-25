@@ -100,6 +100,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       }}
       emailOTP
       // genericOAuth
+      lastLoginMethod
       magicLink
       multiSession
       oneTap

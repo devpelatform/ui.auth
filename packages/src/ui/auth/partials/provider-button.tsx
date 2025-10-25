@@ -9,20 +9,20 @@ import { cn, getLocalizedError } from '../../../lib/utils';
 import type { SocialProvider } from '../../../types/auth';
 import type { Provider } from '../../../types/components';
 import type { AuthButtonProps } from '../types';
+import { LastUsedButton } from './last-used-button';
 
 export function ProviderButton({
+  className,
   classNames,
   isSubmitting,
   localization: localizationProp,
   redirectTo: redirectToProp,
   setIsSubmitting,
-  className,
   callbackURL: callbackURLProp,
   other,
   provider,
   socialLayout,
 }: AuthButtonProps & {
-  className?: string;
   callbackURL?: string;
   other?: boolean;
   provider: Provider;
@@ -96,6 +96,7 @@ export function ProviderButton({
       type="button"
       variant="outline"
       className={cn(
+        'relative',
         socialLayout === 'vertical' ? 'w-full' : 'grow',
         className,
         classNames?.form?.button,
@@ -105,6 +106,11 @@ export function ProviderButton({
       onClick={doSignInSocial}
       disabled={isSubmitting}
     >
+      <LastUsedButton
+        className={classNames?.form?.lastLoginMethod}
+        localization={localization}
+        lastUsedName={provider.provider}
+      />
       {provider.icon && <provider.icon className={classNames?.form?.icon} />}
       {socialLayout === 'grid' && provider.name}
       {socialLayout === 'vertical' && `${localization.SIGN_IN_WITH} ${provider.name}`}

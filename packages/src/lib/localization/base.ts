@@ -23,6 +23,7 @@ export const GENERAL_STRINGS = {
   REQUEST_FAILED: 'Request failed',
   COPIED_TO_CLIPBOARD: 'Copied to clipboard',
   COPY_TO_CLIPBOARD: 'Copy to clipboard',
+  LAST_USED: 'Last used',
 };
 
 // Account related strings

@@ -165,6 +165,11 @@ export type AuthUIOptions = {
    */
   genericOAuth?: GenericOAuthOptions;
   /**
+   * Enable or disable Last Login Method support
+   * @default false
+   */
+  lastLoginMethod?: boolean;
+  /**
    * Enable or disable Magic Link support
    * @default false
    */

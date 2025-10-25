@@ -7,8 +7,10 @@ import { useAuth } from '../../../hooks/main';
 import { useLocalization } from '../../../hooks/private';
 import { cn } from '../../../lib/utils';
 import type { AuthButtonProps } from '../types';
+import { LastUsedButton } from './last-used-button';
 
 export function MagicLinkButton({
+  className,
   classNames,
   isSubmitting,
   localization: localizationProp,
@@ -22,7 +24,12 @@ export function MagicLinkButton({
     <Button
       type="button"
       variant="secondary"
-      className={cn('w-full', classNames?.form?.button, classNames?.form?.secondaryButton)}
+      className={cn(
+        'relative w-full',
+        className,
+        classNames?.form?.button,
+        classNames?.form?.secondaryButton,
+      )}
       onClick={() =>
         navigate(
           `${basePath}/${view === 'MAGIC_LINK' || !credentials ? viewPaths.SIGN_IN : viewPaths.MAGIC_LINK}${window.location.search}`,
@@ -30,6 +37,11 @@ export function MagicLinkButton({
       }
       disabled={isSubmitting}
     >
+      <LastUsedButton
+        className={classNames?.form?.lastLoginMethod}
+        localization={localization}
+        lastUsedName="magic-link"
+      />
       {view === 'MAGIC_LINK' ? (
         <LockIcon className={classNames?.form?.icon} />
       ) : (

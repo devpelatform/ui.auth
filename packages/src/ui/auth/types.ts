@@ -34,6 +34,7 @@ export type AuthFormClassNames = {
   secondaryButton?: string;
   outlineButton?: string;
   providerButton?: string;
+  lastLoginMethod?: string;
 };
 
 export interface AuthViewProps extends BaseProps {

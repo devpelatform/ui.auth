@@ -7,8 +7,10 @@ import { useAuth } from '../../../hooks/main';
 import { useLocalization, useOnSuccessTransition } from '../../../hooks/private';
 import { cn, getLocalizedError } from '../../../lib/utils';
 import type { AuthButtonProps } from '../types';
+import { LastUsedButton } from './last-used-button';
 
 export function PasskeyButton({
+  className,
   classNames,
   isSubmitting,
   localization: localizationProp,
@@ -55,11 +57,21 @@ export function PasskeyButton({
       variant="secondary"
       name="passkey"
       value="true"
-      className={cn('w-full', classNames?.form?.button, classNames?.form?.secondaryButton)}
+      className={cn(
+        'relative w-full',
+        className,
+        classNames?.form?.button,
+        classNames?.form?.secondaryButton,
+      )}
       onClick={signInPassKey}
       disabled={isSubmitting}
       formNoValidate
     >
+      <LastUsedButton
+        className={classNames?.form?.lastLoginMethod}
+        localization={localization}
+        lastUsedName="passkey"
+      />
       <FingerprintIcon />
       {localization.SIGN_IN_WITH} {localization.PASSKEY}
     </Button>
