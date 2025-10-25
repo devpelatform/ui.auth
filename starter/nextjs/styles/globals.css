@@ -1,0 +1,20 @@
+@import 'tailwindcss';
+@import '@pelatform/ui/css';
+@import '@pelatform/ui.auth/css';
+
+:root {
+  --primary: oklch(0.782 0.106 167.126);
+  --warning: hsl(38 92% 50%);
+  --warning-foreground: hsl(48 96% 89%);
+}
+
+.dark {
+  --primary: oklch(0.782 0.106 167.126);
+  --warning: hsl(48 96% 89%);
+  --warning-foreground: hsl(38 92% 50%);
+}
+
+@theme inline {
+  --color-warning: var(--warning);
+  --color-warning-foreground: var(--warning-foreground);
+}

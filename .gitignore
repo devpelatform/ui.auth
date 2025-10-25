@@ -131,6 +131,7 @@ dist
 .DS_Store
 .vercel
 next-env.d.ts
+.dev
 
 # generated content
 .contentlayer
