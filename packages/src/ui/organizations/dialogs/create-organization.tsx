@@ -11,8 +11,11 @@ export function CreateOrganizationDialog({
   onOpenChange,
   title,
   description,
+  disableRedirect = false,
   ...props
-}: DialogComponentProps) {
+}: DialogComponentProps & {
+  disableRedirect?: boolean;
+}) {
   const localization = useLocalization(localizationProp);
 
   return (
@@ -30,6 +33,7 @@ export function CreateOrganizationDialog({
         localization={localization}
         dialog={true}
         onOpenChange={onOpenChange}
+        disableRedirect={disableRedirect}
       />
     </DialogComponent>
   );

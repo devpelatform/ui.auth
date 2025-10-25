@@ -33,9 +33,11 @@ import { DialogFooterComponent } from '../../shared/components/dialog';
 export function CreateOrganizationForm({
   classNames,
   localization: localizationProp,
+  disableRedirect = false,
   dialog = false,
   onOpenChange,
 }: CardComponentProps & {
+  disableRedirect?: boolean;
   dialog?: boolean;
   onOpenChange?: ((open: boolean) => void) | undefined;
 }) {
@@ -139,7 +141,7 @@ export function CreateOrganizationForm({
         fetchOptions: { throw: true },
       });
 
-      setLastVisited({ organization, refetchList: true });
+      setLastVisited({ organization, refetchList: true, disableRedirect });
 
       onOpenChange?.(false);
       form.reset();

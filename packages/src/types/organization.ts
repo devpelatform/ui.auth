@@ -86,6 +86,7 @@ export type OrganizationContextOptions = {
     organization: Partial<Organization>;
     refetch?: boolean;
     refetchList?: boolean;
+    disableRedirect?: boolean;
     forceRedirect?: boolean;
     personalPath?: string;
   }) => Promise<void> | void;

@@ -126,6 +126,7 @@ export function OrganizationsCard({
         localization={localization}
         open={createDialogOpen}
         onOpenChange={setCreateDialogOpen}
+        disableRedirect={true}
       />
     </>
   );

@@ -6,8 +6,10 @@ import { useActiveOrganization, useListOrganizations, useSession } from '../../h
 import { AuthUIContext, OrganizationContext } from '../../hooks/main';
 import { organizationViewPaths } from '../../lib/view-paths';
 import type { Organization } from '../../types/auth';
-import type { AvatarOptions } from '../../types/options';
-import type { OrganizationUIProviderProps } from '../../types/organization';
+import type {
+  OrganizationLogoOptions,
+  OrganizationUIProviderProps,
+} from '../../types/organization';
 
 export const LAST_VISITED_ORG = 'last-visited-org';
 
@@ -47,7 +49,7 @@ export const OrganizationUIProvider = (options: OrganizationUIProviderProps) => 
     viewPaths: viewPathsProp,
   } = options;
 
-  const logo = useMemo<AvatarOptions | undefined>(() => {
+  const logo = useMemo<OrganizationLogoOptions | undefined>(() => {
     if (!logoProp) return;
 
     if (logoProp === true) {
@@ -62,6 +64,7 @@ export const OrganizationUIProvider = (options: OrganizationUIProviderProps) => 
       delete: logoProp.delete,
       extension: logoProp.extension || 'png',
       size: logoProp.size || (logoProp.upload ? 256 : 128),
+      defaultDicebear: logoProp?.defaultDicebear || false,
     };
   }, [logoProp]);
 
@@ -87,6 +90,7 @@ export const OrganizationUIProvider = (options: OrganizationUIProviderProps) => 
       organization: Partial<Organization>;
       refetch?: boolean;
       refetchList?: boolean;
+      disableRedirect?: boolean;
       forceRedirect?: boolean;
       personalPath?: string;
     }) => {
@@ -94,6 +98,7 @@ export const OrganizationUIProvider = (options: OrganizationUIProviderProps) => 
         organization,
         refetch = true,
         refetchList = false,
+        disableRedirect = false,
         forceRedirect = false,
         personalPath,
       } = options;
@@ -133,7 +138,7 @@ export const OrganizationUIProvider = (options: OrganizationUIProviderProps) => 
           return;
         }
 
-        if (pathMode === 'slug') {
+        if (pathMode === 'slug' && !disableRedirect) {
           if (oldOrgSlug !== '' && pathname.includes(oldOrgSlug as string)) {
             const marker = `/${oldOrgSlug}`;
             const idx = pathname.indexOf(marker);
