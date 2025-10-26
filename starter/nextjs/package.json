@@ -14,7 +14,7 @@
     "@pelatform/ui": "^1.5.2",
     "@pelatform/ui.auth": "workspace:*",
     "@pelatform/utils": "^1.0.0",
-    "better-auth": "^1.3.31",
+    "better-auth": "^1.3.32",
     "drizzle-orm": "^0.44.7",
     "lucide-react": "^0.548.0",
     "next": "16.0.0",
