@@ -36,10 +36,6 @@ export function Header() {
     setUserLocale(newLocale as Locale);
   }
 
-  if (availableLocales.length <= 1) {
-    return null;
-  }
-
   return (
     <SiteHeader className="bg-background backdrop-blur-none supports-backdrop-filter:bg-background">
       <Link href="/" className="flex items-center gap-2">

@@ -12,7 +12,7 @@
     "postinstall": "fumadocs-mdx"
   },
   "dependencies": {
-    "@pelatform/ui": "^1.5.6",
+    "@pelatform/ui": "^1.5.7",
     "fumadocs-core": "16.0.4",
     "fumadocs-mdx": "13.0.2",
     "fumadocs-ui": "16.0.4",

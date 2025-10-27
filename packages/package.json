@@ -1,6 +1,6 @@
 {
   "name": "@pelatform/ui.auth",
-  "version": "0.6.3",
+  "version": "0.6.4",
   "description": "Plug & play UI components for Better Auth.",
   "author": "Pelatform Dev",
   "license": "MIT",
@@ -76,7 +76,7 @@
     "ua-parser-js": "^2.0.6"
   },
   "devDependencies": {
-    "@pelatform/ui": "^1.5.6",
+    "@pelatform/ui": "^1.5.7",
     "@types/node": "^24.9.1",
     "@types/qrcode": "^1.5.6",
     "@types/react": "^19.2.2",
