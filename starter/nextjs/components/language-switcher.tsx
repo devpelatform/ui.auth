@@ -1,10 +1,10 @@
 'use client';
 
 import { useTransition } from 'react';
+import Image from 'next/image';
 import { Globe, Languages } from 'lucide-react';
 import { useLocale } from 'next-intl';
 
-import { getFlagUrl } from '@pelatform/ui';
 import {
   Button,
   DropdownMenu,
@@ -77,11 +77,12 @@ export function LanguageSwitcher({ showNames = true, showFlags = true }: Languag
             className={cn('gap-2', currentLocale === lang.code && 'bg-accent')}
           >
             {showFlags && lang.flag ? (
-              // biome-ignore lint/performance/noImgElement: disable
-              <img
-                src={getFlagUrl(lang.flag)}
+              <Image
+                src={`/flags/${lang.flag}.svg`}
                 alt={`${lang.name} flag`}
                 className="size-4 rounded-full object-cover"
+                width={24}
+                height={24}
                 loading="lazy"
               />
             ) : showFlags ? (
