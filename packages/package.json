@@ -1,6 +1,6 @@
 {
   "name": "@pelatform/ui.auth",
-  "version": "0.6.1",
+  "version": "0.6.2",
   "description": "Plug & play UI components for Better Auth.",
   "author": "Pelatform Dev",
   "license": "MIT",

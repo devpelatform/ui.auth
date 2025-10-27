@@ -32,8 +32,9 @@ export function DeleteOrganizationDialog({
   title,
   description,
   organization,
+  redirectTo,
   ...props
-}: DialogComponentProps & { organization: Organization | null | undefined }) {
+}: DialogComponentProps & { organization: Organization | null | undefined; redirectTo?: string }) {
   const { account: accountOptions, authClient, navigate, toast } = useAuth();
   const { refetch: refetchOrganizations } = useListOrganizations();
 
@@ -72,7 +73,9 @@ export function DeleteOrganizationDialog({
         icon: 'success',
       });
 
-      navigate(`${accountOptions?.basePath}/${accountOptions?.viewPaths.ORGANIZATIONS}`);
+      navigate(
+        redirectTo ?? `${accountOptions?.basePath}/${accountOptions?.viewPaths.ORGANIZATIONS}`,
+      );
 
       onOpenChange?.(false);
     } catch (error) {

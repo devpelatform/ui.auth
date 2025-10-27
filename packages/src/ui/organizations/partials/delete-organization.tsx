@@ -13,8 +13,9 @@ export function DeleteOrganizationCard({
   className,
   classNames,
   localization: localizationProp,
+  redirectTo,
   ...props
-}: CardComponentProps) {
+}: CardComponentProps & { redirectTo?: string }) {
   const { data: organization, isPending: organizationPending } = useOrganization();
   const { data: hasPermission, isPending: permissionPending } = useHasPermission({
     organizationId: organization?.id,
@@ -66,6 +67,7 @@ export function DeleteOrganizationCard({
         open={showDialog}
         onOpenChange={setShowDialog}
         organization={organization}
+        redirectTo={redirectTo}
       />
     </>
   );

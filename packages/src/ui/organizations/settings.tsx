@@ -14,7 +14,8 @@ export function OrganizationSettingsCards({
   className,
   classNames,
   localization: localizationProp,
-}: OrganizationBaseProps) {
+  redirectDelete,
+}: OrganizationBaseProps & { redirectDelete?: string }) {
   const { data, displayId, isPending, logo } = useOrganization();
 
   const localization = useLocalization(localizationProp);
@@ -38,7 +39,11 @@ export function OrganizationSettingsCards({
         />
       )}
 
-      <DeleteOrganizationCard classNames={classNames} localization={localization} />
+      <DeleteOrganizationCard
+        classNames={classNames}
+        localization={localization}
+        redirectTo={redirectDelete}
+      />
     </div>
   );
 }
