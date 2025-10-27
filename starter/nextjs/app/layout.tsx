@@ -11,6 +11,8 @@ import { createMetadata } from '@/lib/metadata';
 
 import '@/styles/globals.css';
 
+import { Footer } from '@/components/footer';
+
 const geistSans = Geist({
   variable: '--font-geist-sans',
   subsets: ['latin'],
@@ -47,14 +49,17 @@ export default async function RootLayout({
     <html
       lang={locale}
       dir={direction}
-      className={`${geistSans.variable} ${geistMono.variable}`}
+      className={`h-full${geistSans.variable} ${geistMono.variable}`}
       suppressHydrationWarning
     >
-      <body className="flex min-h-svh flex-col antialiased">
+      <body className="flex h-full bg-background font-sans text-base text-foreground antialiased">
         <RootProviders>
           <AuthProvider>
-            <Header />
-            {children}
+            <div className="relative flex min-h-screen grow flex-col border-border/40 bg-background dark:border-border">
+              <Header />
+              <main className="flex flex-1">{children}</main>
+              <Footer />
+            </div>
           </AuthProvider>
         </RootProviders>
       </body>

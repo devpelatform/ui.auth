@@ -11,6 +11,11 @@ const nextConfig: NextConfig = {
   images: {
     remotePatterns: [
       {
+        // for Pelatform static assets
+        protocol: 'https',
+        hostname: 'assets.pelatform.com',
+      },
+      {
         // google profile images
         protocol: 'https',
         hostname: 'lh3.googleusercontent.com',

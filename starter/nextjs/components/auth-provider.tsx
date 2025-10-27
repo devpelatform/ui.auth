@@ -86,6 +86,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       account={{
         fields: ['image', 'name', 'company', 'age'],
       }}
+      syncSession={true}
     >
       {children}
     </AuthUIProvider>

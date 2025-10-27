@@ -1,6 +1,6 @@
 'use client';
 
-import { useCallback, useMemo } from 'react';
+import { useCallback, useEffect, useMemo, useRef } from 'react';
 
 import { AlertToast } from '@pelatform/ui/components';
 import { useQueryClient } from '@pelatform/ui/re/tanstack-query';
@@ -42,7 +42,7 @@ const defaultToast: RenderToast = ({ message, icon = 'destructive' }) => {
   AlertToast({ message, icon, variant: 'mono' });
 };
 
-export const AuthUIProvider = (options: AuthUIProviderProps) => {
+export const AuthUIProvider = (options: AuthUIProviderProps & { syncSession?: boolean }) => {
   const {
     children,
 
@@ -83,6 +83,9 @@ export const AuthUIProvider = (options: AuthUIProviderProps) => {
     social: socialProp,
     twoFactor,
     account: accountProp,
+
+    // Sync Session
+    syncSession = false,
 
     // Query
     sessionQueryOptions,
@@ -212,10 +215,55 @@ export const AuthUIProvider = (options: AuthUIProviderProps) => {
     });
   }, [queryClient, sessionKey]);
 
+  // BroadcastChannel for sync session between tabs
+  const broadcastChannelRef = useRef<BroadcastChannel | null>(null);
+
   const onSessionChange = useCallback(async () => {
     await onSessionChangeCallback();
     await onSessionChangeProp?.();
-  }, [onSessionChangeCallback, onSessionChangeProp]);
+
+    // Broadcast session change to other tabs if syncSession is enabled
+    if (broadcastChannelRef.current && syncSession) {
+      broadcastChannelRef.current.postMessage({
+        type: 'SESSION_CHANGED',
+        timestamp: Date.now(),
+      });
+    }
+  }, [onSessionChangeCallback, onSessionChangeProp, syncSession]);
+
+  // Setup BroadcastChannel for sync session between tabs
+  useEffect(() => {
+    // Only run in browser environment and if syncSession is enabled
+    if (typeof window === 'undefined' || !syncSession) return;
+
+    try {
+      // Create BroadcastChannel with unique name for auth sync
+      broadcastChannelRef.current = new BroadcastChannel('pelatform-auth-sync');
+
+      // Event listener for receiving messages from other tabs
+      const handleBroadcastMessage = async (event: MessageEvent) => {
+        if (event.data?.type === 'SESSION_CHANGED') {
+          // Trigger session refresh without broadcasting again to avoid loop
+          await onSessionChangeCallback();
+          await onSessionChangeProp?.();
+        }
+      };
+
+      broadcastChannelRef.current.addEventListener('message', handleBroadcastMessage);
+
+      // Cleanup function
+      return () => {
+        if (broadcastChannelRef.current) {
+          broadcastChannelRef.current.removeEventListener('message', handleBroadcastMessage);
+          broadcastChannelRef.current.close();
+          broadcastChannelRef.current = null;
+        }
+      };
+    } catch (error) {
+      // Log warning if BroadcastChannel is not supported
+      console.warn('BroadcastChannel not supported:', error);
+    }
+  }, [onSessionChangeCallback, onSessionChangeProp, syncSession]);
 
   return (
     <AuthQueryContext.Provider
