@@ -5,10 +5,10 @@ import { useCallback, useContext, useEffect, useMemo, useRef } from 'react';
 import { useActiveOrganization, useListOrganizations, useSession } from '../../hooks/default';
 import { AuthUIContext, OrganizationContext } from '../../hooks/main';
 import { organizationViewPaths } from '../../lib/view-paths';
-import type { Organization } from '../../types/auth';
 import type {
   OrganizationLogoOptions,
   OrganizationUIProviderProps,
+  SetLastVisitedOptions,
 } from '../../types/organization';
 
 export const LAST_VISITED_ORG = 'last-visited-org';
@@ -86,16 +86,10 @@ export const OrganizationUIProvider = (options: OrganizationUIProviderProps) => 
   const { refetch: refetchListOrganizations } = useListOrganizations(authClient);
 
   const setLastVisited = useCallback(
-    async (options: {
-      organization: Partial<Organization>;
-      refetch?: boolean;
-      refetchList?: boolean;
-      disableRedirect?: boolean;
-      forceRedirect?: boolean;
-      personalPath?: string;
-    }) => {
+    async (options: SetLastVisitedOptions) => {
       const {
         organization,
+        slug: newSlug,
         refetch = true,
         refetchList = false,
         disableRedirect = false,
@@ -105,12 +99,13 @@ export const OrganizationUIProvider = (options: OrganizationUIProviderProps) => 
       try {
         const pathname = window.location.pathname;
         const oldOrgSlug = getLastVisitedOrganization();
-        const baseOrgPath = pathMode === 'slug' ? `${basePath}/${organization?.slug}` : basePath;
+        const slug = newSlug || organization?.slug;
+        const baseOrgPath = pathMode === 'slug' ? `${basePath}/${slug}` : basePath;
 
         if (personalPath) {
           clearLastVisitedOrganization();
-        } else if (organization?.slug) {
-          setLastVisitedOrganization(organization.slug);
+        } else if (slug) {
+          setLastVisitedOrganization(slug);
         }
 
         await authClient.organization.setActive({

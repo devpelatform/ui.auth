@@ -8,6 +8,16 @@ export interface OrganizationLogoOptions extends AvatarOptions {
   defaultDicebear?: boolean;
 }
 
+export interface SetLastVisitedOptions {
+  organization: Partial<Organization>;
+  slug?: string;
+  refetch?: boolean;
+  refetchList?: boolean;
+  disableRedirect?: boolean;
+  forceRedirect?: boolean;
+  personalPath?: string;
+}
+
 export type OrganizationContextOptions = {
   /**
    * Enable or disable API key support for organizations
@@ -82,14 +92,7 @@ export type OrganizationContextOptions = {
   /**
    * Set the last visited organization
    */
-  setLastVisited: (options: {
-    organization: Partial<Organization>;
-    refetch?: boolean;
-    refetchList?: boolean;
-    disableRedirect?: boolean;
-    forceRedirect?: boolean;
-    personalPath?: string;
-  }) => Promise<void> | void;
+  setLastVisited: (options: SetLastVisitedOptions) => Promise<void> | void;
   // /**
   //  * The current organization slug
   //  */

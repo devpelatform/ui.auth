@@ -81,7 +81,7 @@ export function OrganizationSlugCard({
         icon: 'success',
       });
 
-      setLastVisited({ organization: organization as Organization });
+      setLastVisited({ organization: organization as Organization, slug: slug });
     } catch (error) {
       toast({
         message: getLocalizedError({ error, localization }),
